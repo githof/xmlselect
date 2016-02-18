@@ -1,0 +1,11 @@
+
+- tester les setters de xml_contents et xml_node
+  dans test_xml_contents
+
+- tester un exemple un peu plus détaillé de xml_contents (par exemple en découpant plusieurs éléments de texte_epoux)
+
+- ajouter des getters, les tester
+
+- faire une méthode qui remplace un text_node par plusieurs nodes
+- tester sur des situations réelles (genre on tague le père de l'époux, donc on découpe en avant, père et après)
+
