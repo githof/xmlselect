@@ -9,7 +9,7 @@ function xml_node()
     this.contents = null;
 
     /*
-        Initialise un node (tag, contents)
+        Initialise un node(tag, contents)
      */
     this.set_node = function(tag, contents)
     {
@@ -19,7 +19,7 @@ function xml_node()
     }
 
     /*
-        Initialise un node (null, text)
+        Initialise un node(null, text)
      */
     this.set_text_node = function(text)
     {
@@ -27,7 +27,7 @@ function xml_node()
     }
 
     /*
-        Initialise un node (tag, text)
+        Initialise un node(tag, text)
      */
     this.set_tag_text_node = function(tag, text)
     {
@@ -56,7 +56,16 @@ function xml_node()
      */
     this.get_text = function()
     {
-        return that.get_contents();
+        if(that.tag != null)
+            return that.get_contents().get_contents();
+
+        if(that.tag == null)
+            return that.contents;
+    }
+
+    this.toString = function()
+    {
+        return that.pretty_string("");
     }
 
     this.pretty_string = function(indentation)
@@ -64,7 +73,7 @@ function xml_node()
         if(that.tag == null)
             return that.contents.toString();
 
-        return that.tag+": "+that.contents.pretty_string(indentation+"   ");
+        return "["+that.tag+"] "+that.contents.pretty_string(indentation+"   ");
     }
 }
 
@@ -83,16 +92,16 @@ function xml_contents()
     }
 
     /*
-        Ajoute un node (tag, contents)
+        Ajoute un node(tag, contents)
      */
-    this.add_node = function (tag, contents)
+    this.add_node = function(tag, contents)
     {
         var node = new xml_node().set_node(tag, contents);
         return that.add_xml_node(node);
     }
 
     /*
-        Ajoute un node (tag, text)
+        Ajoute un node(tag, text)
      */
     this.add_tag_text = function(tag, text)
     {
@@ -101,19 +110,94 @@ function xml_contents()
     }
 
     /*
-        Ajoute un node (null, text)
+        Ajoute un node(null, text)
      */
-    this.add_text = function (text)
+    this.add_text = function(text)
     {
         var node = new xml_node().set_text_node(text);
         return that.add_xml_node(node);
     }
 
+    /*
+        Getter du tableau de contents
+     */
+    this.get_contents = function()
+    {
+        return that.contents;
+    }
+
+    /*
+        Getter d'un node par index
+     */
+    this.get_content_by_index = function(index)
+    {
+        if(that.contents.length > index)
+            return that.contents[index];
+        return null;
+    }
+
+    /*
+        Getter d'un node par tag
+     */
+    this.get_content_by_tag = function(tag)
+    {
+        for(var i = 0; i < that.contents.length; i++){
+            if(that.contents[i].get_tag() == tag)
+                return that.contents[i];
+        }
+        return null;
+    }
+
+    /**
+     *  Divise un node (null, text) en trois node(null, text), node(tag, text) et node(null, text)
+     *  Si start est 0, il n'y a pas de premier node(null, text)
+     *  Si end est égale à la longueur du texte, il n'y a pas de dernier node(null, text)
+     *
+     * @param index index du node à diviser
+     * @param tag nouveau tag
+     * @param start index de début (inclu) du texte pour le nouveau node(tag, text)
+     * @param end index de end (exclu) du texte pour le nouveau node(tag, text)
+     * @returns {xml_contents}
+     */
+    this.tag_text = function(index, tag, start, end)
+    {
+        if(that.get_content_by_index(index) == null)
+            return;
+
+        var text = that.get_content_by_index(index).get_text();
+
+        if(text == null)
+            return;
+
+        if(start < 0 || start >= text.length)
+            return;
+
+        if(end < 1 || end > text.length)
+            return;
+
+        if(end <= start)
+            return;
+
+
+        that.contents.splice(index, 1);
+
+        if(start > 0) {
+            that.contents.splice(index, 0, new xml_node().set_text_node(text.substring(0, start)));
+            index++;
+        }
+
+        that.contents.splice(index, 0, new xml_node().set_tag_text_node(tag, text.substring(start, end)));
+        index++;
+
+        if(end < text.length-1)
+            that.contents.splice(index, 0, new xml_node().set_text_node(text.substring(end)));
+
+        return that;
+    }
+
     this.toString = function()
     {
-        var s = "";
-        that.pretty_string("");
-        return s;
+        return that.pretty_string("");
     }
 
     this.pretty_string = function(indentation)

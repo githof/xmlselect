@@ -20,7 +20,7 @@ $(document).ready(function (){
             .add_node("pere", new xml_contents()
                 .add_tag_text("prenom", "Pedro José")
                 .add_tag_text("nom", "de los Santos"))
-            .add_text(", y de ")
+            .add_text(",_y_de_")
             .add_node("mere", new xml_contents()
                 .add_tag_text("prenom", "Francisca Angélica")
                 .add_tag_text("nom", "Almedia"))
@@ -40,5 +40,27 @@ $(document).ready(function (){
         );
 
     //console.log(xml);
-    console.log(xml.pretty_string(""));
+    console.log(xml.toString());
+
+    // Tests getter xml_node
+    /*var node_test = new xml_node().set_tag_text_node("a", "b");
+    console.log(node_test.get_tag());
+    console.log(node_test.get_contents());
+    console.log(node_test.get_text());
+    console.log(node_test.get_contents().get_tag());
+    console.log(node_test.get_contents().get_text());*/
+
+    // Tests getter xml_contents
+    /*console.log(xml.get_contents().toString());
+    console.log(xml.get_content_by_index(1).toString());
+    console.log(xml.get_content_by_index(6));
+    console.log(xml.get_content_by_tag("epoux").toString());
+    console.log(xml.get_content_by_tag("mere"));
+    console.log(xml.get_content_by_tag("epoux").get_contents().get_content_by_tag("prenom").get_text());*/
+
+    // Test split
+    xml.get_content_by_tag("epoux").get_contents().tag_text(4, "test1", 2, 4);
+    xml.get_content_by_tag("epouse").get_contents().tag_text(2, "test2", 0, 10);
+    xml.get_content_by_tag("epouse").get_contents().tag_text(5, "test3", 2, 6);
+    console.log(xml.toString());
 });
