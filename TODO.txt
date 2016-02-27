@@ -1,11 +1,23 @@
 
-- tester les setters de xml_contents et xml_node
-  dans test_xml_contents
+- remplacer la fonction tag_text par une fonction
+  tag_text_node(node, container_node, tag, start, end)
+  où le node est un text_node, qu'on passe directement (sans aller le
+  chercher par son index, sinon ce sera une galère à gérer, notamment
+  quand on veut modifier les noeuds dans les descendants).
+  Ça suppose qu'on stocke la référence vers les nodes quand on les
+  crée (au moins deux ou trois dans les tests).
+  Du coup on a besoin du father_node, dont node est l'enfant.
+  Possible qu'il y ait besoin du coup d'itérer sur
+  container_node.contents pour trouver la position de node
 
-- tester un exemple un peu plus détaillé de xml_contents (par exemple en découpant plusieurs éléments de texte_epoux)
+- tester sur des nodes descendants (genre remettre en text_node le nom
+  de la mère de l'épouse, et mettre le tag prenom sur Bernardina, puis
+  sur le texte qui précède (Maria), puis le tag nom sur le texte qui
+  suit (Chavarria)
 
-- ajouter des getters, les tester
-
-- faire une méthode qui remplace un text_node par plusieurs nodes
-- tester sur des situations réelles (genre on tague le père de l'époux, donc on découpe en avant, père et après)
-
+NB : en anglais, contents prend un s quand ça désigne le contenu
+d'un contenant (content c'est plutôt figuré, genre le contenu
+d'un discours, ou un "contenu" au sens photo ou texte partagé sur une
+plateforme web).  Enfin tfaçon j'ai renommé tes fonctions get_content
+en get_node pour être plus cohérent avec les noms des types : un
+xml_contents contient des xml_node.
