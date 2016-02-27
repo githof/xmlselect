@@ -41,8 +41,18 @@ $(document).ready(function (){
                 .add_tag_text("prenom", "María")
                 .add_tag_text("prenom", "Bernardina")
                 .add_tag_text("nom", "Chavarría"))
-            .add_text(". Ts.: Manuel Argerich, y Rufina Marín, (f. 62v).")
-        );
+        )
+        .add_text(". Ts.: ")
+        .add_node("temoins", new xml_contents()
+            .add_node("temoin", new xml_contents()
+                .add_tag_text("prenom", "Manuel")
+                .add_tag_text("nom", "Argerich"))
+            .add_text(", y ")
+            .add_node("temoin", new xml_contents()
+                .add_tag_text("prenom", "Rufina")
+                .add_tag_text("nom", "Marín"))
+        )
+        .add_text(", (f. 62v).");
 
     //console.log(xml);
     console.log(xml.toString());
