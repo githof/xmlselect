@@ -129,7 +129,7 @@ function xml_contents()
     /*
         Getter d'un node par index
      */
-    this.get_content_by_index = function(index)
+    this.get_node_by_index = function(index)
     {
         if(that.contents.length > index)
             return that.contents[index];
@@ -139,7 +139,7 @@ function xml_contents()
     /*
         Getter d'un node par tag
      */
-    this.get_content_by_tag = function(tag)
+    this.get_node_by_tag = function(tag)
     {
         for(var i = 0; i < that.contents.length; i++){
             if(that.contents[i].get_tag() == tag)
@@ -161,10 +161,10 @@ function xml_contents()
      */
     this.tag_text = function(index, tag, start, end)
     {
-        if(that.get_content_by_index(index) == null)
+        if(that.get_node_by_index(index) == null)
             return;
 
-        var text = that.get_content_by_index(index).get_text();
+        var text = that.get_node_by_index(index).get_text();
 
         if(text == null)
             return;

@@ -67,15 +67,15 @@ $(document).ready(function (){
 
     // Tests getter xml_contents
     /*console.log(xml.get_contents().toString());
-    console.log(xml.get_content_by_index(1).toString());
-    console.log(xml.get_content_by_index(6));
-    console.log(xml.get_content_by_tag("epoux").toString());
-    console.log(xml.get_content_by_tag("mere"));
-    console.log(xml.get_content_by_tag("epoux").get_contents().get_content_by_tag("prenom").get_text());*/
+    console.log(xml.get_node_by_index(1).toString());
+    console.log(xml.get_node_by_index(6));
+    console.log(xml.get_node_by_tag("epoux").toString());
+    console.log(xml.get_node_by_tag("mere"));
+    console.log(xml.get_node_by_tag("epoux").get_contents().get_node_by_tag("prenom").get_text());*/
 
     // Test split
-    xml.get_content_by_tag("epoux").get_contents().tag_text(4, "test1", 2, 4);
-    xml.get_content_by_tag("epouse").get_contents().tag_text(2, "test2", 0, 10);
-    xml.get_content_by_tag("epouse").get_contents().tag_text(5, "test3", 2, 6);
+    xml.get_node_by_tag("epoux").get_contents().tag_text(4, "test1", 2, 4);
+    xml.get_node_by_tag("epouse").get_contents().tag_text(2, "test2", 0, 10);
+    xml.get_node_by_tag("epouse").get_contents().tag_text(5, "test3", 2, 6);
     console.log(xml.toString());
 });
