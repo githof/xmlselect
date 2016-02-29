@@ -74,6 +74,7 @@ $(document).ready(function (){
     console.log(xml.get_node_by_tag("epoux").get_contents().get_node_by_tag("prenom").get_text());*/
 
     // Test split
+    /*
     var epoux = xml.get_node_by_tag("epoux");
     var epouse = xml.get_node_by_tag("epouse");
 
@@ -84,6 +85,23 @@ $(document).ready(function (){
     tag_text_node(test1, epoux, "test1", 2, 4);
     tag_text_node(test2, epouse, "test2", 0, 10);
     tag_text_node(test3, epouse, "test3", 2, 6);
+    */
+
+    var mere_epouse = xml.get_node_by_tag("epouse").get_contents().get_node_by_tag("mere");
+    console.log(mere_epouse.toString());
+    mere_epouse.get_contents().get_contents().splice(0, 3, new xml_node().set_text_node("María_Bernardina_Chavarría"));
+
+    var text = mere_epouse.get_contents().get_node_by_index(0);
+    tag_text_node(text, mere_epouse, "prenom", 6, 16);
+    console.log(mere_epouse.toString());
+
+    text = mere_epouse.get_contents().get_node_by_index(0);
+    tag_text_node(text, mere_epouse, "prenom", 0, 5);
+    console.log(mere_epouse.toString());
+
+    text = mere_epouse.get_contents().get_node_by_index(3);
+    tag_text_node(text, mere_epouse, "nom", 1, 10);
+    console.log(mere_epouse.toString());
 
     console.log(xml.toString());
 });
