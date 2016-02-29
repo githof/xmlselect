@@ -2,6 +2,7 @@
   xml_contents est une structure récursive qui contient des listes de
   xml_nodes
 */
+
 function xml_node()
 {
     var that = this;
@@ -148,53 +149,6 @@ function xml_contents()
         return null;
     }
 
-    /**
-     *  Divise un node (null, text) en trois node(null, text), node(tag, text) et node(null, text)
-     *  Si start est 0, il n'y a pas de premier node(null, text)
-     *  Si end est égale à la longueur du texte, il n'y a pas de dernier node(null, text)
-     *
-     * @param index index du node à diviser
-     * @param tag nouveau tag
-     * @param start index de début (inclu) du texte pour le nouveau node(tag, text)
-     * @param end index de end (exclu) du texte pour le nouveau node(tag, text)
-     * @returns {xml_contents}
-     */
-    this.tag_text = function(index, tag, start, end)
-    {
-        if(that.get_node_by_index(index) == null)
-            return;
-
-        var text = that.get_node_by_index(index).get_text();
-
-        if(text == null)
-            return;
-
-        if(start < 0 || start >= text.length)
-            return;
-
-        if(end < 1 || end > text.length)
-            return;
-
-        if(end <= start)
-            return;
-
-
-        that.contents.splice(index, 1);
-
-        if(start > 0) {
-            that.contents.splice(index, 0, new xml_node().set_text_node(text.substring(0, start)));
-            index++;
-        }
-
-        that.contents.splice(index, 0, new xml_node().set_tag_text_node(tag, text.substring(start, end)));
-        index++;
-
-        if(end < text.length-1)
-            that.contents.splice(index, 0, new xml_node().set_text_node(text.substring(end)));
-
-        return that;
-    }
-
     this.toString = function()
     {
         return that.pretty_string("");
@@ -212,3 +166,58 @@ function xml_contents()
     }
 }
 
+/**
+ * Divise un node (null, text) en trois node(null, text), node(tag, text) et node(null, text)
+ * Si start est 0, il n'y a pas de premier node(null, text)
+ * Si end est égale à la longueur du texte, il n'y a pas de dernier node(null, text)
+ *
+ * @param node node à découper
+ * @param container_node parent du node à découper
+ * @param tag nouveau tag
+ * @param start index de début (inclu) du texte pour le nouveau node(tag, text)
+ * @param end index de end (exclu) du texte pour le nouveau node(tag, text)
+ */
+function tag_text_node(node, container_node, tag, start, end)
+{
+    if(node == null || node.get_tag() != null)
+        return;
+
+    var text = node.get_text();
+
+    if(text == null)
+        return;
+
+    if(start < 0 || start >= text.length)
+        return;
+
+    if(end < 1 || end > text.length)
+        return;
+
+    if(end <= start)
+        return;
+
+    var index = -1;
+    var contents = container_node.get_contents().get_contents();
+    for(var i = 0; i < contents.length; i++){
+        if(contents[i] === node){
+            index = i;
+            break;
+        }
+    }
+
+    if(index == -1)
+        return;
+
+    contents.splice(index, 1);
+
+    if(start > 0) {
+        contents.splice(index, 0, new xml_node().set_text_node(text.substring(0, start)));
+        index++;
+    }
+
+    contents.splice(index, 0, new xml_node().set_tag_text_node(tag, text.substring(start, end)));
+    index++;
+
+    if(end < text.length)
+        contents.splice(index, 0, new xml_node().set_text_node(text.substring(end)));
+}

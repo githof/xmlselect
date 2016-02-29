@@ -32,11 +32,11 @@ $(document).ready(function (){
             .add_tag_text("prenom", "María")
             .add_tag_text("prenom", "Sinforosa")
             .add_tag_text("nom", "SUAREZ")
-            .add_text(", natural de ésta, hija legítima de ")
+            .add_text(", natural de ésta, hija legítima de_")
             .add_node("pere", new xml_contents()
                 .add_tag_text("prenom", "Pedro")
                 .add_tag_text("nom", "Suárez"))
-            .add_text(", y de ")
+            .add_text(",_y_de_")
             .add_node("mere", new xml_contents()
                 .add_tag_text("prenom", "María")
                 .add_tag_text("prenom", "Bernardina")
@@ -74,8 +74,16 @@ $(document).ready(function (){
     console.log(xml.get_node_by_tag("epoux").get_contents().get_node_by_tag("prenom").get_text());*/
 
     // Test split
-    xml.get_node_by_tag("epoux").get_contents().tag_text(4, "test1", 2, 4);
-    xml.get_node_by_tag("epouse").get_contents().tag_text(2, "test2", 0, 10);
-    xml.get_node_by_tag("epouse").get_contents().tag_text(5, "test3", 2, 6);
+    var epoux = xml.get_node_by_tag("epoux");
+    var epouse = xml.get_node_by_tag("epouse");
+
+    var test1 = epoux.get_contents().get_node_by_index(5);
+    var test2 = epouse.get_contents().get_node_by_index(3);
+    var test3 = epouse.get_contents().get_node_by_index(5);
+
+    tag_text_node(test1, epoux, "test1", 2, 4);
+    tag_text_node(test2, epouse, "test2", 0, 10);
+    tag_text_node(test3, epouse, "test3", 2, 6);
+
     console.log(xml.toString());
 });
