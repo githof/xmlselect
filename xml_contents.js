@@ -84,7 +84,7 @@ function xml_contents()
     this.nodes = [];
 
     /*
-        Ajoute un node
+        Adds a node
      */
     this.add_xml_node = function(node)
     {
@@ -92,31 +92,43 @@ function xml_contents()
         return that;
     }
 
-    /*
-        Ajoute un node(tag, contents)
+    /* 
+       ________________________________________________
+       Below, syntactic sugar to create and add nodes
+
+       new_* returns a new node
+       add_* adds a new node and returns this
+             (the contents to which the node is added)
      */
+
+    this.new_node = function(tag, contents)
+    {
+        return new xml_node().set_node(tag, contents);
+    }
+
     this.add_node = function(tag, contents)
     {
-        var node = new xml_node().set_node(tag, contents);
-        return that.add_xml_node(node);
+        return that.add_xml_node(that.new_node(tag, contents));
     }
 
-    /*
-        Ajoute un node(tag, text)
-     */
+    this.new_tag_text = function(tag, text)
+    {
+        return new xml_node().set_tag_text_node(tag, text);
+    }
+
     this.add_tag_text = function(tag, text)
     {
-        var node = new xml_node().set_tag_text_node(tag, text);
-        return that.add_xml_node(node);
+        return that.add_xml_node(that.new_tag_text(tag, text));
     }
 
-    /*
-        Ajoute un node(null, text)
-     */
+    this.new_text = function(text)
+    {
+        return new xml_node().set_text_node(text);
+    }
+
     this.add_text = function(text)
     {
-        var node = new xml_node().set_text_node(text);
-        return that.add_xml_node(node);
+        return that.add_xml_node(that.new_text(text));
     }
 
     /*
