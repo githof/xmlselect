@@ -38,9 +38,7 @@ $(document).ready(function (){
                 .add_tag_text("nom", "Suárez"))
             .add_text(",_y_de_")
             .add_node("mere", new xml_contents()
-                .add_tag_text("prenom", "María")
-                .add_tag_text("prenom", "Bernardina")
-                .add_tag_text("nom", "Chavarría"))
+                .add_text("María Bernardina Chavarría"))
         )
         .add_text(". Ts.: ")
         .add_node("temoins", new xml_contents()
@@ -89,7 +87,6 @@ $(document).ready(function (){
 
     var mere_epouse = xml.get_node_by_tag("epouse").get_contents().get_node_by_tag("mere");
     console.log(mere_epouse.toString());
-    mere_epouse.get_contents().get_nodes().splice(0, 3, new xml_node().set_text_node("María_Bernardina_Chavarría"));
 
     var text = mere_epouse.get_contents().get_node_by_index(0);
     tag_text_node(text, mere_epouse, "prenom", 6, 16);
