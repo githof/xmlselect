@@ -1,4 +1,9 @@
 
+/*
+  Uses jquery and lodash libraries
+  (lodash for _.map function)
+ */
+
 function $xml_text(classname)
 {
     return $('<p>',
