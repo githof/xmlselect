@@ -12,7 +12,7 @@ $(document).ready(function (){
 	.add_tag_text("epouse", texte_epouse);
 	*/
 
-    var xml = new xml_contents()
+    var acte = new xml_contents()
         .add_node("epoux", new xml_contents()
             .add_tag_text("prenom", "Felipe")
             .add_tag_text("prenom", "José")
@@ -39,9 +39,9 @@ $(document).ready(function (){
             .add_text(",_y_de_")
             .add_node("mere", new xml_contents()
                 .add_text("María Bernardina Chavarría"))
-        )
-        .add_text(". Ts.: ")
-        .add_node("temoins", new xml_contents()
+        );
+    var temoins = new xml_node()
+	.set_node("temoins", new xml_contents()
             .add_node("temoin", new xml_contents()
                 .add_tag_text("prenom", "Manuel")
                 .add_tag_text("nom", "Argerich"))
@@ -49,11 +49,12 @@ $(document).ready(function (){
             .add_node("temoin", new xml_contents()
                 .add_tag_text("prenom", "Rufina")
                 .add_tag_text("nom", "Marín"))
-        )
+        );
+    acte.add_xml_node(temoins)
         .add_text(", (f. 62v).");
 
     //console.log(xml);
-    console.log(xml.toString());
+    console.log(acte.toString());
 
     // Tests getter xml_node
     /*var node_test = new xml_node().set_tag_text_node("a", "b");
@@ -64,17 +65,17 @@ $(document).ready(function (){
     console.log(node_test.get_contents().get_text());*/
 
     // Tests getter xml_contents
-    /*console.log(xml.get_nodes().toString());
-    console.log(xml.get_node_by_index(1).toString());
-    console.log(xml.get_node_by_index(6));
-    console.log(xml.get_node_by_tag("epoux").toString());
-    console.log(xml.get_node_by_tag("mere"));
-    console.log(xml.get_node_by_tag("epoux").get_contents().get_node_by_tag("prenom").get_text());*/
+    /*console.log(acte.get_nodes().toString());
+    console.log(acte.get_node_by_index(1).toString());
+    console.log(acte.get_node_by_index(6));
+    console.log(acte.get_node_by_tag("epoux").toString());
+    console.log(acte.get_node_by_tag("mere"));
+    console.log(acte.get_node_by_tag("epoux").get_contents().get_node_by_tag("prenom").get_text());*/
 
     // Test split
     /*
-    var epoux = xml.get_node_by_tag("epoux");
-    var epouse = xml.get_node_by_tag("epouse");
+    var epoux = acte.get_node_by_tag("epoux");
+    var epouse = acte.get_node_by_tag("epouse");
 
     var test1 = epoux.get_contents().get_node_by_index(5);
     var test2 = epouse.get_contents().get_node_by_index(3);
@@ -85,7 +86,7 @@ $(document).ready(function (){
     tag_text_node(test3, epouse, "test3", 2, 6);
     */
 
-    var mere_epouse = xml.get_node_by_tag("epouse").get_contents().get_node_by_tag("mere");
+    var mere_epouse = acte.get_node_by_tag("epouse").get_contents().get_node_by_tag("mere");
     console.log(mere_epouse.toString());
 
     var text = mere_epouse.get_contents().get_node_by_index(0);
@@ -100,5 +101,5 @@ $(document).ready(function (){
     tag_text_node(text, mere_epouse, "nom", 1, 10);
     console.log(mere_epouse.toString());
 
-    console.log(xml.toString());
+    console.log(acte.toString());
 });
