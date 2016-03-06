@@ -40,15 +40,15 @@ $(document).ready(function (){
             .add_node("mere", new xml_contents()
                 .add_text("María Bernardina Chavarría"))
         );
+    var temoin1 = new xml_node().
+        set_tag_text_node("temoin", "Manuel Argerich");
+    var temoin2 = new xml_node().
+        set_tag_text_node("temoin", "Rufina Marín");
     var temoins = new xml_node()
 	.set_node("temoins", new xml_contents()
-            .add_node("temoin", new xml_contents()
-                .add_tag_text("prenom", "Manuel")
-                .add_tag_text("nom", "Argerich"))
+            .add_xml_node(temoin1)
             .add_text(", y ")
-            .add_node("temoin", new xml_contents()
-                .add_tag_text("prenom", "Rufina")
-                .add_tag_text("nom", "Marín"))
+            .add_xml_node(temoin2)
         );
     acte.add_xml_node(temoins)
         .add_text(", (f. 62v).");
