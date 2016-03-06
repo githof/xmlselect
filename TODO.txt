@@ -2,3 +2,7 @@
 - Tester dans test.html l'objet select_and_show (voir test_select_and_show).
   Je préfère autant que possible (on verra bien) ne pas toucher à select_and_show.js
 
+- Je réfléchis au découpage à faire pour la structrure d'interface que
+  je veux, pour coller à la structure xml_node / xml_contents
+  À suivre...
+
