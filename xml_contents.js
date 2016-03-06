@@ -81,14 +81,14 @@ function xml_node()
 function xml_contents()
 {
     var that = this;
-    this.contents = [];
+    this.nodes = [];
 
     /*
         Ajoute un node
      */
     this.add_xml_node = function(node)
     {
-        that.contents.push(node);
+        that.nodes.push(node);
         return that;
     }
 
@@ -120,11 +120,11 @@ function xml_contents()
     }
 
     /*
-        Getter du tableau de contents
+        Getter du tableau de nodes
      */
-    this.get_contents = function()
+    this.get_nodes = function()
     {
-        return that.contents;
+        return that.nodes;
     }
 
     /*
@@ -132,8 +132,8 @@ function xml_contents()
      */
     this.get_node_by_index = function(index)
     {
-        if(that.contents.length > index)
-            return that.contents[index];
+        if(that.nodes.length > index)
+            return that.nodes[index];
         return null;
     }
 
@@ -142,9 +142,9 @@ function xml_contents()
      */
     this.get_node_by_tag = function(tag)
     {
-        for(var i = 0; i < that.contents.length; i++){
-            if(that.contents[i].get_tag() == tag)
-                return that.contents[i];
+        for(var i = 0; i < that.nodes.length; i++){
+            if(that.nodes[i].get_tag() == tag)
+                return that.nodes[i];
         }
         return null;
     }
@@ -157,8 +157,8 @@ function xml_contents()
     this.pretty_string = function(indentation)
     {
         var s = "\n";
-        for(var i = 0; i < that.contents.length; i++){
-            s += indentation + that.contents[i].pretty_string(indentation);
+        for(var i = 0; i < that.nodes.length; i++){
+            s += indentation + that.nodes[i].pretty_string(indentation);
             if(!s.endsWith("\n"))
                 s += "\n";
         }
@@ -197,9 +197,9 @@ function tag_text_node(node, container_node, tag, start, end)
         return;
 
     var index = -1;
-    var contents = container_node.get_contents().get_contents();
-    for(var i = 0; i < contents.length; i++){
-        if(contents[i] === node){
+    var nodes = container_node.get_contents().get_nodes();
+    for(var i = 0; i < nodes.length; i++){
+        if(nodes[i] === node){
             index = i;
             break;
         }
@@ -208,16 +208,16 @@ function tag_text_node(node, container_node, tag, start, end)
     if(index == -1)
         return;
 
-    contents.splice(index, 1);
+    nodes.splice(index, 1);
 
     if(start > 0) {
-        contents.splice(index, 0, new xml_node().set_text_node(text.substring(0, start)));
+        nodes.splice(index, 0, new xml_node().set_text_node(text.substring(0, start)));
         index++;
     }
 
-    contents.splice(index, 0, new xml_node().set_tag_text_node(tag, text.substring(start, end)));
+    nodes.splice(index, 0, new xml_node().set_tag_text_node(tag, text.substring(start, end)));
     index++;
 
     if(end < text.length)
-        contents.splice(index, 0, new xml_node().set_text_node(text.substring(end)));
+        nodes.splice(index, 0, new xml_node().set_text_node(text.substring(end)));
 }
