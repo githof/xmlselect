@@ -2,22 +2,24 @@
 + Tester dans test.html l'objet select_and_show (voir test_select_and_show).
   Je préfère autant que possible (on verra bien) ne pas toucher à select_and_show.js
 
-+ pour commencer, on veut, dans un fichier taggable_xml.js,
-  un prototype taggable_text (quand je dis un prototype, si on était
-  en java je dirais une classe.  Je veux parler d'un type d'objet,
-  comme xml_node)
-  qui contrôlera l'interface jquery d'un text_node
-  (ce que j'appelle un text_node, c'est un xml_node qui a été
-  initialisé avec set_text_node)
-  On verra par la suite les deux autres cas (tag_text_node, et
-  xml_node générique avec { tag, contents })
++ L'idée générale est la suivante :
 
-  Un objet taggable_text aura deux attributs :
-  - xml, qui contiendra l'objet text_node
-  - $element, qui contiendra l'objet jquery représentant l'élément
-  d'interface
+  - text_node et  tag_text_node doivent hériter de xml_node.  Les
+  trois auront des comportements en commun, mais les deux prototypes
+  hérités auront des comportements spécifiques
 
-NB : pour faire les choses vraiment bien, il faudrait que text_node et
-  tag_text_node soient des prototypes qui héritent de xml_node.  Si tu
-  veux te lancer dans cette voie, ne te gêne pas :)
+  - un objet taggable_xml (dans un fichier taggable_xml.js) servira de
+  contrôleur pour la vue associée à un objet xml_node.
+  L'attribut de nom xml stockera le xml_node
+  L'attribut $element contiendra l'objet jquery dans lequel tous les
+  éléments html sont préparés (quels éléments html, ça dépendra du
+  type de xml_node spécifique)
+  La méthode append_to($where) permettra d'intégrer les éléments html
+  dans une page :
+  dans la fonction appelante, on fera par exemple
+	new taggable_xml(xml).append_to($("#test"));
+
+  - Dans un premier temps, on ne fait que construire les éléments
+    html, sans y associer d'interaction, pour s'assurer qu'on est ok
+    sur tous les cas.
 
