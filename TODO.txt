@@ -1,8 +1,23 @@
 
-- Tester dans test.html l'objet select_and_show (voir test_select_and_show).
++ Tester dans test.html l'objet select_and_show (voir test_select_and_show).
   Je préfère autant que possible (on verra bien) ne pas toucher à select_and_show.js
 
-- Je réfléchis au découpage à faire pour la structrure d'interface que
-  je veux, pour coller à la structure xml_node / xml_contents
-  À suivre...
++ pour commencer, on veut, dans un fichier taggable_xml.js,
+  un prototype taggable_text (quand je dis un prototype, si on était
+  en java je dirais une classe.  Je veux parler d'un type d'objet,
+  comme xml_node)
+  qui contrôlera l'interface jquery d'un text_node
+  (ce que j'appelle un text_node, c'est un xml_node qui a été
+  initialisé avec set_text_node)
+  On verra par la suite les deux autres cas (tag_text_node, et
+  xml_node générique avec { tag, contents })
+
+  Un objet taggable_text aura deux attributs :
+  - xml, qui contiendra l'objet text_node
+  - $element, qui contiendra l'objet jquery représentant l'élément
+  d'interface
+
+NB : pour faire les choses vraiment bien, il faudrait que text_node et
+  tag_text_node soient des prototypes qui héritent de xml_node.  Si tu
+  veux te lancer dans cette voie, ne te gêne pas :)
 
