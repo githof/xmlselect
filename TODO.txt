@@ -11,9 +11,9 @@
   - un objet taggable_xml (dans un fichier taggable_xml.js) servira de
   contrôleur pour la vue associée à un objet xml_node.
   L'attribut de nom xml stockera le xml_node
-  L'attribut $element contiendra l'objet jquery dans lequel tous les
+  L'attribut $elements contiendra l'objet jquery dans lequel tous les
   éléments html sont préparés (quels éléments html, ça dépendra du
-  type de xml_node spécifique)
+  type de xml_node spécifique, voir ci-dessous)
   La méthode append_to($where) permettra d'intégrer les éléments html
   dans une page :
   dans la fonction appelante, on fera par exemple
@@ -52,5 +52,23 @@
 	</section>
       </section>
 
-    NB : les input radio sont générés par un objet radio_list de elements.js
+    NB : les input radio sont générés par un objet radio_list de
+    elements.js
+    Dans un premier temps, on peut laisser de côté la question des id,
+    on la traitera par la suite
 
+  - tag_text_node
+
+        <dt>tag</dt>
+        <dd>
+	  text_node (donc la structure ci-dessus)
+	</dd>
+
+  - xml_node
+
+        <dt>tag</dt>
+	<dd>
+	  <ul class="xml_contents">
+	    suite de xml_nodes
+	  </ul>
+	</dd>
