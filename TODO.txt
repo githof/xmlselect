@@ -23,3 +23,34 @@
     html, sans y associer d'interaction, pour s'assurer qu'on est ok
     sur tous les cas.
 
++ Les éléments html associés aux trois types de xml_nodes :
+
+  - text_node (un exemple)
+
+      <section class="text_node">
+	<p class="xml_text source">
+	  Text contents of the text_node
+	</p>
+	<button>OK</button>
+	<section class="selection_panel">
+	  <form class="tag_choice">
+	    <ul>
+	    <li>
+	      <input id="xml_epoux_tag_prenom"
+	                  type="radio" name="tag" value="prenom">
+	      <label for="xml_epoux_tag_prenom">prenom</label>
+	    </li>
+            <li>
+              <input id="xml_epoux_tag_nom"
+                          type="radio" name="tag" value="nom">
+              <label for="xml_epoux_tag_nom">nom</label>
+            </li>
+            </ul>
+          </form>
+	  <p class="xml_text show">
+	  </p>
+	</section>
+      </section>
+
+    NB : les input radio sont générés par un objet radio_list de elements.js
+
