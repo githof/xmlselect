@@ -66,7 +66,7 @@ function radio_list(labels, base_id)
 
     this.$ul.append(_.map(that.inputs, that.add_input));
 
-    this.elements = function ()
+    this.$element = function ()
     {
 	return that.$ul;
     }
