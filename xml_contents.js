@@ -5,9 +5,16 @@
 
 function xml_node()
 {
+    var node_types = {
+        XML_NODE: 0,
+        TEXT_NODE: 1,
+        TAG_TEXT_NODE: 2
+    };
+
     var that = this;
     this.tag = null;
     this.contents = null;
+    this.type = node_types.XML_NODE;
 
     /*
         Initialise un node(tag, contents)
@@ -24,7 +31,9 @@ function xml_node()
      */
     this.set_text_node = function(text)
     {
-	    return that.set_node(null, text);
+	    var text_node = that.set_node(null, text);
+        text_node.type = node_types.TEXT_NODE;
+        return text_node;
     }
 
     /*
@@ -33,7 +42,9 @@ function xml_node()
     this.set_tag_text_node = function(tag, text)
     {
         var text_node = new xml_node().set_text_node(text);
-        return that.set_node(tag, text_node);
+        var tag_text_node = that.set_node(tag, text_node);
+        tag_text_node.type = node_types.TAG_TEXT_NODE;
+        return tag_text_node;
     }
 
     /*
@@ -62,6 +73,16 @@ function xml_node()
 
         if(that.tag == null)
             return that.contents;
+    }
+
+    this.is_text_node = function()
+    {
+        return that.type == node_types.TEXT_NODE;
+    }
+
+    this.is_tag_text_node = function()
+    {
+        return that.type == node_types.TAG_TEXT_NODE;
     }
 
     this.toString = function()
