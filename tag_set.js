@@ -7,7 +7,7 @@ var wedding_tags = { 'epoux':
 		      "veuve", "pere", "mere"],
 		   };
 
-var choice_tag = [
+var choice_tags = [
 	"epoux",
 	"epouse",
 	"prenom",
