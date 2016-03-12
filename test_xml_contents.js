@@ -54,7 +54,7 @@ $(document).ready(function (){
         .add_text(", (f. 62v).");
 
     //console.log(xml);
-    console.log(acte.toString());
+    //console.log(acte.toString());
 
     // Tests getter xml_node
     /*var node_test = new xml_node().set_tag_text_node("a", "b");
@@ -86,6 +86,7 @@ $(document).ready(function (){
     tag_text_node(test3, epouse, "test3", 2, 6);
     */
 
+    /*
     var mere_epouse = acte.get_node_by_tag("epouse").get_contents().get_node_by_tag("mere");
     console.log(mere_epouse.toString());
 
@@ -102,4 +103,9 @@ $(document).ready(function (){
     console.log(mere_epouse.toString());
 
     console.log(acte.toString());
+    */
+
+    var acte_node = new xml_node().set_node("acte", acte);
+    new taggable_text(acte_node).append_to($("#test"));
+
 });
