@@ -1,0 +1,22 @@
+
+
+# Pour les tests
+
+Bien séparer les tests des différents objets :
+- test_xml_contents est pour tester... xml_contents :)
+- pour tester taggable_xml, on fait dans test_taggable_xml
+- dans le fichier test.html, on inclut le fichier test_...js dont on a besoin
+
+Éviter de garder trop de code commenté.  Si on n'a plus besoin d'un bout de code, on le vire.  Si on en a besoin plus tard, on pourra toujours faire un checkout sur la version en question, sinon on ne voit plus quels vieux trucs correspondent à quoi.
+
+# Les objets jquery
+
+Utiliser des $ pour les noms de variables et attributs qui contiennent des objets jquery
+(genre $dd, $section, $button_ok, etc.)
+
+# Cédric, 12 mars
+
+J'ai eu pas mal de difficulté pour la fonction append_to (surtout sur le faite que faire un 'new taggable_xml' change la valeur de 'that' pour correspondre au retour du new, enfin c'est ce que j'ai finis par comprendre).
+Je ne sais pas si c'est une bonne idée de créer récursivement des taggable_xml des noeuds fils dans append_to, j'ai voulu le faire dans set_html qui s'occupe simplement de remplir $element. Mais, il me faut les références des instances de taggable_xml des noeuds fils dans append_to. Ca me parait bizarre d'initialiser des taggable_xml dans une fonction d'affichage (append_to).
+
+Tout ca pour dire que j'ai du mal à visualiser/comprendre pour le moment comment taggable_xml sert de controlleur entre un xml_node et sa représentation en html.

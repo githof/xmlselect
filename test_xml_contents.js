@@ -1,60 +1,44 @@
 /*
   pour tester xml_contents au fur et à mesure.
+
+  needs xml_contents.js
+  needs test_acte.js
  */
 
 $(document).ready(function (){
-    var texte_epoux = "Felipe José de los SANTOS, natural de Lisboa, hijo legítimo de Pedro José de los Santos, y de Francisca Angélica Almeida";
-    var texte_epouse = "María Sinforosa SUAREZ, natural de ésta, hija legítima de Pedro Suárez, y de María Bernardina Chavarría. Ts.: Manuel Argerich, y Rufina Marín, (f. 62v)."
 
-    /*
+    console.log('# test_xml_contents');
+
+    console.log('## Tests plus ou moins unitaires');
+
+    var texte_epoux = "Felipe José de los SANTOS, natural de Lisboa, hijo legítimo de Pedro José de los Santos, y de Francisca Angélica Almeida";
+    var texte_epouse = "María Sinforosa SUAREZ, natural de ésta, hija legítima de Pedro Suárez, y de María Bernardina Chavarría"
+
+    var n_text = new xml_node().set_text_node(texte_epoux);
+    console.log('n_text');
+    console.log(n_text.toString());
+    console.log('is?');
+    console.log(n_text.is_text_node());
+
+    var n_tag_text = new xml_node().set_tag_text_node('epouse', texte_epouse);
+    console.log('n_tag_text');
+    console.log(n_tag_text.toString());
+    console.log('is?');
+    console.log(n_tag_text.is_tag_text_node());
+
+
+    console.log('## Test xml_contents 2 tag_text epoux epouse');
     var xml = new xml_contents()
 	.add_tag_text("epoux", texte_epoux)
 	.add_tag_text("epouse", texte_epouse);
-	*/
 
-    var acte = new xml_contents()
-        .add_node("epoux", new xml_contents()
-            .add_tag_text("prenom", "Felipe")
-            .add_tag_text("prenom", "José")
-            .add_tag_text("nom", "de los Santos")
-            .add_text(", natural de Lisboa, hijo legítimo de ")
-            .add_node("pere", new xml_contents()
-                .add_tag_text("prenom", "Pedro")
-                .add_tag_text("prenom", "José")
-                .add_tag_text("nom", "de los Santos"))
-            .add_text(",_y_de_")
-            .add_node("mere", new xml_contents()
-                .add_tag_text("prenom", "Francisca")
-                .add_tag_text("prenom", "Angélica")
-                .add_tag_text("nom", "Almedia"))
-        )
-        .add_node("epouse", new xml_contents()
-            .add_tag_text("prenom", "María")
-            .add_tag_text("prenom", "Sinforosa")
-            .add_tag_text("nom", "SUAREZ")
-            .add_text(", natural de ésta, hija legítima de_")
-            .add_node("pere", new xml_contents()
-                .add_tag_text("prenom", "Pedro")
-                .add_tag_text("nom", "Suárez"))
-            .add_text(",_y_de_")
-            .add_node("mere", new xml_contents()
-                .add_text("María Bernardina Chavarría"))
-        );
-    var temoin1 = new xml_node().
-        set_tag_text_node("temoin", "Manuel Argerich");
-    var temoin2 = new xml_node().
-        set_tag_text_node("temoin", "Rufina Marín");
-    var temoins = new xml_node()
-	.set_node("temoins", new xml_contents()
-            .add_xml_node(temoin1)
-            .add_text(", y ")
-            .add_xml_node(temoin2)
-        );
-    acte.add_xml_node(temoins)
-        .add_text(", (f. 62v).");
+    console.log(xml.toString());
 
-    //console.log(xml);
-    //console.log(acte.toString());
+    console.log('## Gros test (acte complet)');
+
+    var acte = test_acte();
+
+    console.log(acte.toString());
 
     // Tests getter xml_node
     /*var node_test = new xml_node().set_tag_text_node("a", "b");
@@ -105,7 +89,5 @@ $(document).ready(function (){
     console.log(acte.toString());
     */
 
-    var acte_node = new xml_node().set_node("acte", acte);
-    new taggable_text(acte_node).append_to($("#test"));
 
 });

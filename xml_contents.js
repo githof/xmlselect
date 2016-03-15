@@ -31,9 +31,9 @@ function xml_node()
      */
     this.set_text_node = function(text)
     {
-	    var text_node = that.set_node(null, text);
-        text_node.type = node_types.TEXT_NODE;
-        return text_node;
+	that.set_node(null, text);
+        that.type = node_types.TEXT_NODE;
+        return that;
     }
 
     /*
@@ -42,9 +42,9 @@ function xml_node()
     this.set_tag_text_node = function(tag, text)
     {
         var text_node = new xml_node().set_text_node(text);
-        var tag_text_node = that.set_node(tag, text_node);
-        tag_text_node.type = node_types.TAG_TEXT_NODE;
-        return tag_text_node;
+        that.set_node(tag, text_node);
+        that.type = node_types.TAG_TEXT_NODE;
+        return that;
     }
 
     /*
@@ -73,6 +73,17 @@ function xml_node()
 
         if(that.tag == null)
             return that.contents;
+    }
+
+    /*
+      get text_node of tag_text_node
+      returns null otherwise
+     */
+    this.get_text_node = function()
+    {
+	if(! that.is_tag_text_node())
+	    return null;
+	return that.get_contents();
     }
 
     this.is_text_node = function()
