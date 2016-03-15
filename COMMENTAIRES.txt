@@ -1,0 +1,8 @@
+
+Bien séparer les tests des différents objets :
+- test_xml_contents est pour tester... xml_contents :)
+- pour tester taggable_xml, on fait dans test_taggable_xml
+- dans le fichier test.html, on inclut le fichier test_...js dont on a besoin
+
+Éviter de garder trop de code commenté.  Si on n'a plus besoin d'un bout de code, on le vire.  Si on en a besoin plus tard, on pourra toujours faire un checkout sur la version en question, sinon on ne voit plus quels vieux trucs correspondent à quoi.
+

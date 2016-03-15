@@ -23,14 +23,15 @@ $(document).ready(function (){
     console.log('is?');
     console.log(n_tag_text.is_tag_text_node());
 
-    /*
+
+    console.log('## Test xml_contents 2 tag_text epoux epouse');
     var xml = new xml_contents()
 	.add_tag_text("epoux", texte_epoux)
 	.add_tag_text("epouse", texte_epouse);
-	*/
+
+    console.log(xml.toString());
 
     console.log('## Gros test (acte complet)');
-
     var acte = new xml_contents()
         .add_node("epoux", new xml_contents()
             .add_tag_text("prenom", "Felipe")
@@ -72,8 +73,7 @@ $(document).ready(function (){
     acte.add_xml_node(temoins)
         .add_text(", (f. 62v).");
 
-    //console.log(xml);
-    //console.log(acte.toString());
+    console.log(acte.toString());
 
     // Tests getter xml_node
     /*var node_test = new xml_node().set_tag_text_node("a", "b");
@@ -124,7 +124,5 @@ $(document).ready(function (){
     console.log(acte.toString());
     */
 
-    var acte_node = new xml_node().set_node("acte", acte);
-    new taggable_text(acte_node).append_to($("#test"));
 
 });
