@@ -61,7 +61,7 @@ function taggable_text (xml)
                 'class': 'tag_choice',
             });
 
-        var p_show = $("<show>",
+        var p_show = $("<p>",
             {
                 'class': 'xml_text show'
             });
