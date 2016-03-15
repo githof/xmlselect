@@ -75,6 +75,17 @@ function xml_node()
             return that.contents;
     }
 
+    /*
+      get text_node of tag_text_node
+      returns null otherwise
+     */
+    this.get_text_node = function()
+    {
+	if(! that.is_tag_text_node())
+	    return null;
+	return that.get_contents();
+    }
+
     this.is_text_node = function()
     {
         return that.type == node_types.TEXT_NODE;

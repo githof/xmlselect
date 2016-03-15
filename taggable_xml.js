@@ -28,19 +28,20 @@ function taggable_xml (xml)
         dd.append(ul);
 
         that.$element = [dt, dd];
-        that.$attach_child = ul;
     }
 
     this.set_html_tag_text_node = function()
     {
-        var dd = $("<dd>", {});
-
         var dt = $("<dt>", {
             text: that.xml.get_tag()
         });
 
+        var dd = $("<dd>", {});
+
+	var tg_text = new taggable_xml(that.xml.get_text_node());
+	dd.append(tg_text.$element);
+
         that.$element = [dt, dd];
-        that.$attach_child = dd;
     }
 
     this.set_html_text_node = function()
@@ -92,6 +93,7 @@ function taggable_xml (xml)
     this.append_to = function($where)
     {
         $where.append(that.$element);
+/*
         if(that.xml.is_tag_text_node()){
             var tmp = that.$attach_child;
             var fils = new taggable_text(that.xml.get_contents());
@@ -107,6 +109,7 @@ function taggable_xml (xml)
                 fils.append_to(li);
             }
         }
+*/
     }
 
     this.set_html = function()
