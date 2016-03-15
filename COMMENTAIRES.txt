@@ -1,4 +1,7 @@
 
+
+# Pour les tests
+
 Bien séparer les tests des différents objets :
 - test_xml_contents est pour tester... xml_contents :)
 - pour tester taggable_xml, on fait dans test_taggable_xml
@@ -6,3 +9,7 @@ Bien séparer les tests des différents objets :
 
 Éviter de garder trop de code commenté.  Si on n'a plus besoin d'un bout de code, on le vire.  Si on en a besoin plus tard, on pourra toujours faire un checkout sur la version en question, sinon on ne voit plus quels vieux trucs correspondent à quoi.
 
+# Les objets jquery
+
+Utiliser des $ pour les noms de variables et attributs qui contiennent des objets jquery
+(genre $dd, $section, $button_ok, etc.)
