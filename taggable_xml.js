@@ -2,7 +2,7 @@
   Interface objects for xml_contents
  */
 
-function taggable_text (xml)
+function taggable_xml (xml)
 {
     that = this;
     this.xml = null;
