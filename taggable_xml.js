@@ -87,7 +87,7 @@ function taggable_xml (xml)
         $section_text_node.append($button_ok);
         $section_text_node.append($section_panel);
 
-        that.$element = section_text_node;
+        that.$element = $section_text_node;
     }
 
     this.append_to = function($where)
