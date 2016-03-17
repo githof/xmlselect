@@ -7,7 +7,6 @@ function taggable_xml (xml)
     that = this;
     this.xml = null;
     this.$element = null;
-    this.$attach_child = null;
 
     that.xml = xml;
 
