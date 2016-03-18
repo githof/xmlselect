@@ -2,11 +2,24 @@
   Interface objects for xml_contents
  */
 
-function taggable_xml (xml)
+function taggable_xml (xml, id)
 {
     var that = this;
     this.xml = null;
+    this.id = id;
     this.$element = null;
+    this.duplicate_tags = {};
+
+    this.get_id = function(tag)
+    {
+	var base = that.id + '_' + ( tag != null ? tag : "" );
+	if (that.duplicate_tags[tag] == undefined)
+	{
+	    that.duplicate_tags[tag] = 1
+	    return base;
+	}
+	return base + ++that.duplicate_tags[tag];
+    }
 
     this.set_html_xml_node = function()
     {
