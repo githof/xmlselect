@@ -1,20 +1,36 @@
 
-+ Lire COMMENTAIRES.txt
+## taggable_xml
 
-+ test_taggable_xml
+  + ids
+    utiliser la méthode get_id()
+    - pour les form : acte_epouse_mere_form
+    - pour les input : acte_epouse_mere_input_prenom
+    - test sur un noeud simple
+    - test sur tout l'acte
 
-  découper les tests, dans l'esprit des tests "plus ou moins
-  unitaires" dans test_xml_contents :
-  on veut tester petit bout par petit bout, chacun des trois types de
-  xml_nodes,
-  d'abord des simples, puis le gros acte complet
+  + brancher les select_and_show
+    - attributs $source et $show pour taggable_xml
+    - attribut sel_show, création d'un select_and_show
+    - test sur un text_node
+    - test sur un tag_text_node
+    - test sur un xml_node qui contient deux trois tag_text_node et text_node
+    - test sur tout l'acte
 
-+ taggable_xml
+## tag_set
 
-  - regarder set_html_tag_text_node
-  - tester un text_node
-  - tester un tag_text_node
-  - reporter dans set_html_xml_node la récursion qui était dans
-    append_to, sur le modèle de tag_text_node
+   remplacer choice_tags par l'utilisation d'un dictionnaire sur le
+   modèle de wedding_tags.
+   -> au lieu de piocher les tags dans une liste fixe, on les pioche
+   dans tags[that.tag]
+
+   - remplir wedding_tags
+   - passer le dictionnaire de tags en paramètre de l'objet
+      taggable_xml
+      (NB : ça pourrait être pertinent d'en faire plutôt un attribut
+      de xml_node, mais pas sûr que ce soit vraiment utile)
+   - dans taggable_xml, quand tags[that.tag] est vide, alors on ne
+      crée pas le formulaire, on laisse juste un champ texte, dans une
+      section qui a pour classe 'leaf' en plus de 'text_node'
 
 
+   
