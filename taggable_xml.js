@@ -107,6 +107,8 @@ function taggable_xml (xml, id)
         $section_text_node.append($button_ok);
         $section_text_node.append($section_panel);
 
+        new select_and_show($p_source, $p_show);
+
         that.$element = $section_text_node;
     }
 
