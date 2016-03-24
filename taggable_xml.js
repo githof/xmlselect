@@ -12,13 +12,13 @@ function taggable_xml (xml, id)
 
     this.get_id = function(tag)
     {
-	var base = that.id + '_' + ( tag != null ? tag : "" );
-	if (that.duplicate_tags[tag] == undefined)
-	{
-	    that.duplicate_tags[tag] = 1
-	    return base;
-	}
-	return base + ++that.duplicate_tags[tag];
+        var base = that.id + '_' + ( tag != null ? tag : "" );
+        if (that.duplicate_tags[tag] == undefined)
+        {
+            that.duplicate_tags[tag] = 1
+            return base;
+        }
+        return base + ++that.duplicate_tags[tag];
     }
 
     this.set_html_xml_node = function()
@@ -40,7 +40,7 @@ function taggable_xml (xml, id)
             var $li = $("<li>", {});
             $ul.append($li);
 
-            var fils = new taggable_xml(nodes[i]);
+            var fils = new taggable_xml(nodes[i], that.get_id(nodes[i].get_tag()));
             $li.append(fils.$element);
         }
 
@@ -57,7 +57,7 @@ function taggable_xml (xml, id)
 
         var $dd = $("<dd>", {});
 
-	    var tg_text = new taggable_xml(that.xml.get_text_node());
+	    var tg_text = new taggable_xml(that.xml.get_text_node(), that.id);
 	    $dd.append(tg_text.$element);
 
         that.$element = [$dt, $dd];
@@ -78,7 +78,8 @@ function taggable_xml (xml, id)
 
         var $form_tag_choice = $("<form>",
             {
-                'class': 'tag_choice'
+                'class': 'tag_choice',
+                'id': that.get_id('form')
             });
 
         var $p_show = $("<p>",
@@ -96,7 +97,7 @@ function taggable_xml (xml, id)
                 'class': 'text_node'
             });
 
-        var choices = new radio_list(choice_tags, 'ID');
+        var choices = new radio_list(choice_tags, that.get_id('input'));
         $form_tag_choice.append(choices.$element());
 
         $section_panel.append($form_tag_choice);
