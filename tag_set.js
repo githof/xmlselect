@@ -1,22 +1,28 @@
 
 var wedding_tags = {
 	'epoux': [
-		"prenom", "nom", "condition", "veuf", "pere", "mere"
+	    "prenom", "nom", "condition", "naissance-lieu", "age", "veuf", "pere", "mere"
 	],
 	'epouse': [
-		"prenom", "nom", "condition", "veuve", "pere", "mere"
+		"prenom", "nom", "condition", "naissance-lieu", "age", "veuve", "pere", "mere"
 	],
 	'pere': [
-		"prenom", "nom"
+		"prenom", "nom", "condition", "veuf"
 	],
 	'mere': [
-		"prenom", "nom"
+		"prenom", "nom", "condition", "veuf"
 	],
 	'temoins': [
 		"temoin"
 	],
 	'temoin': [
-		"prenom", "nom"
+		"prenom", "nom", "condition", "veuf"
+	],
+	'parrains': [
+		"parrain"
+	],
+	'parrain': [
+		"prenom", "nom", "condition", "veuf"
 	],
 	'veuf': [
 		"prenom", "nom"
