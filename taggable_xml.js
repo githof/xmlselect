@@ -8,6 +8,9 @@ function taggable_xml (xml, id, parent_tag)
     this.xml = null;
     this.id = id;
     this.$element = null;
+    this.$source = null;
+    this.$show = null;
+    this.sel_show = null;
     this.duplicate_tags = {};
     this.parent_tag = parent_tag;
 
@@ -123,7 +126,9 @@ function taggable_xml (xml, id, parent_tag)
             $section_text_node.append($button_ok);
             $section_text_node.append($section_panel);
 
-            new select_and_show($p_source, $p_show);
+	    that.$source = $p_source;
+	    that.$show = $p_show;
+            that.sel_show = new select_and_show(that.$source, that.$show);
 
             that.$element = $section_text_node;
         }

@@ -32,5 +32,15 @@
       crée pas le formulaire, on laisse juste un champ texte, dans une
       section qui a pour classe 'leaf' en plus de 'text_node'
 
+# À vérifier
+
+- les erreurs sur le range de select_and_show à la création
+
+# Suite
+
++ premier input radio sélectionné par défaut
+
+
+
 
    
