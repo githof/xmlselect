@@ -2,7 +2,7 @@
   Interface objects for xml_contents
  */
 
-function taggable_xml (xml, id, parent_tag)
+function taggable_xml (xml, id, tag)
 {
     var that = this;
     this.xml = null;
@@ -12,7 +12,7 @@ function taggable_xml (xml, id, parent_tag)
     this.$show = null;
     this.sel_show = null;
     this.duplicate_tags = {};
-    this.parent_tag = parent_tag;
+    this.tag = tag;
 
     this.get_id = function(tag)
     {
@@ -69,7 +69,7 @@ function taggable_xml (xml, id, parent_tag)
 
     this.set_html_text_node = function()
     {
-        var input_tags = wedding_tags[that.parent_tag];
+        var input_tags = wedding_tags[that.tag];
         console.log(input_tags);
         if(input_tags == null){
             var $p_text = $("<p>", {
