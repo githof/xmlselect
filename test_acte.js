@@ -3,6 +3,20 @@
   needs xml_contents.js
  */
 
+function test_acte_simple()
+{
+    var acte = new xml_contents()
+        .add_node("epoux", new xml_contents()
+		  .add_text("Felipe José de los SANTOS"))
+        .add_node("epouse", new xml_contents()
+		  .add_text("María Sinforosa SUAREZ"))
+        .add_node("temoins", new xml_contents()
+		  .add_tag_text("temoin", "Manuel Argerich")
+		  .add_tag_text("temoin", "Manuel Argerich"))
+
+    return acte;
+}
+
 function test_acte()
 {
     var acte = new xml_contents()
