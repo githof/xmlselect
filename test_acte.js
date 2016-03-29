@@ -3,9 +3,14 @@
   needs xml_contents.js
  */
 
+function new_acte(contents)
+{
+    return new xml_node().set_node("acte", contents);
+}
+
 function test_acte_simple()
 {
-    var acte = new xml_contents()
+    var contents = new xml_contents()
         .add_node("epoux", new xml_contents()
 		  .add_text("Felipe José de los SANTOS"))
         .add_node("epouse", new xml_contents()
@@ -14,12 +19,12 @@ function test_acte_simple()
 		  .add_tag_text("temoin", "Manuel Argerich")
 		  .add_tag_text("temoin", "Manuel Argerich"))
 
-    return acte;
+    return new_acte(contents);
 }
 
 function test_acte()
 {
-    var acte = new xml_contents()
+    var contents = new xml_contents()
         .add_node("epoux", new xml_contents()
             .add_tag_text("prenom", "Felipe")
             .add_tag_text("prenom", "José")
@@ -57,15 +62,15 @@ function test_acte()
             .add_text(", y ")
             .add_xml_node(temoin2)
         );
-    acte.add_xml_node(temoins)
+    contents.add_xml_node(temoins)
         .add_text(", (f. 62v).");
 
-    return acte;
+    return new_acte(contents);
 }
 
 function test_acte_incomplet()
 {
-    var acte = new xml_contents()
+    var contents = new xml_contents()
         .add_node("epoux", new xml_contents()
             .add_text("Felipe José")
             .add_tag_text("nom", "de los Santos")
@@ -105,8 +110,8 @@ function test_acte_incomplet()
             .add_xml_node(temoin2)
         );
 
-    acte.add_xml_node(temoins)
+    contents.add_xml_node(temoins)
         .add_text(", (f. 62v).");
 
-    return acte;
+    return new_acte(contents);
 }
