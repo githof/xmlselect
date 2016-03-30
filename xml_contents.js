@@ -64,6 +64,14 @@ function xml_node()
     }
 
     /*
+        Setter contents
+     */
+    this.set_contents = function(contents)
+    {
+        that.contents = contents;
+    }
+
+    /*
         Getter text
      */
     this.get_text = function()
@@ -223,7 +231,7 @@ function xml_contents()
  */
 function tag_text_node(node, container_node, tag, start, end)
 {
-    if(node == null || node.get_tag() != null)
+    if(!node.is_text_node())
         return;
 
     var text = node.get_text();
@@ -240,28 +248,42 @@ function tag_text_node(node, container_node, tag, start, end)
     if(end <= start)
         return;
 
-    var index = -1;
-    var nodes = container_node.get_contents().get_nodes();
-    for(var i = 0; i < nodes.length; i++){
-        if(nodes[i] === node){
-            index = i;
-            break;
-        }
-    }
 
-    if(index == -1)
-        return;
-
-    nodes.splice(index, 1);
-
+    var new_nodes = [];
     if(start > 0) {
-        nodes.splice(index, 0, new xml_node().set_text_node(text.substring(0, start)));
-        index++;
+        new_nodes.push(new xml_node().set_text_node(text.substring(0, start)));
     }
 
-    nodes.splice(index, 0, new xml_node().set_tag_text_node(tag, text.substring(start, end)));
-    index++;
+    new_nodes.push(new xml_node().set_tag_text_node(tag, text.substring(start, end)));
 
     if(end < text.length)
-        nodes.splice(index, 0, new xml_node().set_text_node(text.substring(end)));
+        new_nodes.push(new xml_node().set_text_node(text.substring(end)));
+
+    var index = -1;
+    var nodes;
+    if(container_node.get_contents() instanceof xml_contents) {
+        index = -1;
+        nodes = container_node.get_contents().get_nodes();
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i] === node) {
+                index = i;
+                break;
+            }
+        }
+
+        if (index == -1)
+            return;
+
+        nodes.splice(index, 1);
+    }else {
+        var contents = new xml_contents();
+        container_node.set_contents(contents);
+        nodes = contents.get_nodes();
+        index = 0;
+    }
+
+    for(var i = 0; i < new_nodes.length; i++){
+        nodes.splice(index, 0, new_nodes[i]);
+        index++;
+    }
 }

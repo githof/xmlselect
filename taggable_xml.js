@@ -150,6 +150,12 @@ function taggable_xml (xml, id, tag)
         }
     }
 
+    this.click_ok = function()
+    {
+        tag_text_node(that.xml, parent, tag, start, end);
+
+    }
+
 
     that.xml = xml;
 

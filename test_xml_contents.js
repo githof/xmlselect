@@ -40,4 +40,12 @@ $(document).ready(function (){
 
     console.log(acte.toString());
 
+    var acte = test_acte_brut();
+    console.log(acte.toString());
+
+    tag_text_node(acte.get_contents(), acte, "epoux", 5, 15);
+    console.log(acte.toString());
+
+    tag_text_node(acte.get_contents().get_node_by_index(2), acte, "epouse", 8, 19);
+    console.log(acte.toString());
 });
