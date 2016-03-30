@@ -70,7 +70,6 @@ function taggable_xml (xml, id, tag)
     this.set_html_text_node = function()
     {
         var input_tags = wedding_tags[that.tag];
-        console.log(input_tags);
         if(input_tags == null){
             var $p_text = $("<p>", {
                 text: that.xml.get_text()
@@ -126,8 +125,8 @@ function taggable_xml (xml, id, tag)
             $section_text_node.append($button_ok);
             $section_text_node.append($section_panel);
 
-	    that.$source = $p_source;
-	    that.$show = $p_show;
+	        that.$source = $p_source;
+	        that.$show = $p_show;
             that.sel_show = new select_and_show(that.$source, that.$show);
 
             that.$element = $section_text_node;
