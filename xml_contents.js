@@ -14,6 +14,7 @@ function xml_node()
     var that = this;
     this.tag = null;
     this.contents = null;
+    this.parent = null;
     this.type = node_types.XML_NODE;
 
     /*
@@ -23,6 +24,8 @@ function xml_node()
     {
         that.tag = tag;
         that.contents = contents;
+        if(contents instanceof xml_node || contents instanceof xml_contents)
+            contents.parent = that;
         return that;
     }
 
@@ -31,7 +34,7 @@ function xml_node()
      */
     this.set_text_node = function(text)
     {
-	that.set_node(null, text);
+	    that.set_node(null, text);
         that.type = node_types.TEXT_NODE;
         return that;
     }
@@ -69,6 +72,7 @@ function xml_node()
     this.set_contents = function(contents)
     {
         that.contents = contents;
+        contents.parent = that;
     }
 
     /*
@@ -92,6 +96,13 @@ function xml_node()
 	if(! that.is_tag_text_node())
 	    return null;
 	return that.get_contents();
+    }
+
+    /*
+        Getter parent
+     */
+    this.get_parent = function(){
+        return that.parent;
     }
 
     this.is_text_node = function()
@@ -122,13 +133,18 @@ function xml_contents()
 {
     var that = this;
     this.nodes = [];
+    this.parent = null;
 
     /*
         Adds a node
      */
-    this.add_xml_node = function(node)
+    this.add_xml_node = function(node, position)
     {
-        that.nodes.push(node);
+        if(position == undefined)
+            that.nodes.push(node);
+        else
+            that.nodes.splice(position, 0, node);
+        node.parent = that.parent;
         return that;
     }
 
@@ -146,9 +162,9 @@ function xml_contents()
         return new xml_node().set_node(tag, contents);
     }
 
-    this.add_node = function(tag, contents)
+    this.add_node = function(tag, contents, position)
     {
-        return that.add_xml_node(that.new_node(tag, contents));
+        return that.add_xml_node(that.new_node(tag, contents), position);
     }
 
     this.new_tag_text = function(tag, text)
@@ -156,9 +172,9 @@ function xml_contents()
         return new xml_node().set_tag_text_node(tag, text);
     }
 
-    this.add_tag_text = function(tag, text)
+    this.add_tag_text = function(tag, text, position)
     {
-        return that.add_xml_node(that.new_tag_text(tag, text));
+        return that.add_xml_node(that.new_tag_text(tag, text), position);
     }
 
     this.new_text = function(text)
@@ -166,9 +182,9 @@ function xml_contents()
         return new xml_node().set_text_node(text);
     }
 
-    this.add_text = function(text)
+    this.add_text = function(text, position)
     {
-        return that.add_xml_node(that.new_text(text));
+        return that.add_xml_node(that.new_text(text), position);
     }
 
     /*
@@ -229,7 +245,7 @@ function xml_contents()
  * @param start index de début (inclu) du texte pour le nouveau node(tag, text)
  * @param end index de end (exclu) du texte pour le nouveau node(tag, text)
  */
-function tag_text_node(node, container_node, tag, start, end)
+function tag_text_node(node, tag, start, end)
 {
     if(!node.is_text_node())
         return;
@@ -249,21 +265,13 @@ function tag_text_node(node, container_node, tag, start, end)
         return;
 
 
-    var new_nodes = [];
-    if(start > 0) {
-        new_nodes.push(new xml_node().set_text_node(text.substring(0, start)));
-    }
 
-    new_nodes.push(new xml_node().set_tag_text_node(tag, text.substring(start, end)));
-
-    if(end < text.length)
-        new_nodes.push(new xml_node().set_text_node(text.substring(end)));
 
     var index = -1;
-    var nodes;
-    if(container_node.get_contents() instanceof xml_contents) {
+    var parent = node.get_parent();
+    if(parent.get_contents() instanceof xml_contents) {
         index = -1;
-        nodes = container_node.get_contents().get_nodes();
+        var nodes = parent.get_contents().get_nodes();
         for (var i = 0; i < nodes.length; i++) {
             if (nodes[i] === node) {
                 index = i;
@@ -277,13 +285,18 @@ function tag_text_node(node, container_node, tag, start, end)
         nodes.splice(index, 1);
     }else {
         var contents = new xml_contents();
-        container_node.set_contents(contents);
-        nodes = contents.get_nodes();
+        parent.set_contents(contents);
         index = 0;
     }
 
-    for(var i = 0; i < new_nodes.length; i++){
-        nodes.splice(index, 0, new_nodes[i]);
+    if(start > 0) {
+        parent.get_contents().add_text(text.substring(0, start), index);
         index++;
     }
+
+    parent.get_contents().add_tag_text(tag, text.substring(start, end), index);
+    index++;
+
+    if(end < text.length)
+        parent.get_contents().add_text(text.substring(end), index);
 }

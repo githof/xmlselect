@@ -7,7 +7,7 @@
 
 $(document).ready(function (){
 
-    console.log('# test_xml_contents');
+    /*console.log('# test_xml_contents');
 
     console.log('## Tests plus ou moins unitaires');
 
@@ -38,14 +38,14 @@ $(document).ready(function (){
 
     var acte = test_acte();
 
-    console.log(acte.toString());
+    console.log(acte.toString());*/
 
     var acte = test_acte_brut();
     console.log(acte.toString());
 
-    tag_text_node(acte.get_contents(), acte, "epoux", 5, 15);
+    tag_text_node(acte.get_contents(), "epoux", 5, 15);
     console.log(acte.toString());
 
-    tag_text_node(acte.get_contents().get_node_by_index(2), acte, "epouse", 8, 19);
+    tag_text_node(acte.get_contents().get_node_by_index(2), "epouse", 8, 19);
     console.log(acte.toString());
 });
