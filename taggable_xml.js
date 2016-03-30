@@ -116,6 +116,7 @@ function taggable_xml (xml, id, tag)
                 });
 
             var choices = new radio_list(input_tags, that.get_id('input'));
+            choices.default_index(0);
             $form_tag_choice.append(choices.$element());
 
             $section_panel.append($form_tag_choice);
