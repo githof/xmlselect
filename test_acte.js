@@ -8,6 +8,15 @@ function new_acte(contents)
     return new xml_node().set_node("acte", contents);
 }
 
+function test_acte_brut()
+{
+    var contents = new xml_node().set_text_node(
+        "Felipe José de los SANTOS, natural de Lisboa, hijo legítimo de Pedro José de los Santos, y de Francisca Angélica Almeida"
+    );
+
+    return new_acte(contents);
+}
+
 function test_acte_simple()
 {
     var contents = new xml_contents()
