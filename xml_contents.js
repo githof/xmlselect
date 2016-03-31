@@ -14,7 +14,6 @@ function xml_node()
     var that = this;
     this.tag = null;
     this.contents = null;
-    this.parent = null;
     this.type = node_types.XML_NODE;
 
     /*
@@ -24,8 +23,6 @@ function xml_node()
     {
         that.tag = tag;
         that.contents = contents;
-        if(contents instanceof xml_node || contents instanceof xml_contents)
-            contents.parent = that;
         return that;
     }
 
@@ -72,7 +69,6 @@ function xml_node()
     this.set_contents = function(contents)
     {
         that.contents = contents;
-        contents.parent = that;
     }
 
     /*
@@ -96,13 +92,6 @@ function xml_node()
 	if(! that.is_tag_text_node())
 	    return null;
 	return that.get_contents();
-    }
-
-    /*
-        Getter parent
-     */
-    this.get_parent = function(){
-        return that.parent;
     }
 
     this.is_text_node = function()
@@ -133,7 +122,6 @@ function xml_contents()
 {
     var that = this;
     this.nodes = [];
-    this.parent = null;
 
     /*
         Adds a node
@@ -144,7 +132,6 @@ function xml_contents()
             that.nodes.push(node);
         else
             that.nodes.splice(position, 0, node);
-        node.parent = that.parent;
         return that;
     }
 
@@ -245,7 +232,7 @@ function xml_contents()
  * @param start index de début (inclu) du texte pour le nouveau node(tag, text)
  * @param end index de end (exclu) du texte pour le nouveau node(tag, text)
  */
-function tag_text_node(node, tag, start, end)
+function tag_text_node(node, parent, tag, start, end)
 {
     if(!node.is_text_node())
         return;
@@ -268,7 +255,7 @@ function tag_text_node(node, tag, start, end)
 
 
     var index = -1;
-    var parent = node.get_parent();
+    console.log(node);
     if(parent.get_contents() instanceof xml_contents) {
         index = -1;
         var nodes = parent.get_contents().get_nodes();

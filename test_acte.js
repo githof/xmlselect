@@ -26,7 +26,7 @@ function test_acte_simple()
 		  .add_text("María Sinforosa SUAREZ"))
         .add_node("temoins", new xml_contents()
 		  .add_tag_text("temoin", "Manuel Argerich")
-		  .add_tag_text("temoin", "Manuel Argerich"))
+		  .add_tag_text("temoin", "Manuel Argerich"));
 
     return new_acte(contents);
 }
