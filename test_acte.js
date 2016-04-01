@@ -21,7 +21,7 @@ function test_acte_simple()
 {
     var contents = new xml_contents()
         .add_node("epoux", new xml_contents()
-		  .add_text("Felipe José de los SANTOS"))
+		  .add_text("Felipe_José_de_los_SANTOS"))
         .add_node("epouse", new xml_contents()
 		  .add_text("María Sinforosa SUAREZ"))
         .add_node("temoins", new xml_contents()

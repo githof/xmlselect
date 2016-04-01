@@ -163,11 +163,14 @@ function taggable_xml (xml, id, tag, parent)
 
         for(var i = index_start + nb -1; i >= index_start; i--){
             console.log("index: "+i+": "+nodes[i].toString());
+            var $li = $("<li>", {});
             var fils = new taggable_xml(nodes[i], that.get_id(nodes[i].get_tag()), that.xml.get_tag(), that);
+            fils.append_to($li);
+
             if(index_start == 0){
-                $ul.prepend(fils.$element);
+                $ul.prepend($li);
             }else{
-                $ul.children().eq(index_start - 1).after(fils.$element);
+                $ul.children().eq(index_start).after($li);
             }
         }
     }
@@ -180,12 +183,12 @@ function split_form(taggable)
     var tag = taggable.$element.find('input[type=radio]:checked').val();
     var start = taggable.sel_show.before.length;
     var end = start + taggable.sel_show.select.length;
-    console.log("input val: "+tag);
+    console.log("split form: tag="+tag+", start="+start+", end="+end);
     var updated_infos = tag_text_node(taggable.xml, taggable.parent.xml, tag, start, end);
 
     taggable.parent.update_children(updated_infos.index_start, updated_infos.nb);
 
-    taggable.$element.fadeOut();
+    taggable.$element.parent().fadeOut().remove();
 
     console.log(taggable.parent.xml.toString());
 }
