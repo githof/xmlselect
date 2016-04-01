@@ -276,6 +276,8 @@ function tag_text_node(node, parent, tag, start, end)
         index = 0;
     }
 
+    var index_start = index;
+
     if(start > 0) {
         parent.get_contents().add_text(text.substring(0, start), index);
         index++;
@@ -284,6 +286,13 @@ function tag_text_node(node, parent, tag, start, end)
     parent.get_contents().add_tag_text(tag, text.substring(start, end), index);
     index++;
 
-    if(end < text.length)
+    if(end < text.length) {
         parent.get_contents().add_text(text.substring(end), index);
+        index++;
+    }
+
+    return {
+        index_start: index_start,
+        nb: index - index_start
+    };
 }

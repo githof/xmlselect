@@ -2,10 +2,10 @@
   Interface objects for xml_contents
  */
 
-function taggable_xml (xml, id, tag)
+function taggable_xml (xml, id, tag, parent)
 {
     var that = this;
-    this.xml = null;
+    this.xml = xml;
     this.id = id;
     this.$element = null;
     this.$source = null;
@@ -13,13 +13,14 @@ function taggable_xml (xml, id, tag)
     this.sel_show = null;
     this.duplicate_tags = {};
     this.tag = tag;
+    this.parent = parent;
 
     this.get_id = function(tag)
     {
         var base = that.id + '_' + ( tag != null ? tag : "" );
         if (that.duplicate_tags[tag] == undefined)
         {
-            that.duplicate_tags[tag] = 1
+            that.duplicate_tags[tag] = 1;
             return base;
         }
         return base + ++that.duplicate_tags[tag];
@@ -44,7 +45,7 @@ function taggable_xml (xml, id, tag)
             var $li = $("<li>", {});
             $ul.append($li);
 
-            var fils = new taggable_xml(nodes[i], that.get_id(nodes[i].get_tag()), that.xml.get_tag());
+            var fils = new taggable_xml(nodes[i], that.get_id(nodes[i].get_tag()), that.xml.get_tag(), that);
             $li.append(fils.$element);
         }
 
@@ -61,7 +62,7 @@ function taggable_xml (xml, id, tag)
 
         var $dd = $("<dd>", {});
 
-	    var tg_text = new taggable_xml(that.xml.get_text_node(), that.id, that.xml.get_tag());
+	    var tg_text = new taggable_xml(that.xml.get_text_node(), that.id, that.xml.get_tag(), that);
 	    $dd.append(tg_text.$element);
 
         that.$element = [$dt, $dd];
@@ -130,6 +131,10 @@ function taggable_xml (xml, id, tag)
 	        that.$show = $p_show;
             that.sel_show = new select_and_show(that.$source, that.$show);
 
+            $button_ok.click(function(){
+                split_form(that)
+            });
+
             that.$element = $section_text_node;
         }
     }
@@ -139,26 +144,48 @@ function taggable_xml (xml, id, tag)
         $where.append(that.$element);
     }
 
-    this.set_html = function()
-    {
-        if(that.xml.is_text_node()){
+    this.set_html = function() {
+        if (that.xml.is_text_node()) {
             that.set_html_text_node();
-        }else if(that.xml.is_tag_text_node()){
+        } else if (that.xml.is_tag_text_node()) {
             that.set_html_tag_text_node();
-        }else{
+        } else {
             that.set_html_xml_node();
         }
     }
 
-    this.click_ok = function()
+    this.update_children = function(index_start, nb)
     {
-        tag_text_node(that.xml, parent, tag, start, end);
+        console.log(that.$element);
+        console.log(index_start+", "+nb);
+        var $ul = that.$element[1].children('ul');
+        var nodes = that.xml.get_contents().get_nodes();
 
+        for(var i = index_start + nb -1; i >= index_start; i--){
+            console.log("index: "+i+": "+nodes[i].toString());
+            var fils = new taggable_xml(nodes[i], that.get_id(nodes[i].get_tag()), that.xml.get_tag(), that);
+            if(index_start == 0){
+                $ul.prepend(fils.$element);
+            }else{
+                $ul.children().eq(index_start - 1).after(fils.$element);
+            }
+        }
     }
 
-
-    that.xml = xml;
-
     that.set_html();
+}
 
+function split_form(taggable)
+{
+    var tag = taggable.$element.find('input[type=radio]:checked').val();
+    var start = taggable.sel_show.before.length;
+    var end = start + taggable.sel_show.select.length;
+    console.log("input val: "+tag);
+    var updated_infos = tag_text_node(taggable.xml, taggable.parent.xml, tag, start, end);
+
+    taggable.parent.update_children(updated_infos.index_start, updated_infos.nb);
+
+    taggable.$element.fadeOut();
+
+    console.log(taggable.parent.xml.toString());
 }
