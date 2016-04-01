@@ -255,7 +255,6 @@ function tag_text_node(node, parent, tag, start, end)
 
 
     var index = -1;
-    console.log(node);
     if(parent.get_contents() instanceof xml_contents) {
         index = -1;
         var nodes = parent.get_contents().get_nodes();

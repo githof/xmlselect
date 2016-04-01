@@ -163,25 +163,20 @@ function create_tag_node_with_selection(taggable)
     var start = taggable.sel_show.before.length;
     var end = start + taggable.sel_show.select.length;
 
-    console.log("split form: tag="+tag+", start="+start+", end="+end);
     var updated_infos = tag_text_node(taggable.xml, taggable.parent.xml, tag, start, end);
-    console.log(taggable.parent.xml.toString());
 
     var index_start = updated_infos.index_start;
     var nb = updated_infos.nb;
     var $li_old = taggable.$element.parent();
     var nodes = taggable.parent.xml.get_contents().get_nodes();
 
-    console.log("index_start: "+index_start+", nb: "+nb);
     for(var i = index_start; i < index_start + nb; i++){
-        console.log("index: "+i+": "+nodes[i].toString());
         var $li = $("<li>", {});
         var fils = new taggable_xml(
             nodes[i],
             taggable.parent.get_id(nodes[i].get_tag()),
             taggable.parent.xml.get_tag(),
             taggable.parent);
-        console.log(fils);
         fils.append_to($li);
 
         $li_old.before($li);
