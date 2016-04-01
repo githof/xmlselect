@@ -21,12 +21,15 @@ function test_acte_simple()
 {
     var contents = new xml_contents()
         .add_node("epoux", new xml_contents()
-		  .add_text("Felipe_José_de_los_SANTOS"))
+		  .add_text("Felipe José de los SANTOS"))
         .add_node("epouse", new xml_contents()
 		  .add_text("María Sinforosa SUAREZ"))
         .add_node("temoins", new xml_contents()
-		  .add_tag_text("temoin", "Manuel Argerich")
-		  .add_tag_text("temoin", "Manuel Argerich"));
+            .add_node("temoin", new xml_contents()
+                .add_text("Manuel Argerich"))
+            .add_node("temoin", new xml_contents()
+                .add_text("Rufina Marín"))
+        );
 
     return new_acte(contents);
 }
@@ -61,15 +64,14 @@ function test_acte()
             .add_node("mere", new xml_contents()
                 .add_text("María Bernardina Chavarría"))
         );
-    var temoin1 = new xml_node().
-        set_tag_text_node("temoin", "Manuel Argerich");
-    var temoin2 = new xml_node().
-        set_tag_text_node("temoin", "Rufina Marín");
+
     var temoins = new xml_node()
 	.set_node("temoins", new xml_contents()
-            .add_xml_node(temoin1)
+            .add_node("temoin", new xml_contents()
+                .add_text("Manuel Argerich"))
             .add_text(", y ")
-            .add_xml_node(temoin2)
+            .add_node("temoin", new xml_contents()
+                .add_text("Rufina Marín"))
         );
     contents.add_xml_node(temoins)
         .add_text(", (f. 62v).");
@@ -109,7 +111,7 @@ function test_acte_incomplet()
 
     var temoin2 = new xml_node().
         set_node("temoin", new xml_contents()
-        .add_tag_text("temoin", "Rufina Marín")
+            .add_text("Rufina Marín")
     );
 
     var temoins = new xml_node()

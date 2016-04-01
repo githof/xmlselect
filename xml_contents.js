@@ -227,7 +227,7 @@ function xml_contents()
  * Si end est égale à la longueur du texte, il n'y a pas de dernier node(null, text)
  *
  * @param node node à découper
- * @param container_node parent du node à découper
+ * @param parent parent du node à découper
  * @param tag nouveau tag
  * @param start index de début (inclu) du texte pour le nouveau node(tag, text)
  * @param end index de end (exclu) du texte pour le nouveau node(tag, text)
@@ -279,16 +279,22 @@ function tag_text_node(node, parent, tag, start, end)
     var index_start = index;
 
     if(start > 0) {
-        parent.get_contents().add_text(text.substring(0, start), index);
-        index++;
+        var before = text.substring(0, start);
+        if(before.replace(/\s/g, '').length != 0){
+            parent.get_contents().add_text(before, index);
+            index++;
+        }
     }
 
     parent.get_contents().add_tag_text(tag, text.substring(start, end), index);
     index++;
 
     if(end < text.length) {
-        parent.get_contents().add_text(text.substring(end), index);
-        index++;
+        var after = text.substring(end);
+        if(after.replace(/\s/g, '').length != 0){
+            parent.get_contents().add_text(after, index);
+            index++;
+        }
     }
 
     return {

@@ -132,7 +132,7 @@ function taggable_xml (xml, id, tag, parent)
             that.sel_show = new select_and_show(that.$source, that.$show);
 
             $button_ok.click(function(){
-                split_form(that)
+                create_tag_node_with_selection(that)
             });
 
             that.$element = $section_text_node;
@@ -154,41 +154,38 @@ function taggable_xml (xml, id, tag, parent)
         }
     }
 
-    this.update_children = function(index_start, nb)
-    {
-        console.log(that.$element);
-        console.log(index_start+", "+nb);
-        var $ul = that.$element[1].children('ul');
-        var nodes = that.xml.get_contents().get_nodes();
-
-        for(var i = index_start + nb -1; i >= index_start; i--){
-            console.log("index: "+i+": "+nodes[i].toString());
-            var $li = $("<li>", {});
-            var fils = new taggable_xml(nodes[i], that.get_id(nodes[i].get_tag()), that.xml.get_tag(), that);
-            fils.append_to($li);
-
-            if(index_start == 0){
-                $ul.prepend($li);
-            }else{
-                $ul.children().eq(index_start).after($li);
-            }
-        }
-    }
-
     that.set_html();
 }
 
-function split_form(taggable)
+function create_tag_node_with_selection(taggable)
 {
     var tag = taggable.$element.find('input[type=radio]:checked').val();
     var start = taggable.sel_show.before.length;
     var end = start + taggable.sel_show.select.length;
+
     console.log("split form: tag="+tag+", start="+start+", end="+end);
     var updated_infos = tag_text_node(taggable.xml, taggable.parent.xml, tag, start, end);
+    console.log(taggable.parent.xml.toString());
 
-    taggable.parent.update_children(updated_infos.index_start, updated_infos.nb);
+    var index_start = updated_infos.index_start;
+    var nb = updated_infos.nb;
+    var $li_old = taggable.$element.parent();
+    var nodes = taggable.parent.xml.get_contents().get_nodes();
+
+    console.log("index_start: "+index_start+", nb: "+nb);
+    for(var i = index_start; i < index_start + nb; i++){
+        console.log("index: "+i+": "+nodes[i].toString());
+        var $li = $("<li>", {});
+        var fils = new taggable_xml(
+            nodes[i],
+            taggable.parent.get_id(nodes[i].get_tag()),
+            taggable.parent.xml.get_tag(),
+            taggable.parent);
+        console.log(fils);
+        fils.append_to($li);
+
+        $li_old.before($li);
+    }
 
     taggable.$element.parent().fadeOut().remove();
-
-    console.log(taggable.parent.xml.toString());
 }
