@@ -176,6 +176,10 @@ function taggable_xml (xml, id, tag, parent)
                     'id': that.get_id('form')
                 });
 
+            var $p_show_title = $("<div>", {
+                text: "Selection :"
+            });
+
             var $p_show = $("<p>",
                 {
                     'class': 'xml_text show'
@@ -196,11 +200,13 @@ function taggable_xml (xml, id, tag, parent)
             $form_tag_choice.append(choices.$element());
 
             $section_panel.append($form_tag_choice);
-            $section_panel.append($p_show);
 
-            $section_text_node.append($p_source);
-            $section_text_node.append($button_ok);
-            $section_text_node.append($section_panel);
+            $section_text_node.append(
+                $p_source,
+                $section_panel,
+                $button_ok,
+                $p_show_title,
+                $p_show);
 
 	        that.$source = $p_source;
 	        that.$show = $p_show;
