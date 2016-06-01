@@ -31,3 +31,24 @@ var wedding_tags = {
 		"prenom", "nom"
 	]
 };
+
+var attributs_set = {
+	'epoux': [
+		"Don"
+	],
+	'epouse': [
+		"Don"
+	],
+	'parrain': [
+		"Don"
+	],
+	'veuf': [
+		"Don"
+	],
+	'veuve': [
+		"Don"
+	],
+	'nom': [
+		"de", "la"
+	]
+}
