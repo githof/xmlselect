@@ -26,6 +26,62 @@ function taggable_xml (xml, id, tag, parent)
         return base + ++that.duplicate_tags[tag];
     }
 
+    this.set_html_tag = function()
+    {
+        var $div_tag = $("<div>", {
+            text: that.xml.get_tag(),
+            class: 'xml_tag'
+        });
+
+        var attributs_available = attributs_set[that.xml.get_tag()];
+        if(attributs_available == null){
+            return $div_tag;
+        }
+
+        var $div_attributs_tags = $("<div>", {
+            'class': 'attributs_tag'
+        });
+
+        var $label_attribut_add = $("<span>", {
+            text: "Ajouter un attribut"
+        });
+        var $combo_box_attributs = $("<select>");
+        var $button_add = $("<button>", {
+            text: "Ajouter"
+        });
+
+        for(var i = 0; i < attributs_available.length; i++){
+            $combo_box_attributs.append(
+                $("<option>", {
+                    'value': attributs_available[i],
+                    text: attributs_available[i]
+                })
+            );
+        }
+
+        $button_add.click(function(){
+            var new_attribut = $combo_box_attributs.val();
+
+            var $div_attribut = $("<div>", {
+                text: new_attribut,
+                'class': 'attribut'
+            });
+            $div_attributs_tags.append($div_attribut);
+            that.xml.attributs.push(new_attribut);
+        })
+
+        var $div_container_add_attribut = $("<div>", {
+            'class': 'attribut_add_container'
+        });
+        $div_container_add_attribut.append(
+            $label_attribut_add,
+            $combo_box_attributs,
+            $button_add
+        );
+
+        return [$div_tag, $div_attributs_tags, $div_container_add_attribut];
+    }
+
     this.set_html_xml_node = function()
     {
         var $ul = $("<ul>",
@@ -33,19 +89,22 @@ function taggable_xml (xml, id, tag, parent)
                 'class': 'xml_contents'
             });
 
-        var $dd = $("<dd>", {});
+        var $dt = $("<dt>", {});
+        $dt.append(that.set_html_tag());
 
-        var $dt = $("<dt>",
-            {
-                text: that.xml.get_tag()
-            });
+        var $dd = $("<dd>", {});
 
         var nodes = that.xml.get_contents().get_nodes();
         for(var i = 0; i < nodes.length; i++){
             var $li = $("<li>", {});
             $ul.append($li);
 
-            var fils = new taggable_xml(nodes[i], that.get_id(nodes[i].get_tag()), that.xml.get_tag(), that);
+            var fils = new taggable_xml(
+                nodes[i],
+                that.get_id(nodes[i].get_tag()),
+                that.xml.get_tag(),
+                that);
+
             $li.append(fils.$element);
         }
 
@@ -56,13 +115,16 @@ function taggable_xml (xml, id, tag, parent)
 
     this.set_html_tag_text_node = function()
     {
-        var $dt = $("<dt>", {
-            text: that.xml.get_tag()
-        });
+        var $dt = $("<dt>", {});
+        $dt.append(that.set_html_tag());
 
         var $dd = $("<dd>", {});
 
-	    var tg_text = new taggable_xml(that.xml.get_text_node(), that.id, that.xml.get_tag(), that);
+	    var tg_text = new taggable_xml(
+            that.xml.get_text_node(),
+            that.id,
+            that.xml.get_tag(),
+            that);
 	    $dd.append(tg_text.$element);
 
         that.$element = [$dt, $dd];
