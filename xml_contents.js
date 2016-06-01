@@ -15,6 +15,7 @@ function xml_node()
     this.tag = null;
     this.contents = null;
     this.type = node_types.XML_NODE;
+    this.attributs = [];
 
     /*
         Initialise un node(tag, contents)
@@ -114,7 +115,15 @@ function xml_node()
         if(that.tag == null)
             return that.contents.toString();
 
-        return "["+that.tag+"] "+that.contents.pretty_string(indentation+"   ");
+        var attrs = "";
+        for(var i in that.attributs){
+            attrs += ", "+i;
+        }
+
+        return
+            "["+that.tag+"] "+
+            "("+attrs+") "+
+            that.contents.pretty_string(indentation+"   ");
     }
 }
 
@@ -135,7 +144,7 @@ function xml_contents()
         return that;
     }
 
-    /* 
+    /*
        ________________________________________________
        Below, syntactic sugar to create and add nodes
 
