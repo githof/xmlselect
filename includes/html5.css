@@ -83,3 +83,7 @@ p{
 .attribut_add_container select{
     margin-right: 10px;
 }
+
+.warning{
+    color: red;
+}

@@ -62,6 +62,19 @@ function taggable_xml (xml, id, tag, parent)
         $button_add.click(function(){
             var new_attribut = $combo_box_attributs.val();
 
+            if(that.xml.attributs.includes(new_attribut)){
+                var $span = $("<span>",{
+                    'class': "warning",
+                    text: "L'attribut existe déjà"
+                });
+
+                $div_container_add_attribut.append($span);
+                $span.show(0).fadeTo(2000, 0, function(){
+                    $span.hide(0);
+                });
+                return;
+            }
+
             var $div_attribut = $("<div>", {
                 text: new_attribut,
                 'class': 'attribut'
