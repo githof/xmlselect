@@ -38,16 +38,19 @@ function taggable_xml (xml, id, tag, parent)
             return $div_tag;
         }
 
-        var $div_attributs_tags = $("<div>", {
+        var $container_attributs = $("<div>", {
             'class': 'attributs_tag'
         });
 
-        var $label_attribut_add = $("<span>", {
-            text: "Ajouter un attribut"
+        var $label_attribut = $("<span>", {
+            text: "Attributs :"
         });
+
         var $combo_box_attributs = $("<select>");
+        $combo_box_attributs.hide();
+
         var $button_add = $("<button>", {
-            text: "Ajouter"
+            text: "+"
         });
 
         for(var i = 0; i < attributs_available.length; i++){
@@ -60,6 +63,11 @@ function taggable_xml (xml, id, tag, parent)
         }
 
         $button_add.click(function(){
+            if($combo_box_attributs.is(":hidden")){
+                $combo_box_attributs.show();
+                return;
+            }
+
             var new_attribut = $combo_box_attributs.val();
 
             if(that.xml.attributs.includes(new_attribut)){
@@ -79,20 +87,33 @@ function taggable_xml (xml, id, tag, parent)
                 text: new_attribut,
                 'class': 'attribut'
             });
-            $div_attributs_tags.append($div_attribut);
+            $container_attributs.append($div_attribut);
             that.xml.attributs.push(new_attribut);
+
+            $combo_box_attributs.hide();
         })
 
-        var $div_container_add_attribut = $("<div>", {
+        var $container_add_attribut = $("<span>", {
             'class': 'attribut_add_container'
         });
-        $div_container_add_attribut.append(
-            $label_attribut_add,
+        $container_add_attribut.append(
             $combo_box_attributs,
             $button_add
         );
 
-        return [$div_tag, $div_attributs_tags, $div_container_add_attribut];
+        var $section_attributs = $("<section>", {
+            'class': 'section_attributs'
+        });
+        $section_attributs.append(
+            $label_attribut,
+            $container_attributs,
+            $container_add_attribut
+        );
+
+        return [
+            $div_tag,
+            $section_attributs
+        ];
     }
 
     this.set_html_xml_node = function()
