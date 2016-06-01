@@ -1,5 +1,5 @@
 article,aside,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section { 
+footer,header,hgroup,menu,nav,section {
     display:block;
 }
 
@@ -15,8 +15,6 @@ footer,header,hgroup,menu,nav,section {
 */
 
 dt{
-    color: #009688;
-    text-transform: uppercase;
     margin-bottom: 20px;
 }
 
@@ -50,4 +48,38 @@ label{
 
 p{
     margin: 0px;
+}
+
+.xml_tag{
+    display: inline-block;
+    color: #009688;
+    text-transform: uppercase;
+    padding: 5px;
+}
+
+.attributs_tag{
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.attribut{
+    display: inline-block;
+    background-color: #DCEDC8;
+    margin-left: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    text-transform: none;
+}
+
+.attribut_add_container{
+    margin-top: 10px;
+    color: #888888;
+}
+
+.attribut_add_container span{
+    margin: 0px 10px 0px 10px;
+}
+
+.attribut_add_container select{
+    margin-right: 10px;
 }
