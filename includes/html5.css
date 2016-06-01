@@ -108,6 +108,10 @@ p{
     margin-right: 10px;
 }
 
+.attribut_add_container input{
+    margin-right: 10px;
+}
+
 .warning{
     color: red;
 }

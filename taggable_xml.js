@@ -49,6 +49,12 @@ function taggable_xml (xml, id, tag, parent)
         var $combo_box_attributs = $("<select>");
         $combo_box_attributs.hide();
 
+        var $attribut_add_other = $("<input>", {
+            'type': "text",
+            'placeholder': ' Autre attribut'
+        });
+        $attribut_add_other.hide();
+
         var $button_add = $("<button>", {
             text: "+"
         });
@@ -61,14 +67,51 @@ function taggable_xml (xml, id, tag, parent)
                 })
             );
         }
+        $combo_box_attributs.append(
+            $("<option>", {
+                'value': option_other,
+                text: option_other
+            })
+        )
+
+        $combo_box_attributs.change(function(){
+            var new_attribut = $combo_box_attributs.val();
+
+            if(new_attribut == option_other)
+                $attribut_add_other.show();
+            else
+                $attribut_add_other.hide();
+        })
 
         $button_add.click(function(){
+            var new_attribut = $combo_box_attributs.val();
+
             if($combo_box_attributs.is(":hidden")){
                 $combo_box_attributs.show();
+
+                if(new_attribut == option_other)
+                    $attribut_add_other.show();
+                else
+                    $attribut_add_other.hide();
+
                 return;
             }
 
-            var new_attribut = $combo_box_attributs.val();
+            if(new_attribut == option_other)
+                new_attribut = $attribut_add_other.val();
+
+            if(new_attribut.length == 0){
+                var $span = $("<span>",{
+                    'class': "warning",
+                    text: "L'attribut est vide"
+                });
+
+                $container_add_attribut.append($span);
+                $span.show(0).fadeTo(2000, 0, function(){
+                    $span.hide(0);
+                });
+                return;
+            }
 
             if(that.xml.attributs.includes(new_attribut)){
                 var $span = $("<span>",{
@@ -76,7 +119,7 @@ function taggable_xml (xml, id, tag, parent)
                     text: "L'attribut existe déjà"
                 });
 
-                $div_container_add_attribut.append($span);
+                $container_add_attribut.append($span);
                 $span.show(0).fadeTo(2000, 0, function(){
                     $span.hide(0);
                 });
@@ -91,6 +134,8 @@ function taggable_xml (xml, id, tag, parent)
             that.xml.attributs.push(new_attribut);
 
             $combo_box_attributs.hide();
+            $attribut_add_other.val("");
+            $attribut_add_other.hide();
         })
 
         var $container_add_attribut = $("<span>", {
@@ -98,6 +143,7 @@ function taggable_xml (xml, id, tag, parent)
         });
         $container_add_attribut.append(
             $combo_box_attributs,
+            $attribut_add_other,
             $button_add
         );
 

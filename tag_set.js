@@ -52,3 +52,5 @@ var attributs_set = {
 		"de", "la"
 	]
 }
+
+var option_other = "Autre";
