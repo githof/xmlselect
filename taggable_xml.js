@@ -207,7 +207,35 @@ function taggable_xml (xml, id, tag, parent)
             that.sel_show = new select_and_show(that.$source, that.$show);
 
             $button_ok.click(function(){
-                create_tag_node_with_selection(that)
+                var tag = $form_tag_choice.find('input[type=radio]:checked').val();
+                var start = that.sel_show.before.length;
+                var end = start + that.sel_show.select.length;
+
+                var updated_infos = tag_text_node(
+                    that.xml,
+                    that.parent.xml,
+                    tag,
+                    start,
+                    end);
+
+                var index_start = updated_infos.index_start;
+                var nb = updated_infos.nb;
+                var $li_old = that.$element.parent();
+                var nodes = that.parent.xml.get_contents().get_nodes();
+
+                for(var i = index_start; i < index_start + nb; i++){
+                    var $li = $("<li>", {});
+                    var fils = new taggable_xml(
+                        nodes[i],
+                        that.parent.get_id(nodes[i].get_tag()),
+                        that.parent.xml.get_tag(),
+                        that.parent);
+
+                    fils.append_to($li);
+                    $li_old.before($li);
+                }
+
+                that.$element.parent().fadeOut().remove();
             });
 
             that.$element = $section_text_node;
@@ -230,32 +258,4 @@ function taggable_xml (xml, id, tag, parent)
     }
 
     that.set_html();
-}
-
-function create_tag_node_with_selection(taggable)
-{
-    var tag = taggable.$element.find('input[type=radio]:checked').val();
-    var start = taggable.sel_show.before.length;
-    var end = start + taggable.sel_show.select.length;
-
-    var updated_infos = tag_text_node(taggable.xml, taggable.parent.xml, tag, start, end);
-
-    var index_start = updated_infos.index_start;
-    var nb = updated_infos.nb;
-    var $li_old = taggable.$element.parent();
-    var nodes = taggable.parent.xml.get_contents().get_nodes();
-
-    for(var i = index_start; i < index_start + nb; i++){
-        var $li = $("<li>", {});
-        var fils = new taggable_xml(
-            nodes[i],
-            taggable.parent.get_id(nodes[i].get_tag()),
-            taggable.parent.xml.get_tag(),
-            taggable.parent);
-        fils.append_to($li);
-
-        $li_old.before($li);
-    }
-
-    taggable.$element.parent().fadeOut().remove();
 }
