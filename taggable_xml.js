@@ -337,7 +337,7 @@ function taggable_xml (xml, id, tag, parent)
     that.set_html();
 }
 
-that.show_error_message = function(message, $where){
+function show_error_message(message, $where){
     var $span = $("<span>",{
         'class': "warning",
         text: message
