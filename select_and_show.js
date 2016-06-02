@@ -74,17 +74,8 @@ function select_and_show($select, $show, then_callback)
             that.text = that.$select.text();
     }
 
-    this.show_selected = function ()
-    {
-        var sel = selection();
-        that.$show.text(sel);
-        return sel;
-    }
-
-    this.stop_selection = function ()
-    {
-        var sel = that.show_selected();
-        var start
+    this.update_selection = function(sel){
+        var start;
 
         if(sel.anchorOffset < sel.focusOffset)
             start = sel.anchorOffset;
@@ -94,6 +85,20 @@ function select_and_show($select, $show, then_callback)
         that.before = that.text.slice(0, start);
         that.select = sel.toString();
         that.after = that.text.slice(start + that.select.length);
+    }
+
+    this.show_selected = function ()
+    {
+        var sel = selection();
+        that.update_selection(sel);
+
+        if(that.text.indexOf(that.select) >= 0)
+            that.$show.text(that.select);
+    }
+
+    this.stop_selection = function ()
+    {
+        that.show_selected();
         that.$select.off('mousemove mouseup');
 
         if(that.then_callback != null) that.then_callback();
