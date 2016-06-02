@@ -105,6 +105,30 @@ function xml_node()
         return that.type == node_types.TAG_TEXT_NODE;
     }
 
+    // Ajoute un attribut
+    this.add_attribut = function(new_attribut){
+        if(that.attributs.includes(new_attribut))
+            return false;
+        that.attributs.push(new_attribut);
+        return true;
+    }
+
+    // Retire une attribut
+    this.remove_attribut = function(attribut){
+        if(!that.attributs.includes(attribut))
+            return false;
+
+        var index = that.attributs.indexOf(attribut);
+        that.attributs.splice(index, 1);
+
+        return true;
+    }
+
+    // Test si contient l'attribut
+    this.contains_attribut = function(attribut){
+        return that.attributs.includes(attribut);
+    }
+
     this.toString = function()
     {
         return that.pretty_string("");

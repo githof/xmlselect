@@ -26,6 +26,33 @@ function taggable_xml (xml, id, tag, parent)
         return base + ++that.duplicate_tags[tag];
     }
 
+    // Ajoute un nouvel attribut
+    this.add_new_attribut = function(attribut, $where, $where_error){
+        if(attribut.length == 0){
+            show_error_message("L'attribut est vide", $where_error);
+            return;
+        }
+
+        if(that.xml.contains_attribut(attribut)){
+            show_error_message("L'attribut existe déjà", $where_error);
+            return;
+        }
+
+        var $div_attribut = $("<div>", {
+            text: attribut,
+            'class': 'attribut'
+        });
+
+        $div_attribut.click(function(){
+            $div_attribut.hide().remove();
+            that.xml.remove_attribut(attribut);
+        });
+
+        if(that.xml.add_attribut(attribut))
+            $where.append($div_attribut);
+    }
+
+    // HTML pour le tag (avec attributs)
     this.set_html_tag = function()
     {
         var $div_tag = $("<div>", {
@@ -59,85 +86,6 @@ function taggable_xml (xml, id, tag, parent)
             text: "+"
         });
 
-        for(var i = 0; i < attributs_available.length; i++){
-            $combo_box_attributs.append(
-                $("<option>", {
-                    'value': attributs_available[i],
-                    text: attributs_available[i]
-                })
-            );
-        }
-        $combo_box_attributs.append(
-            $("<option>", {
-                'value': option_other,
-                text: option_other
-            })
-        )
-
-        $combo_box_attributs.change(function(){
-            var new_attribut = $combo_box_attributs.val();
-
-            if(new_attribut == option_other)
-                $attribut_add_other.show();
-            else
-                $attribut_add_other.hide();
-        })
-
-        $button_add.click(function(){
-            var new_attribut = $combo_box_attributs.val();
-
-            if($combo_box_attributs.is(":hidden")){
-                $combo_box_attributs.show();
-
-                if(new_attribut == option_other)
-                    $attribut_add_other.show();
-                else
-                    $attribut_add_other.hide();
-
-                return;
-            }
-
-            if(new_attribut == option_other)
-                new_attribut = $attribut_add_other.val();
-
-            if(new_attribut.length == 0){
-                var $span = $("<span>",{
-                    'class': "warning",
-                    text: "L'attribut est vide"
-                });
-
-                $container_add_attribut.append($span);
-                $span.show(0).fadeTo(2000, 0, function(){
-                    $span.hide(0);
-                });
-                return;
-            }
-
-            if(that.xml.attributs.includes(new_attribut)){
-                var $span = $("<span>",{
-                    'class': "warning",
-                    text: "L'attribut existe déjà"
-                });
-
-                $container_add_attribut.append($span);
-                $span.show(0).fadeTo(2000, 0, function(){
-                    $span.hide(0);
-                });
-                return;
-            }
-
-            var $div_attribut = $("<div>", {
-                text: new_attribut,
-                'class': 'attribut'
-            });
-            $container_attributs.append($div_attribut);
-            that.xml.attributs.push(new_attribut);
-
-            $combo_box_attributs.hide();
-            $attribut_add_other.val("");
-            $attribut_add_other.hide();
-        })
-
         var $container_add_attribut = $("<span>", {
             'class': 'attribut_add_container'
         });
@@ -155,6 +103,62 @@ function taggable_xml (xml, id, tag, parent)
             $container_attributs,
             $container_add_attribut
         );
+
+        // ajoute attributs du set au combo box
+        for(var i = 0; i < attributs_available.length; i++){
+            $combo_box_attributs.append(
+                $("<option>", {
+                    'value': attributs_available[i],
+                    text: attributs_available[i]
+                })
+            );
+        }
+
+        // ajoutre 'autre' au combo box
+        $combo_box_attributs.append(
+            $("<option>", {
+                'value': option_other,
+                text: option_other
+            })
+        );
+
+        // si changement au combo box
+        $combo_box_attributs.change(function(){
+            var new_attribut = $combo_box_attributs.val();
+
+            if(new_attribut == option_other)
+                $attribut_add_other.show();
+            else
+                $attribut_add_other.hide();
+        });
+
+        // si click sur button ajouter new attribut
+        $button_add.click(function(){
+            var new_attribut = $combo_box_attributs.val();
+
+            if($combo_box_attributs.is(":hidden")){
+                $combo_box_attributs.show();
+
+                if(new_attribut == option_other)
+                    $attribut_add_other.show();
+                else
+                    $attribut_add_other.hide();
+
+                return;
+            }
+
+            if(new_attribut == option_other)
+                new_attribut = $attribut_add_other.val();
+
+            that.add_new_attribut(
+                new_attribut,
+                $container_attributs,
+                $container_add_attribut);
+
+            $combo_box_attributs.hide();
+            $attribut_add_other.val("");
+            $attribut_add_other.hide();
+        });
 
         return [
             $div_tag,
@@ -331,4 +335,16 @@ function taggable_xml (xml, id, tag, parent)
     }
 
     that.set_html();
+}
+
+that.show_error_message = function(message, $where){
+    var $span = $("<span>",{
+        'class': "warning",
+        text: message
+    });
+
+    $where.append($span);
+    $span.show(0).fadeTo(2000, 0, function(){
+        $span.hide(0);
+    });
 }
