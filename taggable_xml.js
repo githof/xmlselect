@@ -1,19 +1,42 @@
 /*
-  Interface objects for xml_contents
+  Interface objects for xml nodes
  */
 
-function taggable_xml (xml, id, tag, parent)
+// affichage d'un message d'erreur temporaire
+function show_error_message(message, $where)
+{
+    var $span = $("<span>",{
+        'class': "warning",
+        text: message
+    });
+
+    $where.append($span);
+    $span.show(0).fadeTo(2000, 0, function(){
+        $span.hide(0);
+    });
+}
+
+// taggable d'un xml text node
+function taggable_text_xml(xml)
 {
     var that = this;
-    this.xml = xml;
-    this.id = id;
-    this.$element = null;
-    this.$source = null;
-    this.$show = null;
+
+    this.xml = null;
+    this.$root = null;
     this.sel_show = null;
+    this.id = null;
     this.duplicate_tags = {};
-    this.tag = tag;
-    this.parent = parent;
+
+    this.set_xml = function(xml)
+    {
+        this.xml = xml;
+        this.xml.view = that;
+    }
+
+    this.remove_from_DOM = function()
+    {
+        that.$root.hide().remove();
+    }
 
     this.get_id = function(tag)
     {
@@ -26,46 +49,161 @@ function taggable_xml (xml, id, tag, parent)
         return base + ++that.duplicate_tags[tag];
     }
 
-    // Ajoute un nouvel attribut
-    this.add_new_attribut = function(attribut, $where, $where_error){
-        if(attribut.length == 0){
-            show_error_message("L'attribut est vide", $where_error);
-            return;
-        }
+    this.html_leaf = function()
+    {
+        var $p_text = $("<p>", {
+            text: that.xml.text
+        });
 
-        if(that.xml.contains_attribut(attribut)){
-            show_error_message("L'attribut existe déjà", $where_error);
-            return;
-        }
+        var $section_leaf = $("<section>", {
+            'class': 'text_node leaf'
+        });
 
+        $section_leaf.append($p_text);
+
+        return $section_leaf;
+    }
+
+    this.html_splittable = function(input_tags)
+    {
+        var $p_source = $("<p>", {
+                'class': 'xml_text source',
+                text: that.xml.text
+            });
+
+        var $button_ok = $("<button>", {
+                text: 'Ok'
+            });
+
+        var $form_tag_choice = $("<form>", {
+                'class': 'tag_choice',
+                'id': that.get_id('form')
+            });
+
+        var $p_show_title = $("<div>", {
+            text: "Selection :"
+        });
+
+        var $p_show = $("<p>", {
+                'class': 'xml_text show'
+            });
+
+        var $section_panel = $("<section>", {
+                'class': 'selection_panel'
+            });
+
+        var $section_text_node = $("<section>", {
+                'class': 'text_node'
+            });
+
+        var choices = new radio_list(input_tags, that.get_id('input'));
+        choices.default_index(0);
+        $form_tag_choice.append(choices.$element());
+
+        $section_panel.append($form_tag_choice);
+
+        $section_text_node.append(
+            $p_source,
+            $section_panel,
+            $button_ok,
+            $p_show_title,
+            $p_show);
+
+        that.sel_show = new select_and_show($p_source, $p_show);
+
+        $button_ok.click(function(){
+            var tag = $form_tag_choice.find('input[type=radio]:checked').val();
+            var start = that.sel_show.before.length;
+            var end = start + that.sel_show.select.length;
+
+            that.xml.split_text(tag, start, end);
+        });
+
+        return $section_text_node;
+    }
+
+    this.html = function()
+    {
+        var tag = "";
+
+        if(that.xml.parent instanceof xml_tag_node)
+            tag = that.xml.parent.tag;
+        else
+            tag = that.xml.parent.parent.tag;
+
+        var input_tags = wedding_tags[tag];
+        if(input_tags == null){
+            that.$root = that.html_leaf();
+        }else {
+            that.$root = that.html_splittable(input_tags);
+        }
+    }
+
+    this.append_to = function($where)
+    {
+        $where.append(that.$root);
+    }
+
+    this.set_xml(xml);
+    this.xml.parent.view.id;
+    this.html();
+}
+
+// taggable d'un xml tag node
+function taggable_tag_xml(xml)
+{
+    var that = this;
+
+    this.xml = null;
+    this.$root = null;
+    this.$root_attributs = null;
+    this.$root_child = null;
+
+    this.set_xml = function(xml)
+    {
+        this.xml = xml;
+        this.xml.view = that;
+    }
+
+    this.html_attribut = function(value)
+    {
         var $div_attribut = $("<div>", {
-            text: attribut,
+            text: value,
             'class': 'attribut'
         });
 
         $div_attribut.click(function(){
-            $div_attribut.hide().remove();
-            that.xml.remove_attribut(attribut);
+            if(that.xml.remove_attribut(value))
+                $div_attribut.hide().remove();
         });
 
-        if(that.xml.add_attribut(attribut))
-            $where.append($div_attribut);
+        return $div_attribut;
     }
 
-    // HTML pour le tag (avec attributs)
-    this.set_html_tag = function()
+    this.add_attribut = function(value, $where_error)
     {
-        var $div_tag = $("<div>", {
-            text: that.xml.get_tag(),
-            class: 'xml_tag'
-        });
-
-        var attributs_available = attributs_set[that.xml.get_tag()];
-        if(attributs_available == null){
-            return $div_tag;
+        if(value.length == 0){
+            show_error_message("L'attribut est vide", $where_error);
+            return;
         }
 
-        var $container_attributs = $("<div>", {
+        if(that.xml.contains_attribut(value)){
+            show_error_message("L'attribut existe déjà", $where_error);
+            return;
+        }
+
+        if(that.xml.add_attribut(value))
+            that.$root_attributs.append(that.html_attribut(value));
+    }
+
+    this.html_attributs = function()
+    {
+        var attributs_available = attributs_set[that.xml.tag];
+        if(attributs_available == null){
+            return null;
+        }
+
+        that.$root_attributs = $("<div>", {
             'class': 'attributs_tag'
         });
 
@@ -100,7 +238,7 @@ function taggable_xml (xml, id, tag, parent)
         });
         $section_attributs.append(
             $label_attribut,
-            $container_attributs,
+            that.$root_attributs,
             $container_add_attribut
         );
 
@@ -114,7 +252,7 @@ function taggable_xml (xml, id, tag, parent)
             );
         }
 
-        // ajoutre 'autre' au combo box
+        // ajoute 'autre' au combo box
         $combo_box_attributs.append(
             $("<option>", {
                 'value': option_other,
@@ -131,6 +269,11 @@ function taggable_xml (xml, id, tag, parent)
             else
                 $attribut_add_other.hide();
         });
+
+        // ajout des attributs déjà présent
+        for(var i = 0; i < that.xml.attributs; i++){
+            that.$root_attributs.append(that.html_attribut(that.xml.attributs[i]));
+        }
 
         // si click sur button ajouter new attribut
         $button_add.click(function(){
@@ -150,9 +293,8 @@ function taggable_xml (xml, id, tag, parent)
             if(new_attribut == option_other)
                 new_attribut = $attribut_add_other.val();
 
-            that.add_new_attribut(
+            that.add_attribut(
                 new_attribut,
-                $container_attributs,
                 $container_add_attribut);
 
             $combo_box_attributs.hide();
@@ -160,191 +302,127 @@ function taggable_xml (xml, id, tag, parent)
             $attribut_add_other.hide();
         });
 
-        return [
+        return $section_attributs;
+    }
+
+    this.html = function()
+    {
+        var $div_tag = $("<div>", {
+            text: that.xml.tag,
+            class: 'xml_tag'
+        });
+
+        var $dt = $("<dt>", {});
+        $dt.append(
             $div_tag,
-            $section_attributs
-        ];
-    }
-
-    this.set_html_xml_node = function()
-    {
-        var $ul = $("<ul>",
-            {
-                'class': 'xml_contents'
-            });
-
-        var $dt = $("<dt>", {});
-        $dt.append(that.set_html_tag());
+            that.html_attributs()
+        );
 
         var $dd = $("<dd>", {});
+        that.$root_child = $dd;
 
-        var nodes = that.xml.get_contents().get_nodes();
-        for(var i = 0; i < nodes.length; i++){
-            var $li = $("<li>", {});
-            $ul.append($li);
+        that.$root = [$dt, $dd];
+    }
 
-            var fils = new taggable_xml(
-                nodes[i],
-                that.get_id(nodes[i].get_tag()),
-                that.xml.get_tag(),
-                that);
+    this.set_child = function(xml)
+    {
+        var child = new_taggable_xml(xml);
+        child.append_to(that.$root_child);
+    }
 
-            $li.append(fils.$element);
+    this.update_child = function()
+    {
+        var child = new_taggable_xml(that.xml.child);
+        child.append_to(that.$root_child);
+    }
+
+    this.append_to = function($where)
+    {
+        $where.append(that.$root);
+    }
+
+    this.set_xml(xml);
+    this.html();
+    this.set_child(this.xml.child);
+}
+
+// taggable d'un xml contents node
+function taggable_contents_xml(xml)
+{
+    var that = this;
+
+    this.xml = null;
+    this.$root = null;
+
+    this.set_xml = function(xml)
+    {
+        this.xml = xml;
+        this.xml.view = that;
+    }
+
+    this.html_new_row = function(xml)
+    {
+        var $li = $("<li>", {});
+        var fils = new_taggable_xml(xml);
+        fils.append_to($li);
+
+        return $li;
+    }
+
+    this.html = function()
+    {
+        var $ul = $("<ul>", {
+            'class': "xml_contents"
+        });
+
+        that.$root = $ul;
+    }
+
+    this.add_all = function(xmls)
+    {
+        for(var i = 0; i < xmls.length; i++){
+            var $html = that.html_new_row(xmls[i]);
+            that.$root.append($html);
         }
-
-        $dd.append($ul);
-
-        that.$element = [$dt, $dd];
     }
 
-    this.set_html_tag_text_node = function()
+    this.update_rows = function(position, number)
     {
-        var $dt = $("<dt>", {});
-        $dt.append(that.set_html_tag());
+        var chidren, $row;
+        var nodes = that.xml.contents;
 
-        var $dd = $("<dd>", {});
+        that.$root.children("li").get(position).remove();
 
-	    var tg_text = new taggable_xml(
-            that.xml.get_text_node(),
-            that.id,
-            that.xml.get_tag(),
-            that);
-	    $dd.append(tg_text.$element);
-
-        that.$element = [$dt, $dd];
-    }
-
-    this.set_html_text_node = function()
-    {
-        var input_tags = wedding_tags[that.tag];
-        if(input_tags == null){
-            var $p_text = $("<p>", {
-                text: that.xml.get_text()
-            });
-
-            var $section_leaf = $("<section>", {
-                'class': 'text_node leaf'
-            });
-
-            $section_leaf.append($p_text);
-
-            that.$element = $section_leaf;
-        }else {
-            var $p_source = $("<p>",
-                {
-                    'class': 'xml_text source',
-                    text: that.xml.get_text()
-                });
-
-            var $button_ok = $("<button>",
-                {
-                    text: 'Ok'
-                });
-
-            var $form_tag_choice = $("<form>",
-                {
-                    'class': 'tag_choice',
-                    'id': that.get_id('form')
-                });
-
-            var $p_show_title = $("<div>", {
-                text: "Selection :"
-            });
-
-            var $p_show = $("<p>",
-                {
-                    'class': 'xml_text show'
-                });
-
-            var $section_panel = $("<section>",
-                {
-                    'class': 'selection_panel'
-                });
-
-            var $section_text_node = $("<section>",
-                {
-                    'class': 'text_node'
-                });
-
-            var choices = new radio_list(input_tags, that.get_id('input'));
-            choices.default_index(0);
-            $form_tag_choice.append(choices.$element());
-
-            $section_panel.append($form_tag_choice);
-
-            $section_text_node.append(
-                $p_source,
-                $section_panel,
-                $button_ok,
-                $p_show_title,
-                $p_show);
-
-	        that.$source = $p_source;
-	        that.$show = $p_show;
-            that.sel_show = new select_and_show(that.$source, that.$show);
-
-            $button_ok.click(function(){
-                var tag = $form_tag_choice.find('input[type=radio]:checked').val();
-                var start = that.sel_show.before.length;
-                var end = start + that.sel_show.select.length;
-
-                var updated_infos = tag_text_node(
-                    that.xml,
-                    that.parent.xml,
-                    tag,
-                    start,
-                    end);
-
-                var index_start = updated_infos.index_start;
-                var nb = updated_infos.nb;
-                var $li_old = that.$element.parent();
-                var nodes = that.parent.xml.get_contents().get_nodes();
-
-                for(var i = index_start; i < index_start + nb; i++){
-                    var $li = $("<li>", {});
-                    var fils = new taggable_xml(
-                        nodes[i],
-                        that.parent.get_id(nodes[i].get_tag()),
-                        that.parent.xml.get_tag(),
-                        that.parent);
-
-                    fils.append_to($li);
-                    $li_old.before($li);
-                }
-
-                that.$element.parent().fadeOut().remove();
-            });
-
-            that.$element = $section_text_node;
+        for(var i = 0; i < nodes.length; i++){
+            if(nodes[i].view == null){
+                children = that.$root.children("li");
+                $row = that.html_new_row(nodes[i]);
+                if(i == 0)
+                    that.$root.prepend($row);
+                else
+                    $row.insertAfter(children.get(i-1));
+            }
         }
     }
 
     this.append_to = function($where)
     {
-        $where.append(that.$element);
+        $where.append(that.$root);
     }
 
-    this.set_html = function() {
-        if (that.xml.is_text_node()) {
-            that.set_html_text_node();
-        } else if (that.xml.is_tag_text_node()) {
-            that.set_html_tag_text_node();
-        } else {
-            that.set_html_xml_node();
-        }
-    }
-
-    that.set_html();
+    this.set_xml(xml);
+    this.html();
+    this.add_all(this.xml.contents);
 }
 
-function show_error_message(message, $where){
-    var $span = $("<span>",{
-        'class': "warning",
-        text: message
-    });
-
-    $where.append($span);
-    $span.show(0).fadeTo(2000, 0, function(){
-        $span.hide(0);
-    });
+// Instanciation facile d'un xml node
+function new_taggable_xml(xml)
+{
+    if(xml instanceof xml_text_node)
+        return new taggable_text_xml(xml);
+    if(xml instanceof xml_contents_node)
+        return new taggable_contents_xml(xml);
+    if(xml instanceof xml_tag_node)
+        return new taggable_tag_xml(xml);
+    return null;
 }
