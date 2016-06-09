@@ -60,21 +60,21 @@ function taggable_xml (xml, id, tag, parent)
             class: 'xml_tag'
         });
 
-        var attributs_available = attributs_set[that.xml.get_tag()];
-        if(attributs_available == null){
+        var attributes_available = attributes_set[that.xml.get_tag()];
+        if(attributes_available == null){
             return $div_tag;
         }
 
-        var $container_attributs = $("<div>", {
-            'class': 'attributs_tag'
+        var $container_attributes = $("<div>", {
+            'class': 'attributes_tag'
         });
 
         var $label_attribut = $("<span>", {
             text: "Attributs :"
         });
 
-        var $combo_box_attributs = $("<select>");
-        $combo_box_attributs.hide();
+        var $combo_box_attributes = $("<select>");
+        $combo_box_attributes.hide();
 
         var $attribut_add_other = $("<input>", {
             'type': "text",
@@ -90,32 +90,32 @@ function taggable_xml (xml, id, tag, parent)
             'class': 'attribut_add_container'
         });
         $container_add_attribut.append(
-            $combo_box_attributs,
+            $combo_box_attributes,
             $attribut_add_other,
             $button_add
         );
 
-        var $section_attributs = $("<section>", {
-            'class': 'section_attributs'
+        var $section_attributes = $("<section>", {
+            'class': 'section_attributes'
         });
-        $section_attributs.append(
+        $section_attributes.append(
             $label_attribut,
-            $container_attributs,
+            $container_attributes,
             $container_add_attribut
         );
 
         // ajoute attributs du set au combo box
-        for(var i = 0; i < attributs_available.length; i++){
-            $combo_box_attributs.append(
+        for(var i = 0; i < attributes_available.length; i++){
+            $combo_box_attributes.append(
                 $("<option>", {
-                    'value': attributs_available[i],
-                    text: attributs_available[i]
+                    'value': attributes_available[i],
+                    text: attributes_available[i]
                 })
             );
         }
 
         // ajoutre 'autre' au combo box
-        $combo_box_attributs.append(
+        $combo_box_attributes.append(
             $("<option>", {
                 'value': option_other,
                 text: option_other
@@ -123,8 +123,8 @@ function taggable_xml (xml, id, tag, parent)
         );
 
         // si changement au combo box
-        $combo_box_attributs.change(function(){
-            var new_attribut = $combo_box_attributs.val();
+        $combo_box_attributes.change(function(){
+            var new_attribut = $combo_box_attributes.val();
 
             if(new_attribut == option_other)
                 $attribut_add_other.show();
@@ -134,10 +134,10 @@ function taggable_xml (xml, id, tag, parent)
 
         // si click sur button ajouter new attribut
         $button_add.click(function(){
-            var new_attribut = $combo_box_attributs.val();
+            var new_attribut = $combo_box_attributes.val();
 
-            if($combo_box_attributs.is(":hidden")){
-                $combo_box_attributs.show();
+            if($combo_box_attributes.is(":hidden")){
+                $combo_box_attributes.show();
 
                 if(new_attribut == option_other)
                     $attribut_add_other.show();
@@ -152,17 +152,17 @@ function taggable_xml (xml, id, tag, parent)
 
             that.add_new_attribut(
                 new_attribut,
-                $container_attributs,
+                $container_attributes,
                 $container_add_attribut);
 
-            $combo_box_attributs.hide();
+            $combo_box_attributes.hide();
             $attribut_add_other.val("");
             $attribut_add_other.hide();
         });
 
         return [
             $div_tag,
-            $section_attributs
+            $section_attributes
         ];
     }
 

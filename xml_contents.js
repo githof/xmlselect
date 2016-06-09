@@ -15,7 +15,7 @@ function xml_node()
     this.tag = null;
     this.contents = null;
     this.type = node_types.XML_NODE;
-    this.attributs = [];
+    this.attributes = [];
 
     /*
         Initialise un node(tag, contents)
@@ -107,26 +107,26 @@ function xml_node()
 
     // Ajoute un attribut
     this.add_attribut = function(new_attribut){
-        if(that.attributs.includes(new_attribut))
+        if(that.attributes.includes(new_attribut))
             return false;
-        that.attributs.push(new_attribut);
+        that.attributes.push(new_attribut);
         return true;
     }
 
     // Retire une attribut
     this.remove_attribut = function(attribut){
-        if(!that.attributs.includes(attribut))
+        if(!that.attributes.includes(attribut))
             return false;
 
-        var index = that.attributs.indexOf(attribut);
-        that.attributs.splice(index, 1);
+        var index = that.attributes.indexOf(attribut);
+        that.attributes.splice(index, 1);
 
         return true;
     }
 
     // Test si contient l'attribut
     this.contains_attribut = function(attribut){
-        return that.attributs.includes(attribut);
+        return that.attributes.includes(attribut);
     }
 
     this.toString = function()
@@ -140,7 +140,7 @@ function xml_node()
             return that.contents.toString();
 
         var attrs = "";
-        for(var i in that.attributs){
+        for(var i in that.attributes){
             attrs += ", "+i;
         }
 
