@@ -1,4 +1,17 @@
 
+var person_tags = [
+    'epoux',
+    'epouse',
+    'pere',
+    'mere',
+    'temoins',
+    'temoin',
+    'parrains',
+    'parrain',
+    'veuf',
+    'veuve'
+]
+
 var wedding_tags = {
 	'epoux': [
 	    "prenom", "nom", "condition", "naissance-lieu", "age", "veuf", "pere", "mere"
@@ -49,7 +62,7 @@ var attributs_set = {
 		"Don"
 	],
 	'nom': [
-		"de", "la"
+	    "de", "la", "los"
 	]
 }
 
