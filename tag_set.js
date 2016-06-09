@@ -12,6 +12,17 @@ var person_tags = [
     'veuve'
 ]
 
+function dico_from_keys(keys, value)
+{
+    // fonction fold au feeling, ajuster avec la doc (quand je serai en ligne)
+    var add_kv = function(key, dico)
+    {
+	dico[key] = value ;
+	return dico;
+    };
+    return _.fold(keys, {}, add_kv);
+}
+
 var wedding_tags = {
 	'epoux': [
 	    "prenom", "nom", "condition", "naissance-lieu", "age", "veuf", "pere", "mere"
