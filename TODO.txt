@@ -1,39 +1,12 @@
 
-+ range errors
-  comme le select_and_show est créé avant que l'élément soit inclus
-  dans la page, ça génère une erreur dans la console (pour chaque
-  select_and_show créé).
-  J'ai essayé de créer le select_and_show dans
-  la fonction append_to (juste après le append) mais le mécanisme ne
-  fonctionne pas et je ne comprends pas l'erreur que ça produit (pas
-  vraiment cherché).
-  En vrai il faudrait corriger un truc dans select_and_show pour
-  éviter qu'il initialise la sélection.  Si tu touches au code de
-  select_and_show préviens-moi.
-  En tout cas soit l'un soit l'autre, ce serait pas mal de se
-  débarrasser de ces erreurs très moches (qui n'empêchent pas le bazar
-  de fonctionner mais qui floodent la console)
++ Ajustements interface
 
-+ input radio : sélectionner le premier de la liste par défaut (dans
-  chaque formulaire).  Après on pourra ajouter des règles pour
-  sélectionner plus intelligemment les items (genre nom si le
-  précédent est déjà nom), mais ça c'est pour plus tard
+    - faire des boutons clic plutôt que des radio boutons
+      ce qui veut dire que ça change sans doute les modalités de prise
+      en compte
 
-# activation des boutons OK
+    - quand la sélection est vide et qu'on valide un tag, proposer de
+      sélectionner tout (idéalement, il suffirait de sélectionner tout
+      le texte, et l'utilisateur devra recliquer sur le bouton pour
+      confirmer)
 
-  quand on clique sur ok,
-  
-  + on crée 2 ou 3 xml_nodes :
-
-  - au milieu, un xml_node contenant la sélection, avec le tag choisi
-  par le bouton radio,
-  soit en tag_text_node si le tag n'a pas de descendants dans le
-  dictionnaire tag_set,
-  soit en xml_node générique sinon
-
-  - avant et/ou après, des text_nodes avec le reste du texte, qu'on
-    récupère dans l'object select_and_show (that.sel_show), dans ses
-    attributs before et after
-
-  + on remplace le <li> par la suite de <li> qui contiendront les
-  2 ou 3 éléments
