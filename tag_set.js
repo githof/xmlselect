@@ -58,6 +58,13 @@ var wedding_tags = {
 	]
 };
 
+/*
+
+var attributs_set = dico_from_keys(person_tags, ['Don']);
+attributs_set['nom'] = [ "de", "la", "los" ]
+
+ */
+
 var attributs_set = {
 	'epoux': [
 		"Don"
