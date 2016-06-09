@@ -5,6 +5,9 @@
       ce qui veut dire que ça change sans doute les modalités de prise
       en compte
 
+    - commander les boutons aussi avec des touches du clavier
+      (dictionnaire de correspondances tag -> lettre)
+
     - quand la sélection est vide et qu'on valide un tag, proposer de
       sélectionner tout (idéalement, il suffirait de sélectionner tout
       le texte, et l'utilisateur devra recliquer sur le bouton pour
