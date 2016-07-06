@@ -3,11 +3,35 @@
   needs test_acte.js
 */
 
+function test_acte(nom, acte){
+    var $test = $("<div>");
+
+    var $button = $("<button>", {
+        text: "print acte"
+    });
+    $button.click(function(){
+        console.log(acte.toString());
+    });
+
+    $test.append(
+        $("<h1>", {
+            text: nom
+        }),
+        $button
+    );
+
+    new_taggable_xml(acte).append_to($test);
+
+    $("body").append($test);
+}
+
 $(document).ready(function (){
 
-    var acte = test_acte_simple();
-    new taggable_xml(acte, 'acte').append_to($("#test1"));
+    test_acte("ACTE BRUTE", test_acte_brut());
 
-    acte = test_acte_incomplet();
-    new taggable_xml(acte, 'acte').append_to($("#test2"));
+    test_acte("ACTE SIMPLE", test_acte_simple());
+
+    test_acte("ACTE INCOMPLET", test_acte_incomplet());
+
+    test_acte("ACTE COMPLET", test_acte_complet());
 });

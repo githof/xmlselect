@@ -1,128 +1,115 @@
 
 /*
-  needs xml_contents.js
+  needs xml_node.js
  */
-
-function new_acte(contents)
-{
-    return new xml_node().set_node("acte", contents);
-}
 
 function test_acte_brut()
 {
-    var contents = new xml_node().set_text_node(
+    return new xml_tag_node(
+        "acte",
         "Felipe José de los SANTOS, natural de Lisboa, hijo legítimo de Pedro José de los Santos, y de Francisca Angélica Almeida"
     );
-
-    return new_acte(contents);
 }
+
 
 function test_acte_simple()
 {
-    var contents = new xml_contents()
-        .add_node("epoux", new xml_contents()
-		  .add_text("Felipe José de los SANTOS"))
-        .add_node("epouse", new xml_contents()
-		  .add_text("María Sinforosa SUAREZ"))
-        .add_node("temoins", new xml_contents()
-            .add_node("temoin", new xml_contents()
-                .add_text("Manuel Argerich"))
-            .add_node("temoin", new xml_contents()
-                .add_text("Rufina Marín"))
-        );
-
-    return new_acte(contents);
+    return new xml_tag_node("acte", [
+            new xml_tag_node("epoux", [
+                new xml_tag_node("prenom", "Felipe"),
+                new xml_tag_node("nom", "de los Santos")
+            ]),
+            new xml_tag_node("epouse", [
+                new xml_tag_node("prenom", "Maria"),
+                new xml_text_node(" Sinforosa "),
+                new xml_tag_node("nom", "SUAREZ")
+            ])
+        ]);
 }
 
-function test_acte()
+
+function test_acte_complet()
 {
-    var contents = new xml_contents()
-        .add_node("epoux", new xml_contents()
-            .add_tag_text("prenom", "Felipe")
-            .add_tag_text("prenom", "José")
-            .add_tag_text("nom", "de los Santos")
-            .add_text(", natural de Lisboa, hijo legítimo de ")
-            .add_node("pere", new xml_contents()
-                .add_tag_text("prenom", "Pedro")
-                .add_tag_text("prenom", "José")
-                .add_tag_text("nom", "de los Santos"))
-            .add_text(",_y_de_")
-            .add_node("mere", new xml_contents()
-                .add_tag_text("prenom", "Francisca")
-                .add_tag_text("prenom", "Angélica")
-                .add_tag_text("nom", "Almedia"))
-        )
-        .add_node("epouse", new xml_contents()
-            .add_tag_text("prenom", "María")
-            .add_tag_text("prenom", "Sinforosa")
-            .add_tag_text("nom", "SUAREZ")
-            .add_text(", natural de ésta, hija legítima de_")
-            .add_node("pere", new xml_contents()
-                .add_tag_text("prenom", "Pedro")
-                .add_tag_text("nom", "Suárez"))
-            .add_text(",_y_de_")
-            .add_node("mere", new xml_contents()
-                .add_text("María Bernardina Chavarría"))
-        );
-
-    var temoins = new xml_node()
-	.set_node("temoins", new xml_contents()
-            .add_node("temoin", new xml_contents()
-                .add_text("Manuel Argerich"))
-            .add_text(", y ")
-            .add_node("temoin", new xml_contents()
-                .add_text("Rufina Marín"))
-        );
-    contents.add_xml_node(temoins)
-        .add_text(", (f. 62v).");
-
-    return new_acte(contents);
+    return new xml_tag_node("acte", [
+        new xml_tag_node("epoux", [
+            new xml_tag_node("prenom", "Felipe"),
+            new xml_tag_node("prenom", "José"),
+            new xml_tag_node("nom", "de los Santos"),
+            new xml_text_node(", natural de Lisboa, hijo legítimo de "),
+            new xml_tag_node("pere", [
+                new xml_tag_node("prenom", "Pedro"),
+                new xml_tag_node("prenom", "José"),
+                new xml_tag_node("nom", "de los Santos")
+            ]),
+            new xml_text_node(", y de "),
+            new xml_tag_node("mere", [
+                new xml_tag_node("prenom", "Francisca"),
+                new xml_tag_node("prenom", "Angélica"),
+                new xml_tag_node("nom", "Almedia")
+            ])
+        ]),
+        new xml_tag_node("epouse", [
+            new xml_tag_node("prenom", "Maria"),
+            new xml_tag_node("prenom", "Sinforosa"),
+            new xml_tag_node("nom", "SUAREZ"),
+            new xml_text_node(", natural de ésta, hija legítima de"),
+            new xml_tag_node("pere", [
+                new xml_tag_node("prenom", "Pedro"),
+                new xml_tag_node("nom", "SUAREZ")
+            ]),
+            new xml_text_node(", y de "),
+            new xml_tag_node("mere", [
+                new xml_tag_node("prenom", "Maria"),
+                new xml_tag_node("prenom", "Bernardina"),
+                new xml_tag_node("nom", "Chavarria")
+            ])
+        ]),
+        new xml_tag_node("temoins", [
+            new xml_tag_node("temoin", [
+                new xml_tag_node("prenom", "Manuel"),
+                new xml_tag_node("nom", "Argerich")
+            ]),
+            new xml_text_node(", y "),
+            new xml_tag_node("temoin", [
+                new xml_tag_node("prenom", "Rufina"),
+                new xml_tag_node("nom", "Marin")
+            ])
+        ]),
+        new xml_text_node(", (f. 62v).")
+    ]);
 }
 
 function test_acte_incomplet()
 {
-    var contents = new xml_contents()
-        .add_node("epoux", new xml_contents()
-            .add_text("Felipe José")
-            .add_tag_text("nom", "de los Santos")
-            .add_text(", natural de Lisboa, hijo legítimo de ")
-            .add_node("pere", new xml_contents()
-                .add_text("Pedro José de los Santos"))
-            .add_text(",_y_de_")
-            .add_node("mere", new xml_contents()
-                .add_tag_text("prenom", "Francisca")
-                .add_tag_text("prenom", "Angélica")
-                .add_tag_text("nom", "Almedia"))
-        )
-        .add_node("epouse", new xml_contents()
-            .add_text("Maria Sinforosa SUAREZ")
-            .add_text(", natural de ésta, hija legítima de_")
-            .add_node("pere", new xml_contents()
-                .add_tag_text("prenom", "Pedro")
-                .add_tag_text("nom", "Suárez"))
-            .add_text(",_y_de_María Bernardina Chavarría")
-        );
-
-    var temoin1 = new xml_node().
-        set_node("temoin", new xml_contents()
-            .add_tag_text("Prenom", "Manuel")
-            .add_tag_text("Nom", "Argerich")
-    );
-
-    var temoin2 = new xml_node().
-        set_node("temoin", new xml_contents()
-            .add_text("Rufina Marín")
-    );
-
-    var temoins = new xml_node()
-        .set_node("temoins", new xml_contents()
-            .add_xml_node(temoin1)
-            .add_text(", y ")
-            .add_xml_node(temoin2)
-        );
-
-    contents.add_xml_node(temoins)
-        .add_text(", (f. 62v).");
-
-    return new_acte(contents);
+    return new xml_tag_node("acte", [
+        new xml_tag_node("epoux", [
+            new xml_text_node("Felipe José"),
+            new xml_tag_node("nom", "de los Santos"),
+            new xml_text_node(", natural de Lisboa, hijo legítimo de "),
+            new xml_tag_node("pere", [
+                new xml_tag_node("prenom", "Pedro"),
+                new xml_tag_node("prenom", "José"),
+                new xml_tag_node("nom", "de los Santos")
+            ]),
+            new xml_text_node(", y de Francisca Angélica Almedia")
+        ]),
+        new xml_tag_node("epouse", [
+            new xml_text_node("Maria Sinforosa SUAREZ, natural de ésta, hija legítima de"),
+            new xml_tag_node("pere", [
+                new xml_tag_node("prenom", "Pedro"),
+                new xml_tag_node("nom", "SUAREZ")
+            ]),
+            new xml_text_node(", y de "),
+            new xml_tag_node("mere", [
+                new xml_text_node("Maria Bernadina Chavarria")
+            ])
+        ]),
+        new xml_tag_node("temoins", [
+            new xml_text_node("Manuel Argerich, y "),
+            new xml_tag_node("temoin", [
+                new xml_text_node("Rufina Marin")
+            ])
+        ]),
+        new xml_text_node(", (f. 62v).")
+    ]);
 }
