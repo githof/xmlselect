@@ -387,7 +387,7 @@ function taggable_contents_xml(xml)
 
     this.update_rows = function(position)
     {
-        var chidren, $row;
+        var children, $row;
         var nodes = that.xml.contents;
 
         that.$root.children("li").get(position).remove();
