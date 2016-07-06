@@ -145,7 +145,6 @@ function taggable_text_xml(xml)
     }
 
     this.set_xml(xml);
-    this.xml.parent.view.id;
     this.html();
 }
 
