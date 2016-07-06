@@ -35,7 +35,7 @@ var wedding_tags = {
 	]
 };
 
-var attributs_set = {
+var attributes_set = {
 	'epoux': [
 		"Don"
 	],

@@ -136,7 +136,7 @@ function xml_tag_node(tag, child)
     this.tag = tag;
     this.child = null;
     this.parent = null;
-    this.attributs = [];
+    this.attributes = [];
     this.view = null;
 
     this.set_view = function(view)
@@ -163,9 +163,9 @@ function xml_tag_node(tag, child)
     {
         var attrs = "";
 
-        for(var i = 0; i < that.attributs.length; i++){
-            attrs += that.attributs[i];
-            if(i < that.attributs.length -1)
+        for(var i = 0; i < that.attributes.length; i++){
+            attrs += that.attributes[i];
+            if(i < that.attributes.length -1)
                 attrs += ", ";
         }
 
@@ -209,26 +209,26 @@ function xml_tag_node(tag, child)
 
     // Ajoute un attribut
     this.add_attribut = function(new_attribut){
-        if(that.attributs.includes(new_attribut))
+        if(that.attributes.includes(new_attribut))
             return false;
-        that.attributs.push(new_attribut);
+        that.attributes.push(new_attribut);
         return true;
     }
 
     // Retire une attribut
     this.remove_attribut = function(attribut){
-        if(!that.attributs.includes(attribut))
+        if(!that.attributes.includes(attribut))
             return false;
 
-        var index = that.attributs.indexOf(attribut);
-        that.attributs.splice(index, 1);
+        var index = that.attributes.indexOf(attribut);
+        that.attributes.splice(index, 1);
 
         return true;
     }
 
     // Test si contient l'attribut
     this.contains_attribut = function(attribut){
-        return that.attributs.includes(attribut);
+        return that.attributes.includes(attribut);
     }
 
     this.set_child(child);
