@@ -1,6 +1,6 @@
 
 /*
-  needs xml_contents.js
+  needs xml_node.js
  */
 
 function test_acte_brut()
