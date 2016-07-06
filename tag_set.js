@@ -1,4 +1,30 @@
 
+var person_tags = [
+    'epoux',
+    'epouse',
+    'pere',
+    'mere',
+    'temoin',
+    'parrain'
+]
+
+/*
+function dico_from_keys(keys, value)
+{
+    // fonction fold au feeling, ajuster avec la doc (quand je serai en ligne)
+    var add_kv = function(key, dico)
+    {
+	dico[key] = value ;
+	return dico;
+    };
+    return _.fold(keys, {}, add_kv);
+}
+
+var wt = dico_from_keys(person_tags, ['prenom', 'nom', 'condition', 'veuf'])
+
+ajouter les tags qui manquent
+*/
+
 var wedding_tags = {
     'acte': [
 	"epoux", "epouse", "temoins", "parrains"
@@ -35,6 +61,13 @@ var wedding_tags = {
 	]
 };
 
+/*
+
+var attributes_set = dico_from_keys(person_tags, ['Don']);
+attributes_set['nom'] = [ "de", "la", "los" ]
+
+ */
+
 var attributes_set = {
 	'epoux': [
 		"Don"
@@ -52,7 +85,7 @@ var attributes_set = {
 		"Don"
 	],
 	'nom': [
-		"de", "la"
+	    "de", "la", "los"
 	]
 }
 

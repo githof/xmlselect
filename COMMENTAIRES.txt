@@ -1,4 +1,14 @@
 
+# Christophe 9 juin
+
+## Les branches
+
+Utiliser l'option --no-ff de git merge, pour garder la trace, dans l'historique, des branches utilisées
+Pour ça, dans mon .gitconfig, j'ai les alias suivants :
+[alias]
+        mg = merge --no-ff
+        lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d %Cgreen[%cr]%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit
+
 # Christophe, 15 mars
 
 ## Pour les tests
