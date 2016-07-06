@@ -35,13 +35,13 @@ function selection()
 function select_text(element) {
     var doc = document
         , range, selection
-    ;    
+    ;
     if (doc.body.createTextRange) {
         range = document.body.createTextRange();
         range.moveToElementText(element);
         range.select();
     } else if (window.getSelection) {
-        selection = window.getSelection();        
+        selection = window.getSelection();
         range = document.createRange();
         range.selectNodeContents(element);
         selection.removeAllRanges();
@@ -60,45 +60,56 @@ function select_and_show($select, $show, then_callback)
 
     this.extract_text = function ()
     {
-	var select = that.$select.get(0);
-	var text;
+        var select = that.$select.get(0);
+        var text;
 
-	select_text(select);
-	text = selection().toString();
-	if(text != "")
-	{
-	    that.$select.text(text);
-	    that.text = text;
-	}
-	else
-	    that.text = that.$select.text();
+        select_text(select);
+        text = selection().toString();
+        if(text != "")
+        {
+            that.$select.text(text);
+            that.text = text;
+        }
+        else
+            that.text = that.$select.text();
+    }
+
+    this.update_selection = function(sel){
+        var start;
+
+        if(sel.anchorOffset < sel.focusOffset)
+            start = sel.anchorOffset;
+        else
+            start = sel.focusOffset;
+
+        that.before = that.text.slice(0, start);
+        that.select = sel.toString();
+        that.after = that.text.slice(start + that.select.length);
     }
 
     this.show_selected = function ()
     {
-	var sel = selection();
-	that.$show.text(sel);
-	return sel;
+        var sel = selection();
+        that.update_selection(sel);
+
+        if(that.text.indexOf(that.select) >= 0)
+            that.$show.text(that.select);
     }
 
     this.stop_selection = function ()
     {
-	var sel = that.show_selected();
-	that.before = that.text.slice(0, sel.anchorOffset);
-	that.select = sel.toString();
-	that.after = that.text.slice(sel.anchorOffset + that.select.length);
-	that.$select.off('mousemove mouseup');
+        that.show_selected();
+        that.$select.off('mousemove mouseup');
 
-	if(that.then_callback != null) that.then_callback();
+        if(that.then_callback != null) that.then_callback();
     }
 
     this.start_selection = function ()
     {
-	that.$select.on('mousemove', that.show_selected);
-	that.$select.on('mouseup', that.stop_selection);
+        that.$select.on('mousemove', that.show_selected);
+        that.$select.on('mouseup', that.stop_selection);
     }
 
     this.extract_text();
     this.$select.on('mousedown', this.start_selection);
 }
-
