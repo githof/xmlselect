@@ -120,7 +120,7 @@ function xml_contents_node(contents)
             that.contents.splice(index, 0, new_nodes[i]);
 
         if(that.view != null)
-            that.view.update_rows(position);
+            that.view.update_rows(index);
     }
 
     if(contents != null){

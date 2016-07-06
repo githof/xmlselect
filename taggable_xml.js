@@ -386,7 +386,7 @@ function taggable_contents_xml(xml)
         }
     }
 
-    this.update_rows = function(position, number)
+    this.update_rows = function(position)
     {
         var chidren, $row;
         var nodes = that.xml.contents;
