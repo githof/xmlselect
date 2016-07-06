@@ -1,6 +1,8 @@
 
 + Ajustements interface
 
+     - ajouter attributs même quand il n'y en a pas dans le attr_set ("autre")
+
     - faire des boutons clic plutôt que des radio boutons
       ce qui veut dire que ça change sans doute les modalités de prise
       en compte
