@@ -10,10 +10,5 @@
 
     - undo
 
-    - quand la sélection est vide et qu'on valide un tag, proposer de
-      sélectionner tout (idéalement, il suffirait de sélectionner tout
-      le texte, et l'utilisateur devra recliquer sur le bouton pour
-      confirmer)
-
     - commander les boutons aussi avec des touches du clavier
       (dictionnaire de correspondances tag -> lettre)
