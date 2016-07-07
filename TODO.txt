@@ -8,10 +8,6 @@
 
      - ajouter attributs même quand il n'y en a pas dans le attr_set ("autre")
 
-    - faire des boutons clic plutôt que des radio boutons
-      ce qui veut dire que ça change sans doute les modalités de prise
-      en compte
-
     - undo
 
     - quand la sélection est vide et qu'on valide un tag, proposer de
@@ -21,4 +17,3 @@
 
     - commander les boutons aussi avec des touches du clavier
       (dictionnaire de correspondances tag -> lettre)
-
