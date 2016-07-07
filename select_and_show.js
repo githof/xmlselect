@@ -74,23 +74,30 @@ function select_and_show($select, $show, then_callback)
             that.text = that.$select.text();
     }
 
-    this.update_selection = function(sel){
+    this.update_selection = function(sel, select_all = false){
         var start;
 
-        if(sel.anchorOffset < sel.focusOffset)
+        if(select_all)
+            start = 0;
+        else if(sel.anchorOffset < sel.focusOffset)
             start = sel.anchorOffset;
         else
             start = sel.focusOffset;
 
         that.before = that.text.slice(0, start);
-        that.select = sel.toString();
+
+        if(select_all)
+            that.select = that.text;
+        else
+            that.select = sel.toString();
+
         that.after = that.text.slice(start + that.select.length);
     }
 
-    this.show_selected = function ()
+    this.show_selected = function (select_all = false)
     {
         var sel = selection();
-        that.update_selection(sel);
+        that.update_selection(sel, select_all);
 
         if(that.text.indexOf(that.select) >= 0)
             that.$show.text(that.select);

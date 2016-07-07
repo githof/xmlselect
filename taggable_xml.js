@@ -49,7 +49,7 @@ function taggable_text_xml(xml)
         return base + ++that.duplicate_tags[tag];
     }
 
-    this.button_tag = function(tag)
+    this.button_tag = function(tag, text_length)
     {
         var $button = $("<button>", {
             'class': 'button_tag',
@@ -60,7 +60,10 @@ function taggable_text_xml(xml)
             var start = that.sel_show.before.length;
             var end = start + that.sel_show.select.length;
 
-            that.xml.split_text(tag, start, end);
+            if(start == end)
+                that.sel_show.show_selected(true);
+            else
+                that.xml.split_text(tag, start, end);
         });
 
         return $button;
