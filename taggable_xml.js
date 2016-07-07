@@ -49,7 +49,7 @@ function taggable_text_xml(xml)
         return base + ++that.duplicate_tags[tag];
     }
 
-    this.button_tag = function(tag, text_length)
+    this.button_tag = function(tag)
     {
         var $button = $("<button>", {
             'class': 'button_tag',
