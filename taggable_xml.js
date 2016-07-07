@@ -49,6 +49,23 @@ function taggable_text_xml(xml)
         return base + ++that.duplicate_tags[tag];
     }
 
+    this.button_tag = function(tag)
+    {
+        var $button = $("<button>", {
+            'class': 'button_tag',
+            'text': tag
+        });
+
+        $button.click(function(){
+            var start = that.sel_show.before.length;
+            var end = start + that.sel_show.select.length;
+
+            that.xml.split_text(tag, start, end);
+        });
+
+        return $button;
+    }
+
     this.html_leaf = function()
     {
         var $p_text = $("<p>", {
@@ -71,15 +88,6 @@ function taggable_text_xml(xml)
                 text: that.xml.text
             });
 
-        var $button_ok = $("<button>", {
-                text: 'Ok'
-            });
-
-        var $form_tag_choice = $("<form>", {
-                'class': 'tag_choice',
-                'id': that.get_id('form')
-            });
-
         var $p_show_title = $("<div>", {
             text: "Selection :"
         });
@@ -88,7 +96,7 @@ function taggable_text_xml(xml)
                 'class': 'xml_text show'
             });
 
-        var $section_panel = $("<section>", {
+        var $section_selection_panel = $("<section>", {
                 'class': 'selection_panel'
             });
 
@@ -96,28 +104,17 @@ function taggable_text_xml(xml)
                 'class': 'text_node'
             });
 
-        var choices = new radio_list(input_tags, that.get_id('input'));
-        choices.default_index(0);
-        $form_tag_choice.append(choices.$element());
-
-        $section_panel.append($form_tag_choice);
+        for(var i = 0; i < input_tags.length; i++){
+            $section_selection_panel.append(that.button_tag(input_tags[i]));
+        }
 
         $section_text_node.append(
             $p_source,
-            $section_panel,
-            $button_ok,
+            $section_selection_panel,
             $p_show_title,
             $p_show);
 
         that.sel_show = new select_and_show($p_source, $p_show);
-
-        $button_ok.click(function(){
-            var tag = $form_tag_choice.find('input[type=radio]:checked').val();
-            var start = that.sel_show.before.length;
-            var end = start + that.sel_show.select.length;
-
-            that.xml.split_text(tag, start, end);
-        });
 
         return $section_text_node;
     }

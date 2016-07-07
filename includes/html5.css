@@ -32,7 +32,7 @@ ul{
     margin: 10px 0px 10px 0px;
 }
 
-.tag_choice ul li {
+.button_tag {
     display: inline-block;;
     margin-right: 10px;
 }
