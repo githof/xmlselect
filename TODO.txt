@@ -1,7 +1,4 @@
 
-+ Remonter d'un cran la sélection
-  - au début (le mettre en text_node avant) ou à la fin (en text_node après)
-
 + Lire / écrire de et vers le xml
 
 + Ajustements interface
