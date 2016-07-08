@@ -16,7 +16,7 @@ function xml_text_node(text)
 
     this.pretty_string = function(indentation)
     {
-        return that.text.toString();
+        return indentation + that.text.toString();
     }
 
     this.toString = function()
@@ -54,7 +54,6 @@ function xml_text_node(text)
         that.parent.split_child(that, tag, before, select, after);
     }
 
-    /*
     this.ascend_text = function(start, end)
     {
         if(start < 0 || start >= that.text.length)
@@ -70,29 +69,32 @@ function xml_text_node(text)
             return;
 
         var select = other = "";
+        var is_before = false;
 
         if(start == 0){
             select = that.text.substring(0, end);
             other = that.text.substring(end);
-
-            that.parent.parent.ascend_text(that.parent, select, true);
+            is_before = true;
         }else{
             other = that.text.substring(0, start);
             select = that.text.substring(start);
-
-            that.parent.parent.ascend_text(that.parent, select, false);
+            is_before = false;
         }
 
         that.text = other;
 
-        if(that.text.length == 0){
+        if(other.length == 0)
             that.parent.remove_child(that);
-        }else{
-            if(that.view != null)
+
+        that.parent.parent.ascend_text(that.parent, select, is_before);
+
+        if(that.view != null){
+            if(that.text.length == 0)
+                that.view.remove_from_DOM();
+            else
                 that.view.update();
         }
     }
-    */
 }
 
 function xml_tag_node(tag, child)
@@ -125,6 +127,15 @@ function xml_tag_node(tag, child)
         }
     }
 
+    this.remove_child = function(child)
+    {
+        var index = that.contents.indexOf(child);
+        if(index < 0)
+            return;
+
+        that.contents.splice(index, 1);
+    }
+
     this.pretty_string = function(indentation)
     {
         var s = "";
@@ -136,12 +147,12 @@ function xml_tag_node(tag, child)
                 attrs += ", ";
         }
 
-        s = "[" + that.tag + "] "
+        s = indentation + "[" + that.tag + "] "
             + "(" + attrs + ") ";
 
         s += "\n";
         for(var i = 0; i < that.contents.length; i++){
-            s += indentation + that.contents[i].pretty_string(indentation);
+            s += indentation + that.contents[i].pretty_string(indentation + "  ");
             if(!s.endsWith("\n"))
                 s += "\n";
         }
@@ -186,43 +197,56 @@ function xml_tag_node(tag, child)
             that.view.update_children();
     }
 
-    /*
     this.ascend_text = function(child, text, is_before)
     {
         var index = that.contents.indexOf(child);
-        console.log("index:"+index+" is_before:"+is_before);
 
-        if(is_before && index > 0){
-            var before = that.contents[index -1];
-            if(before instanceof xml_text_node){
-                before.text = before.text + ' ' + text;
-                return;
+        if(is_before){
+            var before = null;
+            if(index > 0){
+                before = that.contents[index -1];
             }
-        }else if(!is_before && index < that.contents.length){
-            var after = that.contents[index + 1];
-            if(after instanceof xml_text_node){
+
+            if(before != null && before instanceof xml_text_node){
+                before.text = before.text + ' ' + text;
+
+                if(before.view != null)
+                    before.view.update();
+            }else{
+                var node = new xml_text_node(text);
+                node.parent = that;
+                that.contents.splice(index, 0, node);
+            }
+        }else{
+            var after = null;
+            if(index < that.contents.length -1){
+                after = that.contents[index + 1];
+            }
+
+            if(after != null && after instanceof xml_text_node){
                 after.text = text + ' ' + after.text;
-                return;
+
+                if(after.view != null)
+                    after.view.update();
+            }else{
+                var node = new xml_text_node(text);
+                node.parent = that;
+                that.contents.splice(index+1, 0, node);
             }
         }
 
-        var node = new xml_text_node(text);
+        if(child.contents.length == 0){
+            index = that.contents.indexOf(child);
+            that.contents.splice(index, 1);
 
-        if(is_before)
-            that.contents.splice(index, 0, node);
-        else{
-            if(index == that.contents.length -1)
-                that.contents.push(node);
-            else
-                that.contents.splice(index+1, 0, node);
+            if(child.view != null)
+                child.view.remove_from_DOM();
         }
 
         if(that.view != null)
-            that.view.update_rows();
+            that.view.update_children();
     }
-    */
 
-    // Ajoute un attribut
     this.add_attribut = function(new_attribut){
         if(that.attributes.includes(new_attribut))
             return false;
@@ -230,7 +254,6 @@ function xml_tag_node(tag, child)
         return true;
     }
 
-    // Retire une attribut
     this.remove_attribut = function(attribut){
         if(!that.attributes.includes(attribut))
             return false;
@@ -241,7 +264,6 @@ function xml_tag_node(tag, child)
         return true;
     }
 
-    // Test si contient l'attribut
     this.contains_attribut = function(attribut){
         return that.attributes.includes(attribut);
     }

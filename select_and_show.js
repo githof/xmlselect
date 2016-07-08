@@ -58,6 +58,13 @@ function select_and_show($select, $show, then_callback)
     this.then_callback = then_callback;
     this.text = this.before = this.select = this.after = "";
 
+    this.clean_bounds = function()
+    {
+        that.before = "";
+        that.select = "";
+        that.after = "";
+    }
+
     this.extract_text = function ()
     {
         var select = that.$select.get(0);
@@ -103,6 +110,11 @@ function select_and_show($select, $show, then_callback)
             that.$show.text(that.select);
     }
 
+    this.move_selection = function()
+    {
+        that.show_selected();
+    }
+
     this.stop_selection = function ()
     {
         that.show_selected();
@@ -113,7 +125,7 @@ function select_and_show($select, $show, then_callback)
 
     this.start_selection = function ()
     {
-        that.$select.on('mousemove', that.show_selected);
+        that.$select.on('mousemove', that.move_selection);
         that.$select.on('mouseup', that.stop_selection);
     }
 

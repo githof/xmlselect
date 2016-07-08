@@ -52,6 +52,7 @@ function taggable_text_xml(xml)
     this.update = function()
     {
         that.sel_show.$select.text(that.xml.text);
+        that.sel_show.clean_bounds();
         that.sel_show.extract_text();
         that.sel_show.$show.text("");
     }
@@ -70,7 +71,6 @@ function taggable_text_xml(xml)
             var start = that.sel_show.before.length;
             var end = start + that.sel_show.select.length;
 
-            console.log("start:"+start+", end:"+end);
             if(start == end)
                 that.sel_show.show_selected(true);
             else
@@ -141,7 +141,7 @@ function taggable_text_xml(xml)
         for(var i = 0; i < input_tags.length; i++){
             $section_selection_panel.append(that.button_tag(input_tags[i]));
         }
-        //$section_selection_panel.append(that.button_go_up());
+        $section_selection_panel.append(that.button_go_up());
 
         $div_text_node.append(
             $p_source,
@@ -156,12 +156,7 @@ function taggable_text_xml(xml)
 
     this.html = function()
     {
-        var tag = "";
-
-        if(that.xml.parent instanceof xml_tag_node)
-            tag = that.xml.parent.tag;
-        else
-            tag = that.xml.parent.parent.tag;
+        var tag = that.xml.parent.tag;
 
         var input_tags = wedding_tags[tag];
         if(input_tags == null){
@@ -194,6 +189,11 @@ function taggable_tag_xml(xml)
     {
         that.xml = xml;
         that.xml.view = that;
+    }
+
+    this.remove_from_DOM = function()
+    {
+        that.$root.hide().remove();
     }
 
     this.html_attribut = function(value)
