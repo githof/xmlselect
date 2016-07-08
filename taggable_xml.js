@@ -29,8 +29,8 @@ function taggable_text_xml(xml)
 
     this.set_xml = function(xml)
     {
-        this.xml = xml;
-        this.xml.view = that;
+        that.xml = xml;
+        that.xml.view = that;
     }
 
     this.remove_from_DOM = function()
@@ -47,6 +47,37 @@ function taggable_text_xml(xml)
             return base;
         }
         return base + ++that.duplicate_tags[tag];
+    }
+
+    this.update = function()
+    {
+        that.sel_show.$select.text(that.xml.text);
+        that.sel_show.extract_text();
+        that.sel_show.$show.text("");
+    }
+
+    this.button_go_up = function()
+    {
+        if(that.xml.parent == null || that.xml.parent.parent == null)
+            return;
+
+        var $button = $("<button>", {
+            'class': 'button_go_up',
+            text: 'UP'
+        });
+
+        $button.click(function(){
+            var start = that.sel_show.before.length;
+            var end = start + that.sel_show.select.length;
+
+            console.log("start:"+start+", end:"+end);
+            if(start == end)
+                that.sel_show.show_selected(true);
+            else
+                that.xml.ascend_text(start, end);
+        })
+
+        return $button;
     }
 
     this.button_tag = function(tag)
@@ -75,13 +106,13 @@ function taggable_text_xml(xml)
             text: that.xml.text
         });
 
-        var $section_leaf = $("<section>", {
+        var $div_leaf = $("<div>", {
             'class': 'text_node leaf'
         });
 
-        $section_leaf.append($p_text);
+        $div_leaf.append($p_text);
 
-        return $section_leaf;
+        return $div_leaf;
     }
 
     this.html_splittable = function(input_tags)
@@ -103,15 +134,16 @@ function taggable_text_xml(xml)
                 'class': 'selection_panel'
             });
 
-        var $section_text_node = $("<section>", {
+        var $div_text_node = $("<div>", {
                 'class': 'text_node'
             });
 
         for(var i = 0; i < input_tags.length; i++){
             $section_selection_panel.append(that.button_tag(input_tags[i]));
         }
+        //$section_selection_panel.append(that.button_go_up());
 
-        $section_text_node.append(
+        $div_text_node.append(
             $p_source,
             $section_selection_panel,
             $p_show_title,
@@ -119,7 +151,7 @@ function taggable_text_xml(xml)
 
         that.sel_show = new select_and_show($p_source, $p_show);
 
-        return $section_text_node;
+        return $div_text_node;
     }
 
     this.html = function()
@@ -156,12 +188,12 @@ function taggable_tag_xml(xml)
     this.xml = null;
     this.$root = null;
     this.$root_attributes = null;
-    this.$root_child = null;
+    this.$root_children = null;
 
     this.set_xml = function(xml)
     {
-        this.xml = xml;
-        this.xml.view = that;
+        that.xml = xml;
+        that.xml.view = that;
     }
 
     this.html_attribut = function(value)
@@ -304,11 +336,28 @@ function taggable_tag_xml(xml)
         return $section_attributes;
     }
 
+    this.html_child = function(xml)
+    {
+        return new_taggable_xml(xml);
+    }
+
+    this.html_children = function()
+    {
+        var children = [];
+
+        for(var i = 0; i < that.xml.contents.length; i++){
+            var child = that.html_child(that.xml.contents[i]);
+            children.push(child);
+        }
+
+        return children;
+    }
+
     this.html = function()
     {
         var $div_tag = $("<div>", {
             text: that.xml.tag,
-            class: 'xml_tag'
+            class: 'tag_title'
         });
 
         var $dt = $("<dt>", {});
@@ -317,89 +366,34 @@ function taggable_tag_xml(xml)
             that.html_attributes()
         );
 
-        var $dd = $("<dd>", {});
-        that.$root_child = $dd;
-
-        that.$root = [$dt, $dd];
-    }
-
-    this.set_child = function(xml)
-    {
-        var child = new_taggable_xml(xml);
-        child.append_to(that.$root_child);
-    }
-
-    this.update_child = function()
-    {
-        var child = new_taggable_xml(that.xml.child);
-        child.append_to(that.$root_child);
-    }
-
-    this.append_to = function($where)
-    {
-        $where.append(that.$root);
-    }
-
-    this.set_xml(xml);
-    this.html();
-    this.set_child(this.xml.child);
-}
-
-// taggable d'un xml contents node
-function taggable_contents_xml(xml)
-{
-    var that = this;
-
-    this.xml = null;
-    this.$root = null;
-
-    this.set_xml = function(xml)
-    {
-        this.xml = xml;
-        this.xml.view = that;
-    }
-
-    this.html_new_row = function(xml)
-    {
-        var $li = $("<li>", {});
-        var fils = new_taggable_xml(xml);
-        fils.append_to($li);
-
-        return $li;
-    }
-
-    this.html = function()
-    {
-        var $ul = $("<ul>", {
-            'class': "xml_contents"
+        var $dd = $("<dd>", {
+            'class': 'children'
         });
 
-        that.$root = $ul;
+        var children = that.html_children();
+        for(var i = 0; i< children.length; i++)
+            children[i].append_to($dd);
+
+        that.$root_children = $dd;
+
+        that.$root = $("<div>", {
+            'class': 'tag_node'
+        });
+
+        that.$root.append([$dt, $dd]);
     }
 
-    this.add_all = function(xmls)
+    this.update_children = function()
     {
-        for(var i = 0; i < xmls.length; i++){
-            var $html = that.html_new_row(xmls[i]);
-            that.$root.append($html);
-        }
-    }
+        var children = that.xml.contents;
 
-    this.update_rows = function(position)
-    {
-        var children, $row;
-        var nodes = that.xml.contents;
-
-        that.$root.children("li").get(position).remove();
-
-        for(var i = 0; i < nodes.length; i++){
-            if(nodes[i].view == null){
-                children = that.$root.children("li");
-                $row = that.html_new_row(nodes[i]);
+        for(var i = 0; i < children.length; i++){
+            if(children[i].view == null){
+                var child = that.html_child(children[i]);
                 if(i == 0)
-                    that.$root.prepend($row);
+                    that.$root_children.prepend(child.$root);
                 else
-                    $row.insertAfter(children.get(i-1));
+                    child.$root.insertAfter(that.$root_children.children("div").get(i-1));
             }
         }
     }
@@ -411,7 +405,6 @@ function taggable_contents_xml(xml)
 
     this.set_xml(xml);
     this.html();
-    this.add_all(this.xml.contents);
 }
 
 // Instanciation facile d'un xml node
@@ -419,8 +412,6 @@ function new_taggable_xml(xml)
 {
     if(xml instanceof xml_text_node)
         return new taggable_text_xml(xml);
-    if(xml instanceof xml_contents_node)
-        return new taggable_contents_xml(xml);
     if(xml instanceof xml_tag_node)
         return new taggable_tag_xml(xml);
     return null;

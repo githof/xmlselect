@@ -37,6 +37,14 @@ ul{
     margin-right: 10px;
 }
 
+.button_go_up {
+    margin-right: 30px;
+    color: white;
+    border-radius: 7px;
+    background-color: red;
+    float: right;
+}
+
 .text_node{
     background-color: #d7e3ea;
     border: 1px solid #CFD8DC;
@@ -52,6 +60,11 @@ ul{
 .source {
     background-color: white;
     padding: 10px 10px 10px 10px;
+    white-space: pre-wrap;
+}
+
+.source:hover {
+    text-decoration: underline;
 }
 
 .show{
@@ -71,14 +84,14 @@ p{
     margin: 0px;
 }
 
-.xml_tag{
+.tag_title{
     display: inline-block;
     color: #698096;
     text-transform: uppercase;
     padding: 5px;
 }
 
-.attributs_tag{
+.attributes_tag{
     display: inline-block;
     margin-left: 10px;
 }

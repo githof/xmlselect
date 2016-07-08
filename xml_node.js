@@ -10,8 +10,8 @@ function xml_text_node(text)
 
     this.set_view = function(view)
     {
-        this.view = view;
-        this.view.xml = that;
+        that.view = view;
+        that.view.xml = that;
     }
 
     this.pretty_string = function(indentation)
@@ -53,14 +53,56 @@ function xml_text_node(text)
 
         that.parent.split_child(that, tag, before, select, after);
     }
+
+    /*
+    this.ascend_text = function(start, end)
+    {
+        if(start < 0 || start >= that.text.length)
+            return;
+
+        if(end < 1 || end > that.text.length)
+            return;
+
+        if(end <= start)
+            return;
+
+        if(start != 0 && end != that.text.length)
+            return;
+
+        var select = other = "";
+
+        if(start == 0){
+            select = that.text.substring(0, end);
+            other = that.text.substring(end);
+
+            that.parent.parent.ascend_text(that.parent, select, true);
+        }else{
+            other = that.text.substring(0, start);
+            select = that.text.substring(start);
+
+            that.parent.parent.ascend_text(that.parent, select, false);
+        }
+
+        that.text = other;
+
+        if(that.text.length == 0){
+            that.parent.remove_child(that);
+        }else{
+            if(that.view != null)
+                that.view.update();
+        }
+    }
+    */
 }
 
-function xml_contents_node(contents)
+function xml_tag_node(tag, child)
 {
     var that = this;
 
-    this.contents = [];
+    this.tag = tag;
     this.parent = null;
+    this.contents = [];
+    this.attributes = [];
     this.view = null;
 
     this.set_view = function(view)
@@ -69,20 +111,41 @@ function xml_contents_node(contents)
         this.view.xml = that;
     }
 
-    this.add_contents = function(contents)
+    this.add_child = function(child)
     {
-        this.contents.push(contents);
-        contents.parent = that;
+        if(_.isString(child)){
+            var n = new xml_text_node(child);
+            that.contents.push(n);
+            n.parent = that;
+        }else if(Array.isArray(child)){
+            for(var i = 0; i < child.length; i++){
+                that.contents.push(child[i]);
+                child[i].parent = that;
+            }
+        }
     }
 
     this.pretty_string = function(indentation)
     {
-        var s = "\n";
+        var s = "";
+        var attrs = "";
+
+        for(var i = 0; i < that.attributes.length; i++){
+            attrs += that.attributes[i];
+            if(i < that.attributes.length -1)
+                attrs += ", ";
+        }
+
+        s = "[" + that.tag + "] "
+            + "(" + attrs + ") ";
+
+        s += "\n";
         for(var i = 0; i < that.contents.length; i++){
             s += indentation + that.contents[i].pretty_string(indentation);
             if(!s.endsWith("\n"))
                 s += "\n";
         }
+
         return s;
     }
 
@@ -120,92 +183,44 @@ function xml_contents_node(contents)
             that.contents.splice(index, 0, new_nodes[i]);
 
         if(that.view != null)
-            that.view.update_rows(index);
+            that.view.update_children();
     }
 
-    if(contents != null){
-        for(var i = 0; i < contents.length; i++)
-            that.add_contents(contents[i]);
-    }
-}
-
-function xml_tag_node(tag, child)
-{
-    var that = this;
-
-    this.tag = tag;
-    this.child = null;
-    this.parent = null;
-    this.attributes = [];
-    this.view = null;
-
-    this.set_view = function(view)
+    /*
+    this.ascend_text = function(child, text, is_before)
     {
-        this.view = view;
-        this.view.xml = that;
-    }
+        var index = that.contents.indexOf(child);
+        console.log("index:"+index+" is_before:"+is_before);
 
-    this.set_child = function(child)
-    {
-        if(_.isString(child)){
-            that.child = new xml_text_node(child);
-        }else if(Array.isArray(child)){
-            that.child = new xml_contents_node(child);
-        }else{
-            that.child = child;
+        if(is_before && index > 0){
+            var before = that.contents[index -1];
+            if(before instanceof xml_text_node){
+                before.text = before.text + ' ' + text;
+                return;
+            }
+        }else if(!is_before && index < that.contents.length){
+            var after = that.contents[index + 1];
+            if(after instanceof xml_text_node){
+                after.text = text + ' ' + after.text;
+                return;
+            }
         }
 
-        if(that.child != null)
-            that.child.parent = that;
-    }
+        var node = new xml_text_node(text);
 
-    this.pretty_string = function(indentation)
-    {
-        var attrs = "";
-
-        for(var i = 0; i < that.attributes.length; i++){
-            attrs += that.attributes[i];
-            if(i < that.attributes.length -1)
-                attrs += ", ";
+        if(is_before)
+            that.contents.splice(index, 0, node);
+        else{
+            if(index == that.contents.length -1)
+                that.contents.push(node);
+            else
+                that.contents.splice(index+1, 0, node);
         }
-
-        return "[" + that.tag+ "] " + "(" + attrs + ") "+ that.child.pretty_string(indentation+"   ");
-    }
-
-    this.toString = function()
-    {
-        return that.pretty_string("");
-    }
-
-    // Remplace le node child par au plus 3 nodes text(before),
-    // tag_text(tag, select) et text(after)
-    this.split_child = function(child, tag, before, select, after)
-    {
-        var new_nodes = [];
-        var tmp;
-
-        if(before.length != 0){
-            tmp = new xml_text_node(before);
-            tmp.parent = that;
-            new_nodes.push(tmp);
-
-        }
-
-        tmp = new xml_tag_node(tag, select);
-        tmp.parent = that;
-        new_nodes.push(tmp);
-
-        if(after.length != 0){
-            tmp = new xml_text_node(after);
-            tmp.parent = that;
-            new_nodes.push(tmp);
-        }
-
-        that.set_child(new_nodes);
 
         if(that.view != null)
-            that.view.update_child();
+            that.view.update_rows();
     }
+    */
 
     // Ajoute un attribut
     this.add_attribut = function(new_attribut){
@@ -231,5 +246,5 @@ function xml_tag_node(tag, child)
         return that.attributes.includes(attribut);
     }
 
-    this.set_child(child);
+    this.add_child(child);
 }
