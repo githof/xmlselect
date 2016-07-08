@@ -57,14 +57,14 @@ function taggable_text_xml(xml)
         that.sel_show.$show.text("");
     }
 
-    this.button_go_up = function()
+    this.button_ascend = function()
     {
         if(that.xml.parent == null || that.xml.parent.parent == null)
             return;
 
         var $button = $("<button>", {
-            'class': 'button_go_up',
-            text: 'UP'
+            'class': 'button_ascend',
+            text: '<'
         });
 
         $button.click(function(){
@@ -78,6 +78,19 @@ function taggable_text_xml(xml)
         })
 
         return $button;
+    }
+
+    this.buttons_up_down = function()
+    {
+        var $button_up = $("<button>", {
+            text: '^'
+        });
+
+        var $button_down = $("<button>", {
+            text: 'v'
+        });
+
+        return [$button_up, $button_down];
     }
 
     this.button_tag = function(tag)
@@ -118,36 +131,52 @@ function taggable_text_xml(xml)
     this.html_splittable = function(input_tags)
     {
         var $p_source = $("<p>", {
-                'class': 'xml_text source',
-                text: that.xml.text
-            });
+            'class': 'xml_text source',
+            text: that.xml.text
+        });
 
         var $p_show_title = $("<div>", {
             text: "Selection :"
         });
 
         var $p_show = $("<p>", {
-                'class': 'xml_text show'
-            });
+            'class': 'xml_text show'
+        });
 
         var $section_selection_panel = $("<section>", {
-                'class': 'selection_panel'
-            });
+            'class': 'selection_panel'
+        });
 
         var $div_text_node = $("<div>", {
-                'class': 'text_node'
-            });
+            'class': 'text_node'
+        });
+
+        var $div_left = $("<div>", {
+            'class': 'left'
+        });
+
+        var $div_right = $("<div>", {
+            'class': 'right'
+        });
 
         for(var i = 0; i < input_tags.length; i++){
             $section_selection_panel.append(that.button_tag(input_tags[i]));
         }
-        $section_selection_panel.append(that.button_go_up());
 
-        $div_text_node.append(
+        $div_right.append(that.buttons_up_down());
+        $div_right.append(that.button_ascend());
+
+        $div_left.append(
             $p_source,
             $section_selection_panel,
             $p_show_title,
-            $p_show);
+            $p_show
+        );
+
+        $div_text_node.append(
+            $div_left,
+            $div_right
+        );
 
         that.sel_show = new select_and_show($p_source, $p_show);
 

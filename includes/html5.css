@@ -23,11 +23,6 @@ dd{
     margin-bottom: 20px;
 }
 
-ul{
-    list-style-type: none;
-    padding: 0px;
-}
-
 .selection_panel{
     margin: 10px 0px 10px 0px;
 }
@@ -37,12 +32,30 @@ ul{
     margin-right: 10px;
 }
 
-.button_go_up {
-    margin-right: 30px;
-    color: white;
-    border-radius: 7px;
-    background-color: red;
-    float: right;
+.left {
+    flex-grow: 2;
+}
+
+.right {
+    margin-left: 10px;
+    position: relative;
+}
+
+.right button {
+    display: block;
+    width: 26px;
+    height: 26px;
+    margin: 0px;
+    padding: 0px;
+}
+
+button img {
+    float: left;
+}
+
+.button_ascend {
+    position: absolute;
+    bottom: 0px;
 }
 
 .text_node{
@@ -51,10 +64,9 @@ ul{
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 20px;
-}
-
-.text_node div{
-    margin: 10px 0px 10px 0px;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
 }
 
 .source {
