@@ -1,7 +1,5 @@
 /*
-  pour tester xml_contents au fur et à mesure.
-
-  needs xml_contents.js
+  needs xml_node.js
   needs test_acte.js
  */
 

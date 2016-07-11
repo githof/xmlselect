@@ -1,4 +1,6 @@
-
+/*
+    needs xml_node.js
+*/
 
 function xml_parser(xml)
 {

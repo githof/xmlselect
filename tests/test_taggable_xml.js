@@ -1,5 +1,6 @@
 /*
-  needs xml_contents.js
+  needs xml_node.js
+  needs xml_parser.js
   needs test_acte.js
 */
 
