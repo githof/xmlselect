@@ -38,17 +38,6 @@ function taggable_text_xml(xml)
         that.$root.hide().remove();
     }
 
-    this.get_id = function(tag)
-    {
-        var base = that.id + '_' + ( tag != null ? tag : "" );
-        if (that.duplicate_tags[tag] == undefined)
-        {
-            that.duplicate_tags[tag] = 1;
-            return base;
-        }
-        return base + ++that.duplicate_tags[tag];
-    }
-
     this.update = function()
     {
         that.sel_show.$select.text(that.xml.text);
