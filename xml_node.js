@@ -14,14 +14,16 @@ function xml_text_node(text)
         that.view.xml = that;
     }
 
-    this.pretty_string = function(indentation)
+    this.toXML = function(indentation = null)
     {
-        return indentation + that.text.toString();
+        if(indentation != null)
+            return indentation + text;
+        return text;
     }
 
     this.toString = function()
     {
-        return that.pretty_string("");
+        return that.toXML("");
     }
 
     // Découpe le texte en 3 et demande au père de diviser les nodes
@@ -136,33 +138,40 @@ function xml_tag_node(tag, child)
         that.contents.splice(index, 1);
     }
 
-    this.pretty_string = function(indentation)
+    this.toXML = function(indentation = null)
     {
         var s = "";
-        var attrs = "";
+
+        if(indentation != null)
+            s += indentation;
+
+        s += "<"+that.tag;
 
         for(var i = 0; i < that.attributes.length; i++){
-            attrs += that.attributes[i];
-            if(i < that.attributes.length -1)
-                attrs += ", ";
+            s += " " + that.attributes[i] + "=true";
         }
 
-        s = indentation + "[" + that.tag + "] "
-            + "(" + attrs + ") ";
+        s += ">";
 
-        s += "\n";
+        if(indentation != null)
+            s += "\n";
+
         for(var i = 0; i < that.contents.length; i++){
-            s += indentation + that.contents[i].pretty_string(indentation + "  ");
-            if(!s.endsWith("\n"))
-                s += "\n";
+            s += that.contents[i].toXML((indentation != null) ? indentation + "  " : null);
+            s += "\n";
         }
+
+        if(indentation != null)
+            s += indentation;
+
+        s += "</" + that.tag + ">";
 
         return s;
     }
 
     this.toString = function()
     {
-        return that.pretty_string("");
+        return that.toXML("");
     }
 
     this.split_child = function(child, tag, before, select, after)
