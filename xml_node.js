@@ -14,7 +14,7 @@ function xml_text_node(text)
         that.view.xml = that;
     }
 
-    this.toXML = function(indentation = null)
+    this.to_XML = function(indentation = null)
     {
         if(indentation != null)
             return indentation + text;
@@ -23,7 +23,7 @@ function xml_text_node(text)
 
     this.toString = function()
     {
-        return that.toXML("");
+        return that.to_XML("");
     }
 
     // Découpe le texte en 3 et demande au père de diviser les nodes
@@ -99,15 +99,24 @@ function xml_text_node(text)
     }
 }
 
-function xml_tag_node(tag, child)
+function xml_tag_node(tag, children, attributes = [])
 {
     var that = this;
 
-    this.tag = tag;
+    this.tag = null;
     this.parent = null;
     this.contents = [];
     this.attributes = [];
     this.view = null;
+
+    this.init = function(tag, children, attributes)
+    {
+        that.tag = tag;
+        that.add_child(children);
+
+        for(var i = 0; i < attributes.length; i++)
+            that.add_attribut(attributes[i]);
+    }
 
     this.set_view = function(view)
     {
@@ -138,7 +147,7 @@ function xml_tag_node(tag, child)
         that.contents.splice(index, 1);
     }
 
-    this.toXML = function(indentation = null)
+    this.to_XML = function(indentation = null)
     {
         var s = "";
 
@@ -148,7 +157,7 @@ function xml_tag_node(tag, child)
         s += "<"+that.tag;
 
         for(var i = 0; i < that.attributes.length; i++){
-            s += " " + that.attributes[i] + "=true";
+            s += " " + that.attributes[i] + '="true"';
         }
 
         s += ">";
@@ -157,7 +166,7 @@ function xml_tag_node(tag, child)
             s += "\n";
 
         for(var i = 0; i < that.contents.length; i++){
-            s += that.contents[i].toXML((indentation != null) ? indentation + "  " : null);
+            s += that.contents[i].to_XML((indentation != null) ? indentation + "  " : null);
             s += "\n";
         }
 
@@ -171,7 +180,7 @@ function xml_tag_node(tag, child)
 
     this.toString = function()
     {
-        return that.toXML("");
+        return that.to_XML("");
     }
 
     this.split_child = function(child, tag, before, select, after)
@@ -256,14 +265,16 @@ function xml_tag_node(tag, child)
             that.view.update_children();
     }
 
-    this.add_attribut = function(new_attribut){
+    this.add_attribut = function(new_attribut)
+    {
         if(that.attributes.includes(new_attribut))
             return false;
         that.attributes.push(new_attribut);
         return true;
     }
 
-    this.remove_attribut = function(attribut){
+    this.remove_attribut = function(attribut)
+    {
         if(!that.attributes.includes(attribut))
             return false;
 
@@ -273,9 +284,10 @@ function xml_tag_node(tag, child)
         return true;
     }
 
-    this.contains_attribut = function(attribut){
+    this.contains_attribut = function(attribut)
+    {
         return that.attributes.includes(attribut);
     }
 
-    this.add_child(child);
+    this.init(tag, children, attributes);
 }

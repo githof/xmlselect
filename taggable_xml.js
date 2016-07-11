@@ -331,7 +331,7 @@ function taggable_tag_xml(xml)
         });
 
         // ajout des attributs déjà présent
-        for(var i = 0; i < that.xml.attributes; i++){
+        for(var i = 0; i < that.xml.attributes.length; i++){
             that.$root_attributes.append(that.html_attribut(that.xml.attributes[i]));
         }
 
