@@ -236,7 +236,6 @@ function xml_tag_node(tag, children, attributes = [])
 
             if(before != null && before instanceof xml_text_node){
                 before.text = before.text + text;
-                console.log(before);
 
                 if(before.view != null)
                     before.view.update();
