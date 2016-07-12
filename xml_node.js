@@ -97,6 +97,15 @@ function xml_text_node(text)
                 that.view.update();
         }
     }
+
+    this.can_ascend = function()
+    {
+        if(that.parent == null || that.parent.parent == null)
+            return false;
+
+        var index = that.parent.contents.indexOf(that);
+        return index == 0 || index == that.parent.contents.length -1;
+    }
 }
 
 function xml_tag_node(tag, children, attributes = [])
@@ -226,7 +235,8 @@ function xml_tag_node(tag, children, attributes = [])
             }
 
             if(before != null && before instanceof xml_text_node){
-                before.text = before.text + ' ' + text;
+                before.text = before.text + text;
+                console.log(before);
 
                 if(before.view != null)
                     before.view.update();
@@ -242,7 +252,7 @@ function xml_tag_node(tag, children, attributes = [])
             }
 
             if(after != null && after instanceof xml_text_node){
-                after.text = text + ' ' + after.text;
+                after.text = text + after.text;
 
                 if(after.view != null)
                     after.view.update();

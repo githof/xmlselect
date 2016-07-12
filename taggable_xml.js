@@ -40,15 +40,19 @@ function taggable_text_xml(xml)
 
     this.update = function()
     {
-        that.sel_show.$select.text(that.xml.text);
-        that.sel_show.clean_bounds();
-        that.sel_show.extract_text();
-        that.sel_show.$show.text("");
+        if(that.sel_show != null){
+            that.sel_show.$select.text(that.xml.text);
+            that.sel_show.clean_bounds();
+            that.sel_show.extract_text();
+            that.sel_show.$show.text("");
+        }else{
+            that.$root.find("p").text(that.xml.text);
+        }
     }
 
     this.button_ascend = function()
     {
-        if(that.xml.parent == null || that.xml.parent.parent == null)
+        if(!that.xml.can_ascend())
             return;
 
         var $button = $("<button>", {
