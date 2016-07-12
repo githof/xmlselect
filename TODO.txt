@@ -1,6 +1,4 @@
 
-+ Lire / écrire de et vers le xml
-
 + Ajustements interface
 
      - ajouter attributs même quand il n'y en a pas dans le attr_set ("autre")
