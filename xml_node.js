@@ -17,8 +17,8 @@ function xml_text_node(text)
     this.to_XML = function(indentation = null)
     {
         if(indentation != null)
-            return indentation + text;
-        return text;
+            return indentation + that.text;
+        return that.text;
     }
 
     this.toString = function()
@@ -40,14 +40,14 @@ function xml_text_node(text)
 
         var before = select = after = "";
 
-        before = that.text.substring(0, start).replace(/\s/g, '');
-        if(before.length > 0)
+        //before = that.text.substring(0, start).replace(/\s/g, '');
+        //if(before.length > 0)
             before = that.text.substring(0, start);
 
         select = that.text.substring(start, end);
 
-        after = that.text.substring(end).replace(/\s/g, '');
-        if(after.length > 0)
+        //after = that.text.substring(end).replace(/\s/g, '');
+        //if(after.length > 0)
             after = that.text.substring(end);
 
         if(that.view != null)
@@ -59,28 +59,41 @@ function xml_text_node(text)
     this.ascend_text = function(start, end)
     {
         if(start < 0 || start >= that.text.length)
-            return;
+            return false;
 
         if(end < 1 || end > that.text.length)
-            return;
+            return false;
 
         if(end <= start)
-            return;
+            return false;
 
         if(start != 0 && end != that.text.length)
-            return;
+            return false;
+
+        if(!that.can_ascend())
+            return false;
 
         var select = other = "";
         var is_before = false;
+        var can_before = false, can_after = false;
 
-        if(start == 0){
+        var index = that.parent.contents.indexOf(that);
+        if(index < 0)
+            return false;
+
+        can_before = index == 0;
+        can_after = index == that.parent.contents.length -1;
+
+        if(start == 0 && can_before){
             select = that.text.substring(0, end);
             other = that.text.substring(end);
             is_before = true;
-        }else{
+        }else if(end == that.text.length && can_after){
             other = that.text.substring(0, start);
             select = that.text.substring(start);
             is_before = false;
+        }else{
+            return false;
         }
 
         that.text = other;
@@ -96,6 +109,8 @@ function xml_text_node(text)
             else
                 that.view.update();
         }
+
+        return true;
     }
 
     this.can_ascend = function()
@@ -121,7 +136,13 @@ function xml_tag_node(tag, children, attributes = [])
     this.init = function(tag, children, attributes)
     {
         that.tag = tag;
-        that.add_child(children);
+
+        if(_.isString(children) || children instanceof xml_text_node){
+            that.add_child(children);
+        }else if(Array.isArray(children)){
+            for(var i = 0; i < children.length; i++)
+                that.add_child(children[i]);
+        }
 
         for(var i = 0; i < attributes.length; i++)
             that.add_attribut(attributes[i]);
@@ -133,18 +154,22 @@ function xml_tag_node(tag, children, attributes = [])
         this.view.xml = that;
     }
 
-    this.add_child = function(child)
+    this.add_child = function(child, position = -1)
     {
+        var node = null;
         if(_.isString(child)){
-            var n = new xml_text_node(child);
-            that.contents.push(n);
-            n.parent = that;
-        }else if(Array.isArray(child)){
-            for(var i = 0; i < child.length; i++){
-                that.contents.push(child[i]);
-                child[i].parent = that;
-            }
+            node = new xml_text_node(child);
+        }else if(child instanceof xml_text_node
+            || child instanceof xml_tag_node){
+            node = child;
         }
+
+        if(position < 0 || position >= that.contents.length)
+            that.contents.push(node);
+        else
+            that.contents.splice(position, 0, node);
+
+        node.parent = that;
     }
 
     this.remove_child = function(child)
@@ -154,6 +179,26 @@ function xml_tag_node(tag, children, attributes = [])
             return;
 
         that.contents.splice(index, 1);
+    }
+
+    this.merge_consecutive_text_node = function()
+    {
+        var last = null;
+        var current = null;
+        for(var i = that.contents.length -1; i >= 0; i--){
+            current = that.contents[i];
+            if(last != null
+                && last instanceof xml_text_node
+                && current instanceof xml_text_node){
+                current.text = current.text + last.text;
+                that.contents.splice(i+1, 1);
+                if(last.view != null)
+                    last.view.remove_from_DOM();
+                if(current.view != null)
+                    current.view.update();
+            }
+            last = current;
+        }
     }
 
     this.to_XML = function(indentation = null)
@@ -194,31 +239,16 @@ function xml_tag_node(tag, children, attributes = [])
 
     this.split_child = function(child, tag, before, select, after)
     {
-        var new_nodes = [];
-        var tmp;
-
-        if(before.length != 0){
-            tmp = new xml_text_node(before);
-            tmp.parent = that;
-            new_nodes.push(tmp);
-
-        }
-
-        tmp = new xml_tag_node(tag, select);
-        tmp.parent = that;
-        new_nodes.push(tmp);
-
-        if(after.length != 0){
-            tmp = new xml_text_node(after);
-            tmp.parent = that;
-            new_nodes.push(tmp);
-        }
-
         var index = that.contents.indexOf(child);
         that.contents.splice(index, 1);
 
-        for(var i = new_nodes.length -1; i >= 0; i--)
-            that.contents.splice(index, 0, new_nodes[i]);
+        if(after.length != 0)
+            that.add_child(after, index);
+
+        that.add_child(new xml_tag_node(tag, select), index);
+
+        if(before.length != 0)
+            that.add_child(before, index);
 
         if(that.view != null)
             that.view.update_children();
@@ -228,39 +258,10 @@ function xml_tag_node(tag, children, attributes = [])
     {
         var index = that.contents.indexOf(child);
 
-        if(is_before){
-            var before = null;
-            if(index > 0){
-                before = that.contents[index -1];
-            }
-
-            if(before != null && before instanceof xml_text_node){
-                before.text = before.text + text;
-
-                if(before.view != null)
-                    before.view.update();
-            }else{
-                var node = new xml_text_node(text);
-                node.parent = that;
-                that.contents.splice(index, 0, node);
-            }
-        }else{
-            var after = null;
-            if(index < that.contents.length -1){
-                after = that.contents[index + 1];
-            }
-
-            if(after != null && after instanceof xml_text_node){
-                after.text = text + after.text;
-
-                if(after.view != null)
-                    after.view.update();
-            }else{
-                var node = new xml_text_node(text);
-                node.parent = that;
-                that.contents.splice(index+1, 0, node);
-            }
-        }
+        if(is_before)
+            that.add_child(text, index);
+        else
+            that.add_child(text, index+1);
 
         if(child.contents.length == 0){
             index = that.contents.indexOf(child);
@@ -269,6 +270,8 @@ function xml_tag_node(tag, children, attributes = [])
             if(child.view != null)
                 child.view.remove_from_DOM();
         }
+
+        that.merge_consecutive_text_node();
 
         if(that.view != null)
             that.view.update_children();
