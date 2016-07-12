@@ -180,7 +180,7 @@ function taggable_text_xml(xml)
     {
         var tag = that.xml.parent.tag;
 
-        var input_tags = wedding_tags[tag];
+        var input_tags = wedding_tags[tag.toLowerCase()];
         if(input_tags == null){
             that.$root = that.html_leaf();
         }else {
