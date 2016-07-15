@@ -1,9 +1,19 @@
 
 + Ajustements interface
 
-     - ajouter attributs même quand il n'y en a pas dans le attr_set ("autre")
+    + ne faire apparaître la boîte à outils que quand on clique sur la
+      zone de texte
+       - y compris pour les feuilles
 
+    - BUG : quand on fait remonter, mettre à jour l'affichage
+     (notamment le bouton remonter qui n'est pas présent si on n'était
+     pas sur le dernier fils)
+
+    - bouton descendre :
+       descendre dans le noeud suivant la fin de la sélection
+       ou dans le précédent le début
+       
+    - ajouter attributs même quand il n'y en a pas dans le attr_set ("autre")
     - undo
-
     - commander les boutons aussi avec des touches du clavier
       (dictionnaire de correspondances tag -> lettre)
