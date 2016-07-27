@@ -188,13 +188,82 @@ function taggable_text_xml(xml)
         }
     }
 
+    this.html_buttons_tag = function()
+    {
+        var tag = that.xml.parent.tag;
+        var input_tags = wedding_tags[tag.toLowerCase()];
+
+        $container_buttons = $("<div>", {
+            class: "selection_panel"
+        });
+
+        if(input_tags != null){
+            for(var i = 0; i < input_tags.length; i++)
+                $container_buttons.append(that.button_tag(input_tags[i]));
+        }
+
+        return $container_buttons;
+    }
+
+    this.html_container_edit = function($p_source)
+    {
+        var $container_edit = $("<div>");
+
+        var $p_show = $("<p>", {
+            class: 'xml_text show'
+        });
+
+        $container_edit.append(
+            that.html_buttons_tag(),
+            that.buttons_up_down(),
+            that.button_ascend(),
+            $p_show
+        );
+
+        that.sel_show = new select_and_show($p_source, $p_show);
+
+        return $container_edit;
+    }
+
+    this.html_bis = function()
+    {
+        var $div_text_node = $("<div>", {
+            class: "text_node"
+        });
+
+        var $p_source = $("<p>", {
+            class: "xml_text source",
+            text: that.xml.text
+        });
+
+        var $container_edit = that.html_container_edit($p_source);
+        $container_edit.hide();
+
+        $div_text_node.append(
+            $p_source,
+            $container_edit
+        );
+
+        that.$root = $div_text_node;
+
+        $p_source.click(function(){
+            if($container_edit.is(":visible")){
+                $container_edit.hide();
+                $div_text_node.removeClass("text_node_edit");
+            }else{
+                $container_edit.show();
+                $div_text_node.addClass("text_node_edit");
+            }
+        });
+    }
+
     this.append_to = function($where)
     {
         $where.append(that.$root);
     }
 
     this.set_xml(xml);
-    this.html();
+    this.html_bis();
 }
 
 // taggable d'un xml tag node
@@ -405,6 +474,39 @@ function taggable_tag_xml(xml)
         that.$root.append([$dt, $dd]);
     }
 
+    this.html_bis = function()
+    {
+        var $div_balise_ouvrante = $("<div>", {
+            text: "<"+that.xml.tag+">",
+            class: "xml_tag"
+        });
+
+        var $div_balise_fermante = $("<div>", {
+            text: "</"+that.xml.tag+">",
+            class: "xml_tag"
+        });
+
+        var $dd = $("<dd>", {
+            class: 'children'
+        });
+
+        var children = that.html_children();
+        for(var i = 0; i< children.length; i++)
+            children[i].append_to($dd);
+
+        that.$root_children = $dd;
+
+        that.$root = $("<div>", {
+            'class': 'tag_node'
+        });
+
+        that.$root.append(
+            $div_balise_ouvrante,
+            $dd,
+            $div_balise_fermante
+        );
+    }
+
     this.update_children = function()
     {
         var children = that.xml.contents;
@@ -427,7 +529,7 @@ function taggable_tag_xml(xml)
     }
 
     this.set_xml(xml);
-    this.html();
+    this.html_bis();
 }
 
 // Instanciation facile d'un xml node

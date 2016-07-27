@@ -20,7 +20,6 @@ dd{
     border-left: 1px dashed #CFD8DC;
     padding-left: 50px;
     margin: 0px;
-    margin-bottom: 20px;
 }
 
 .selection_panel{
@@ -59,29 +58,32 @@ button img {
 }
 
 .text_node{
-    background-color: #d7e3ea;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+
+.text_node_edit {
     border: 1px solid #CFD8DC;
     border-radius: 5px;
     padding: 10px;
     margin-bottom: 20px;
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: space-between;
 }
 
-.source {
-    background-color: white;
-    padding: 10px 10px 10px 10px;
+.xml_text {
+    border: 1px solid white;
+    padding: 5px;
     white-space: pre-wrap;
+    cursor: pointer;
+}
+
+.text_node:hover .xml_text, .text_node_edit .xml_text {
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
 }
 
 .source:hover {
     text-decoration: underline;
-}
-
-.show{
-    background-color: white;
-    padding: 10px 10px 10px 10px;
 }
 
 .leaf{
@@ -96,11 +98,8 @@ p{
     margin: 0px;
 }
 
-.tag_title{
-    display: inline-block;
-    color: #698096;
-    text-transform: uppercase;
-    padding: 5px;
+.xml_tag {
+    color: green;
 }
 
 .attributes_tag{
