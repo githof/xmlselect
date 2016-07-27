@@ -18,10 +18,12 @@ function test_acte(nom, acte){
         $("<h1>", {
             text: nom
         }),
-        $button
+        $button,
+        $("<div>",{
+            class: "xmlselect_edit",
+            text: acte
+        })
     );
-
-    new_taggable_xml(acte).append_to($test);
 
     $("body").append($test);
 }
@@ -39,6 +41,6 @@ $(document).ready(function (){
 
     // test_acte("ACTE COMPLET", test_acte_complet());
 
-    test_acte("XML PARSE", xml_parser(acte_jeronimo));
+    test_acte("XML PARSE", acte_jeronimo);
 //    test_acte("Belgrano", xml_parser(acte_calderon));
 });
