@@ -25,19 +25,44 @@ body{
 }
 
 /* TEXT NODE */
+.xml-text {
+    border: 1px solid white;
+    padding: 5px;
+    white-space: pre-wrap;
+    cursor: pointer;
+}
 
+.source:hover {
+    text-decoration: underline;
+}
+
+.text-node:hover .xml-text, .text-node-edit .xml-text {
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+}
+
+
+/* TEXT NODE EDIT */
+.text-node-edit {
+    border: 1px solid #CFD8DC;
+    border-radius: 3px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.buttons-tag{
+    margin: 10px 0px 10px 0px;
+}
+
+.button-tag {
+    display: inline-block;;
+    margin-right: 10px;
+}
 
 
 /* OTHERS */
 
-.selection_panel{
-    margin: 10px 0px 10px 0px;
-}
 
-.button_tag {
-    display: inline-block;;
-    margin-right: 10px;
-}
 
 .left {
     flex-grow: 2;
@@ -67,28 +92,13 @@ button img {
 
 
 
-.text_node_edit {
-    border: 1px solid #CFD8DC;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 20px;
-}
 
-.xml_text {
-    border: 1px solid white;
-    padding: 5px;
-    white-space: pre-wrap;
-    cursor: pointer;
-}
 
-.text_node:hover .xml_text, .text_node_edit .xml_text {
-    background-color: #f3f3f3;
-    border: 1px solid #ccc;
-}
 
-.source:hover {
-    text-decoration: underline;
-}
+
+
+
+
 
 .leaf{
     background-color: transparent;
@@ -96,10 +106,6 @@ button img {
 
 label{
     color: #727272;
-}
-
-p{
-    margin: 0px;
 }
 
 .attributes_tag{

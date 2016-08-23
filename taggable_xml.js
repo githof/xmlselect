@@ -50,15 +50,14 @@ function taggable_text_xml(xml)
         }
     }
 
-    this.button_ascend = function()
+    this.html_button_ascend = function()
     {
         if(!that.xml.can_ascend())
             return;
 
-        var $button = $("<button>", {
-            'class': 'button_ascend',
-            text: '<'
-        });
+        var $button = $("<button data-toggle='tooltip' data-placement='top' title='Remonter' class='button-tag btn btn-sm'>");
+        $button.html("<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span>");
+        $button.tooltip();
 
         $button.click(function(){
             var start = that.sel_show.before.length;
@@ -73,23 +72,23 @@ function taggable_text_xml(xml)
         return $button;
     }
 
-    this.buttons_up_down = function()
+    this.html_buttons_up_down = function()
     {
-        var $button_up = $("<button>", {
-            text: '^'
-        });
+        var $button_up = $("<button data-toggle='tooltip' data-placement='top' title='Avant' class='button-tag btn btn-sm'>");
+        $button_up.html("<span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span>");
+        $button_up.tooltip();
 
-        var $button_down = $("<button>", {
-            text: 'v'
-        });
+        var $button_down = $("<button data-toggle='tooltip' data-placement='bottom' title='Après' class='button-tag btn btn-sm'>");
+        $button_down.html("<span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span>");
+        $button_down.tooltip();
 
         return [$button_up, $button_down];
     }
 
-    this.button_tag = function(tag)
+    this.html_button_tag = function(tag)
     {
         var $button = $("<button>", {
-            'class': 'button_tag',
+            'class': 'button-tag btn btn-sm',
             'text': tag
         });
 
@@ -106,153 +105,79 @@ function taggable_text_xml(xml)
         return $button;
     }
 
-    this.html_leaf = function()
-    {
-        var $p_text = $("<p>", {
-            text: that.xml.text
-        });
-
-        var $div_leaf = $("<div>", {
-            'class': 'text_node leaf'
-        });
-
-        $div_leaf.append($p_text);
-
-        return $div_leaf;
-    }
-
-    this.html_splittable = function(input_tags)
-    {
-        var $p_source = $("<p>", {
-            'class': 'xml_text source',
-            text: that.xml.text
-        });
-
-        var $p_show_title = $("<div>", {
-            text: "Selection :"
-        });
-
-        var $p_show = $("<p>", {
-            'class': 'xml_text show'
-        });
-
-        var $section_selection_panel = $("<section>", {
-            'class': 'selection_panel'
-        });
-
-        var $div_text_node = $("<div>", {
-            'class': 'text_node'
-        });
-
-        var $div_left = $("<div>", {
-            'class': 'left'
-        });
-
-        var $div_right = $("<div>", {
-            'class': 'right'
-        });
-
-        for(var i = 0; i < input_tags.length; i++){
-            $section_selection_panel.append(that.button_tag(input_tags[i]));
-        }
-
-        $div_right.append(that.buttons_up_down());
-        $div_right.append(that.button_ascend());
-
-        $div_left.append(
-            $p_source,
-            $section_selection_panel,
-            $p_show_title,
-            $p_show
-        );
-
-        $div_text_node.append(
-            $div_left,
-            $div_right
-        );
-
-        that.sel_show = new select_and_show($p_source, $p_show);
-
-        return $div_text_node;
-    }
-
-    this.html = function()
-    {
-        var tag = that.xml.parent.tag;
-
-        var input_tags = wedding_tags[tag.toLowerCase()];
-        if(input_tags == null){
-            that.$root = that.html_leaf();
-        }else {
-            that.$root = that.html_splittable(input_tags);
-        }
-    }
-
     this.html_buttons_tag = function()
     {
         var tag = that.xml.parent.tag;
         var input_tags = wedding_tags[tag.toLowerCase()];
-
-        $container_buttons = $("<div>", {
-            class: "selection_panel"
-        });
+        var buttons = [];
 
         if(input_tags != null){
             for(var i = 0; i < input_tags.length; i++)
-                $container_buttons.append(that.button_tag(input_tags[i]));
+                buttons.push(that.html_button_tag(input_tags[i]));
         }
 
-        return $container_buttons;
+        return buttons;
     }
 
-    this.html_container_edit = function($p_source)
+    this.html_buttons = function()
+    {
+        $buttons = $("<div data-toggle='tooltip' data-placement='left' title='Options sur la sélection (Double clic pour tout sélectionner)' class='buttons-tag'>");
+
+        $buttons.append(
+            that.html_buttons_tag(),
+            that.html_button_ascend(),
+            that.html_buttons_up_down()
+        );
+        $buttons.tooltip();
+        return $buttons;
+    }
+
+    this.html_container_edit = function($source)
     {
         var $container_edit = $("<div>");
 
-        var $p_show = $("<p>", {
-            class: 'xml_text show'
+        var $show = $("<div>", {
+            class: 'xml-text show'
         });
 
         $container_edit.append(
-            that.html_buttons_tag(),
-            that.buttons_up_down(),
-            that.button_ascend(),
-            $p_show
+            that.html_buttons(),
+            $show
         );
 
-        that.sel_show = new select_and_show($p_source, $p_show);
+        that.sel_show = new select_and_show($source, $show);
 
         return $container_edit;
     }
 
-    this.html_bis = function()
+    this.html = function()
     {
-        var $div_text_node = $("<div>", {
-            class: "text_node"
+        var $text_node = $("<div>", {
+            class: "text-node"
         });
 
-        var $p_source = $("<p>", {
-            class: "xml_text source",
+        var $source = $("<div>", {
+            class: "xml-text source",
             text: that.xml.text
         });
 
-        var $container_edit = that.html_container_edit($p_source);
+        var $container_edit = that.html_container_edit($source);
         $container_edit.hide();
 
-        $div_text_node.append(
-            $p_source,
+        $text_node.append(
+            $source,
             $container_edit
         );
 
-        that.$root = $div_text_node;
+        that.$root = $text_node;
 
-        $p_source.click(function(){
+        $source.click(function(){
             if($container_edit.is(":visible")){
                 $container_edit.hide();
-                $div_text_node.removeClass("text_node_edit");
+                $text_node.removeClass("text-node-edit");
             }else{
                 $container_edit.show();
-                $div_text_node.addClass("text_node_edit");
+                $text_node.addClass("text-node-edit");
             }
         });
     }
@@ -263,7 +188,7 @@ function taggable_text_xml(xml)
     }
 
     this.set_xml(xml);
-    this.html_bis();
+    this.html();
 }
 
 // taggable d'un xml tag node
