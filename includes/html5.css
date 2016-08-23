@@ -25,10 +25,13 @@ body{
 }
 
 /* TEXT NODE */
-.xml-text {
+.text-node .xml-text {
     border: 1px solid white;
     padding: 5px;
     white-space: pre-wrap;
+}
+
+.text-node > .source {
     cursor: pointer;
 }
 
@@ -46,8 +49,12 @@ body{
 .text-node-edit {
     border: 1px solid #CFD8DC;
     border-radius: 3px;
-    padding: 10px;
+    padding: 10px 20px 10px 10px;
     margin-bottom: 20px;
+}
+
+.text-node-edit > .source {
+    cursor: default;
 }
 
 .buttons-tag{
@@ -59,6 +66,19 @@ body{
     margin-right: 10px;
 }
 
+.xml-text-edit-close {
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: .2;
+    float: right;
+    left: 18px;
+    bottom: 12px;
+    font-size: 25px;
+    position: relative;
+    cursor: pointer;
+}
 
 /* OTHERS */
 

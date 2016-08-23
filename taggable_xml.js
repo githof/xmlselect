@@ -161,10 +161,18 @@ function taggable_text_xml(xml)
             text: that.xml.text
         });
 
+        var $close = $("<span>", {
+            class: "xml-text-edit-close",
+            html: "&times;",
+            "aria-label": "close"
+        });
+        $close.hide();
+
         var $container_edit = that.html_container_edit($source);
         $container_edit.hide();
 
         $text_node.append(
+            $close,
             $source,
             $container_edit
         );
@@ -172,14 +180,17 @@ function taggable_text_xml(xml)
         that.$root = $text_node;
 
         $source.click(function(){
-            if($container_edit.is(":visible")){
-                $container_edit.hide();
-                $text_node.removeClass("text-node-edit");
-            }else{
+            if(!$container_edit.is(":visible")){
                 $container_edit.show();
+                $close.show();
                 $text_node.addClass("text-node-edit");
             }
         });
+        $close.click(function(){
+            $container_edit.hide();
+            $close.hide();
+            $text_node.removeClass("text-node-edit");
+        })
     }
 
     this.append_to = function($where)
