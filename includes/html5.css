@@ -12,15 +12,23 @@ body{
     width: 800px;
 }
 
-dt{
-    margin-bottom: 20px;
+
+/* TAG NODE */
+.xml-tag {
+    color: green;
 }
 
-dd{
-    border-left: 1px dashed #CFD8DC;
+.children {
+    border-left: 1px solid green;
     padding-left: 50px;
     margin: 0px;
 }
+
+/* TEXT NODE */
+
+
+
+/* OTHERS */
 
 .selection_panel{
     margin: 10px 0px 10px 0px;
@@ -57,11 +65,7 @@ button img {
     bottom: 0px;
 }
 
-.text_node{
-    display: flex;
-    flex-flow: column nowrap;
-    justify-content: space-between;
-}
+
 
 .text_node_edit {
     border: 1px solid #CFD8DC;
@@ -96,10 +100,6 @@ label{
 
 p{
     margin: 0px;
-}
-
-.xml_tag {
-    color: green;
 }
 
 .attributes_tag{

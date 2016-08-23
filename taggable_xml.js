@@ -476,34 +476,34 @@ function taggable_tag_xml(xml)
 
     this.html_bis = function()
     {
-        var $div_balise_ouvrante = $("<div>", {
+        var $balise_ouvrante = $("<div>", {
             text: "<"+that.xml.tag+">",
-            class: "xml_tag"
+            class: "xml-tag"
         });
 
-        var $div_balise_fermante = $("<div>", {
+        var $balise_fermante = $("<div>", {
             text: "</"+that.xml.tag+">",
-            class: "xml_tag"
+            class: "xml-tag"
         });
 
-        var $dd = $("<dd>", {
+        var $children = $("<div>", {
             class: 'children'
         });
 
         var children = that.html_children();
         for(var i = 0; i< children.length; i++)
-            children[i].append_to($dd);
+            children[i].append_to($children);
 
-        that.$root_children = $dd;
+        that.$root_children = $children;
 
         that.$root = $("<div>", {
-            'class': 'tag_node'
+            'class': 'tag-node'
         });
 
         that.$root.append(
-            $div_balise_ouvrante,
-            $dd,
-            $div_balise_fermante
+            $balise_ouvrante,
+            $children,
+            $balise_fermante
         );
     }
 
