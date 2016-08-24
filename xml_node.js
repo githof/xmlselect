@@ -128,7 +128,7 @@ function xml_text_node(text)
             return false;
 
         var index = that.parent.contents.indexOf(that);
-        return index > 0;
+        return index > 0 || that.parent.contents.length == 1;
     }
 
     this.can_go_down = function()
@@ -137,7 +137,7 @@ function xml_text_node(text)
             return false;
 
         var index = that.parent.contents.indexOf(that);
-        return index < that.parent.contents.length-1;
+        return index < that.parent.contents.length-1 || that.parent.contents.length == 1;
     }
 }
 
