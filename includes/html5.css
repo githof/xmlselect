@@ -49,8 +49,9 @@ body{
 .text-node-edit {
     border: 1px solid #CFD8DC;
     border-radius: 3px;
-    padding: 10px 20px 10px 10px;
+    padding: 10px 25px 10px 10px;
     margin-bottom: 20px;
+    position: relative;
 }
 
 .text-node-edit > .source {
@@ -66,6 +67,27 @@ body{
     margin-right: 10px;
 }
 
+.xml-text-edit-side-buttons {
+    position: absolute;
+    left: -42px;
+    top: 0px;
+    bottom: 0px;
+}
+
+.button-up {
+    display: block;
+    position: absolute;
+    top: 0px;
+    margin: 0px;
+}
+
+.button-down {
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    margin: 0px;
+}
+
 .xml-text-edit-close {
     font-weight: 700;
     line-height: 1;
@@ -73,7 +95,7 @@ body{
     text-shadow: 0 1px 0 #fff;
     opacity: .2;
     float: right;
-    left: 18px;
+    left: 20px;
     bottom: 12px;
     font-size: 25px;
     position: relative;

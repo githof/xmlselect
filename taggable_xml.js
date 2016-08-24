@@ -75,9 +75,9 @@ function taggable_text_xml(xml)
     this.html_button_up = function()
     {
         if(!that.xml.can_go_up())
-            return;
+            return null;
 
-        var $button = $("<button data-toggle='tooltip' data-placement='top' title='Avant' class='button-tag btn btn-sm'>");
+        var $button = $("<button data-toggle='tooltip' data-placement='top' title='Avant' class='button-tag button-up btn btn-sm'>");
         $button.html("<span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span>");
         $button.tooltip();
 
@@ -96,9 +96,9 @@ function taggable_text_xml(xml)
     this.html_button_down = function()
     {
         if(!that.xml.can_go_down())
-            return;
+            return null;
 
-        var $button = $("<button data-toggle='tooltip' data-placement='bottom' title='Après' class='button-tag btn btn-sm'>");
+        var $button = $("<button data-toggle='tooltip' data-placement='bottom' title='Après' class='button-tag button-down btn btn-sm'>");
         $button.html("<span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span>");
         $button.tooltip();
 
@@ -154,9 +154,7 @@ function taggable_text_xml(xml)
 
         $buttons.append(
             that.html_buttons_tag(),
-            that.html_button_ascend(),
-            that.html_button_up(),
-            that.html_button_down()
+            that.html_button_ascend()
         );
         $buttons.tooltip();
         return $buttons;
@@ -198,11 +196,21 @@ function taggable_text_xml(xml)
         });
         $close.hide();
 
+        var $side_buttons = $("<div>", {
+            class: "xml-text-edit-side-buttons"
+        });
+        $side_buttons.append(
+            that.html_button_up(),
+            that.html_button_down()
+        );
+        $side_buttons.hide();
+
         var $container_edit = that.html_container_edit($source);
         $container_edit.hide();
 
         $text_node.append(
             $close,
+            $side_buttons,
             $source,
             $container_edit
         );
@@ -213,12 +221,14 @@ function taggable_text_xml(xml)
             if(!$container_edit.is(":visible")){
                 $container_edit.show();
                 $close.show();
+                $side_buttons.show();
                 $text_node.addClass("text-node-edit");
             }
         });
         $close.click(function(){
             $container_edit.hide();
             $close.hide();
+            $side_buttons.hide();
             $text_node.removeClass("text-node-edit");
         })
     }
