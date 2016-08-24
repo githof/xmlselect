@@ -72,17 +72,46 @@ function taggable_text_xml(xml)
         return $button;
     }
 
-    this.html_buttons_up_down = function()
+    this.html_button_up = function()
     {
-        var $button_up = $("<button data-toggle='tooltip' data-placement='top' title='Avant' class='button-tag btn btn-sm'>");
-        $button_up.html("<span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span>");
-        $button_up.tooltip();
+        if(!that.xml.can_go_up())
+            return;
 
-        var $button_down = $("<button data-toggle='tooltip' data-placement='bottom' title='Après' class='button-tag btn btn-sm'>");
-        $button_down.html("<span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span>");
-        $button_down.tooltip();
+        var $button = $("<button data-toggle='tooltip' data-placement='top' title='Avant' class='button-tag btn btn-sm'>");
+        $button.html("<span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span>");
+        $button.tooltip();
 
-        return [$button_up, $button_down];
+        $button.click(function(){
+            var start = that.sel_show.before.length;
+            var end = start + that.sel_show.select.length;
+
+            if(start == end)
+                that.sel_show.show_selected(true);
+            else
+                console.log("up");
+        });
+        return $button;
+    }
+
+    this.html_button_down = function()
+    {
+        if(!that.xml.can_go_down())
+            return;
+
+        var $button = $("<button data-toggle='tooltip' data-placement='bottom' title='Après' class='button-tag btn btn-sm'>");
+        $button.html("<span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span>");
+        $button.tooltip();
+
+        $button.click(function(){
+            var start = that.sel_show.before.length;
+            var end = start + that.sel_show.select.length;
+
+            if(start == end)
+                that.sel_show.show_selected(true);
+            else
+                console.log("down");
+        });
+        return $button;
     }
 
     this.html_button_tag = function(tag)
@@ -126,7 +155,8 @@ function taggable_text_xml(xml)
         $buttons.append(
             that.html_buttons_tag(),
             that.html_button_ascend(),
-            that.html_buttons_up_down()
+            that.html_button_up(),
+            that.html_button_down()
         );
         $buttons.tooltip();
         return $buttons;

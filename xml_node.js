@@ -121,6 +121,24 @@ function xml_text_node(text)
         var index = that.parent.contents.indexOf(that);
         return index == 0 || index == that.parent.contents.length -1;
     }
+
+    this.can_go_up = function()
+    {
+        if(that.parent == null)
+            return false;
+
+        var index = that.parent.contents.indexOf(that);
+        return index > 0;
+    }
+
+    this.can_go_down = function()
+    {
+        if(that.parent == null)
+            return false;
+
+        var index = that.parent.contents.indexOf(that);
+        return index < that.parent.contents.length-1;
+    }
 }
 
 function xml_tag_node(tag, children, attributes = [])
