@@ -82,13 +82,7 @@ function taggable_text_xml(xml)
         $button.tooltip();
 
         $button.click(function(){
-            var start = that.sel_show.before.length;
-            var end = start + that.sel_show.select.length;
-
-            if(start == end)
-                that.sel_show.show_selected(true);
-            else
-                console.log("up");
+            that.xml.go_up();
         });
         return $button;
     }
@@ -103,13 +97,7 @@ function taggable_text_xml(xml)
         $button.tooltip();
 
         $button.click(function(){
-            var start = that.sel_show.before.length;
-            var end = start + that.sel_show.select.length;
-
-            if(start == end)
-                that.sel_show.show_selected(true);
-            else
-                console.log("down");
+            that.xml.go_down();
         });
         return $button;
     }

@@ -122,13 +122,29 @@ function xml_text_node(text)
         return index == 0 || index == that.parent.contents.length -1;
     }
 
+    this.go_up = function()
+    {
+        if(that.parent.contents.length == 1)
+            that.parent.parent.move_child(that.parent, -1);
+        else
+            that.parent.move_child(that, -1);
+    }
+
+    this.go_down = function()
+    {
+        if(that.parent.contents.length == 1)
+            that.parent.parent.move_child(that.parent, 1);
+        else
+            that.parent.move_child(that, 1);
+    }
+
     this.can_go_up = function()
     {
         if(that.parent == null)
             return false;
 
         var index = that.parent.contents.indexOf(that);
-        return index > 0 || that.parent.contents.length == 1;
+        return index > 0 || (that.parent.contents.length == 1 && that.parent.parent != null);
     }
 
     this.can_go_down = function()
@@ -137,7 +153,7 @@ function xml_text_node(text)
             return false;
 
         var index = that.parent.contents.indexOf(that);
-        return index < that.parent.contents.length-1 || that.parent.contents.length == 1;
+        return index < that.parent.contents.length-1 || (that.parent.contents.length == 1 && that.parent.parent != null);
     }
 }
 
@@ -288,6 +304,18 @@ function xml_tag_node(tag, children, attributes = [])
             if(child.view != null)
                 child.view.remove_from_DOM();
         }
+
+        that.merge_consecutive_text_node();
+
+        if(that.view != null)
+            that.view.update_children();
+    }
+
+    this.move_child = function(child, position_relative)
+    {
+        var index = that.contents.indexOf(child);
+        that.remove_child(child);
+        that.add_child(child, index + position_relative);
 
         that.merge_consecutive_text_node();
 
