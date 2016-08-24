@@ -153,8 +153,8 @@ function taggable_text_xml(xml)
         $buttons = $("<div data-toggle='tooltip' data-placement='left' title='Options sur la sélection (Double clic pour tout sélectionner)' class='buttons-tag'>");
 
         $buttons.append(
-            that.html_buttons_tag(),
-            that.html_button_ascend()
+            that.html_button_ascend(),
+            that.html_buttons_tag()
         );
         $buttons.tooltip();
         return $buttons;
