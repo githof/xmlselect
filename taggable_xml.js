@@ -48,14 +48,13 @@ function taggable_text_xml(xml)
         }else{
             that.$root.find("p").text(that.xml.text);
         }
+
+        that.check_buttons();
     }
 
     this.html_button_ascend = function()
     {
-        if(!that.xml.can_ascend())
-            return;
-
-        var $button = $("<button data-toggle='tooltip' data-placement='top' title='Remonter' class='button-tag btn btn-sm'>");
+        var $button = $("<button data-toggle='tooltip' data-placement='top' title='Remonter' class='button-tag button-ascend btn btn-sm'>");
         $button.html("<span class='glyphicon glyphicon-chevron-left' aria-hidden='true'></span>");
         $button.tooltip();
 
@@ -67,38 +66,32 @@ function taggable_text_xml(xml)
                 that.sel_show.show_selected(true);
             else
                 that.xml.ascend_text(start, end);
-        })
+        });
 
         return $button;
     }
 
     this.html_button_up = function()
     {
-        if(!that.xml.can_go_up())
-            return null;
-
-        var $button = $("<button data-toggle='tooltip' data-placement='top' title='Avant' class='button-tag button-up btn btn-sm'>");
+        var $button = $("<button title='Avant' class='button-tag button-up btn btn-sm'>");
         $button.html("<span class='glyphicon glyphicon-chevron-up' aria-hidden='true'></span>");
-        $button.tooltip();
 
         $button.click(function(){
             that.xml.go_up();
         });
+
         return $button;
     }
 
     this.html_button_down = function()
     {
-        if(!that.xml.can_go_down())
-            return null;
-
-        var $button = $("<button data-toggle='tooltip' data-placement='bottom' title='Après' class='button-tag button-down btn btn-sm'>");
+        var $button = $("<button title='Après' class='button-tag button-down btn btn-sm'>");
         $button.html("<span class='glyphicon glyphicon-chevron-down' aria-hidden='true'></span>");
-        $button.tooltip();
 
         $button.click(function(){
             that.xml.go_down();
         });
+
         return $button;
     }
 
@@ -134,6 +127,26 @@ function taggable_text_xml(xml)
         }
 
         return buttons;
+    }
+
+    this.check_buttons = function(){
+        var $button = that.$root.find(".button-up");
+        if(that.xml.can_go_up())
+            $button.show();
+        else
+            $button.hide();
+
+        $button = that.$root.find(".button-down");
+        if(that.xml.can_go_down())
+            $button.show();
+        else
+            $button.hide();
+
+        $button = that.$root.find(".button-ascend");
+        if(that.xml.can_ascend())
+            $button.show();
+        else
+            $button.hide();
     }
 
     this.html_buttons = function()
@@ -204,6 +217,7 @@ function taggable_text_xml(xml)
         );
 
         that.$root = $text_node;
+        that.check_buttons();
 
         $source.click(function(){
             if(!$container_edit.is(":visible")){
@@ -495,7 +509,7 @@ function taggable_tag_xml(xml)
 
     this.update = function()
     {
-        
+
     }
 
     this.append_to = function($where)
