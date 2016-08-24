@@ -10,9 +10,6 @@ function test_acte(nom, acte){
     var $button = $("<button>", {
         text: "print acte"
     });
-    $button.click(function(){
-        console.log(acte.toString());
-    });
 
     $test.append(
         $("<h1>", {

@@ -475,16 +475,27 @@ function taggable_tag_xml(xml)
     {
         var children = that.xml.contents;
         var current_child_view = null;
+        var need_update = [];
 
         that.$root_children.children().detach();
 
         for(var i = 0; i < children.length; i++){
             if(children[i].view == null)
                 current_child_view = that.html_child(children[i]);
-            else
+            else{
                 current_child_view = children[i].view;
+                need_update.push(current_child_view);
+            }
             current_child_view.append_to(that.$root_children);
         }
+
+        for(var i = 0; i < need_update.length; i++)
+            need_update[i].update();
+    }
+
+    this.update = function()
+    {
+        
     }
 
     this.append_to = function($where)

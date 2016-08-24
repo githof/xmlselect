@@ -228,8 +228,6 @@ function xml_tag_node(tag, children, attributes = [])
                 that.contents.splice(i+1, 1);
                 if(last.view != null)
                     last.view.remove_from_DOM();
-                if(current.view != null)
-                    current.view.update();
             }
             last = current;
         }
