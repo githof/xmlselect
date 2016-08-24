@@ -129,7 +129,8 @@ function taggable_text_xml(xml)
         return buttons;
     }
 
-    this.check_buttons = function(){
+    this.check_buttons = function()
+    {
         var $button = that.$root.find(".button-up");
         if(that.xml.can_go_up())
             $button.show();
@@ -163,7 +164,7 @@ function taggable_text_xml(xml)
 
     this.html_container_edit = function($source)
     {
-        var $container_edit = $("<div>");
+        var $container_edit = $("<div class='text-node-edit-container'>");
 
         var $show = $("<div>", {
             class: 'xml-text show'
@@ -179,6 +180,35 @@ function taggable_text_xml(xml)
         return $container_edit;
     }
 
+    this.show_edit = function()
+    {
+        that.$root.find(".text-node-edit-container").show();
+        that.$root.find(".text-node-edit-close").show();
+        that.$root.find(".text-node-edit-side-buttons").show();
+        that.$root.addClass("text-node-edit");
+    }
+
+    this.hide_edit = function()
+    {
+        that.$root.find(".text-node-edit-container").hide();
+        that.$root.find(".text-node-edit-close").hide();
+        that.$root.find(".text-node-edit-side-buttons").hide();
+        that.$root.removeClass("text-node-edit");
+    }
+
+    this.close_others_edit = function()
+    {
+        var $root = that.xml;
+        while($root.parent != null)
+            $root = $root.parent;
+        $root = $root.view.$root;
+
+        $root.find(".text-node-edit-container").hide();
+        $root.find(".text-node-edit-close").hide();
+        $root.find(".text-node-edit-side-buttons").hide();
+        $root.find(".text-node-edit").removeClass("text-node-edit");
+    }
+
     this.html = function()
     {
         var $text_node = $("<div>", {
@@ -191,14 +221,14 @@ function taggable_text_xml(xml)
         });
 
         var $close = $("<span>", {
-            class: "xml-text-edit-close",
+            class: "text-node-edit-close",
             html: "&times;",
             "aria-label": "close"
         });
         $close.hide();
 
         var $side_buttons = $("<div>", {
-            class: "xml-text-edit-side-buttons"
+            class: "text-node-edit-side-buttons"
         });
         $side_buttons.append(
             that.html_button_up(),
@@ -221,18 +251,13 @@ function taggable_text_xml(xml)
 
         $source.click(function(){
             if(!$container_edit.is(":visible")){
-                $container_edit.show();
-                $close.show();
-                $side_buttons.show();
-                $text_node.addClass("text-node-edit");
+                that.close_others_edit();
+                that.show_edit();
             }
         });
         $close.click(function(){
-            $container_edit.hide();
-            $close.hide();
-            $side_buttons.hide();
-            $text_node.removeClass("text-node-edit");
-        })
+            that.hide_edit();
+        });
     }
 
     this.append_to = function($where)
