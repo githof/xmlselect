@@ -143,8 +143,16 @@ function xml_text_node(text)
         if(that.parent == null)
             return false;
 
-        var index = that.parent.contents.indexOf(that);
-        return index > 0 || (that.parent.contents.length == 1 && that.parent.parent != null);
+        var index = 0;
+        if(that.parent.contents.length == 1){
+            if(that.parent.parent != null)
+                index = that.parent.parent.contents.indexOf(that.parent);
+            else
+                return false;
+        }else{
+            index = that.parent.contents.indexOf(that);
+        }
+        return index > 0;
     }
 
     this.can_go_down = function()
@@ -152,8 +160,19 @@ function xml_text_node(text)
         if(that.parent == null)
             return false;
 
-        var index = that.parent.contents.indexOf(that);
-        return index < that.parent.contents.length-1 || (that.parent.contents.length == 1 && that.parent.parent != null);
+        var index = 0;
+        var length = 0;
+        if(that.parent.contents.length == 1){
+            if(that.parent.parent != null){
+                length = that.parent.parent.contents.length;
+                index = that.parent.parent.contents.indexOf(that.parent);
+            }else
+                return false;
+        }else{
+            length = that.parent.contents.length;
+            index = that.parent.contents.indexOf(that);
+        }
+        return index < length-1;
     }
 }
 

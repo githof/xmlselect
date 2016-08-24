@@ -509,7 +509,7 @@ function taggable_tag_xml(xml)
 
     this.update = function()
     {
-
+        that.update_children();
     }
 
     this.append_to = function($where)
