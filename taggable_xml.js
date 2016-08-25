@@ -207,6 +207,9 @@ function taggable_text_xml(xml)
         $root.find(".text-node-edit-close").hide();
         $root.find(".text-node-edit-side-buttons").hide();
         $root.find(".text-node-edit").removeClass("text-node-edit");
+        var $inline_disabled = $root.find(".inline-node-disabled");
+        $inline_disabled.removeClass("inline-node-disabled");
+        $inline_disabled.addClass("inline-node");
     }
 
     this.html = function()
@@ -253,10 +256,20 @@ function taggable_text_xml(xml)
             if(!$container_edit.is(":visible")){
                 that.close_others_edit();
                 that.show_edit();
+                var $parent = that.$root.parent();
+                if($parent.hasClass("inline-node")){
+                    $parent.removeClass("inline-node");
+                    $parent.addClass("inline-node-disabled");
+                }
             }
         });
         $close.click(function(){
             that.hide_edit();
+            var $parent = that.$root.parent();
+            if($parent.hasClass("inline-node-disabled")){
+                $parent.removeClass("inline-node-disabled");
+                $parent.addClass("inline-node");
+            }
         });
     }
 
@@ -289,146 +302,6 @@ function taggable_tag_xml(xml)
     {
         that.$root.hide().remove();
     }
-
-    // this.html_attribut = function(value)
-    // {
-    //     var $div_attribut = $("<div>", {
-    //         text: value,
-    //         'class': 'attribut'
-    //     });
-    //
-    //     $div_attribut.click(function(){
-    //         if(that.xml.remove_attribut(value))
-    //             $div_attribut.hide().remove();
-    //     });
-    //
-    //     return $div_attribut;
-    // }
-
-    // this.add_attribut = function(value, $where_error)
-    // {
-    //     if(value.length == 0){
-    //         show_error_message("L'attribut est vide", $where_error);
-    //         return;
-    //     }
-    //
-    //     if(that.xml.contains_attribut(value)){
-    //         show_error_message("L'attribut existe déjà", $where_error);
-    //         return;
-    //     }
-    //
-    //     if(that.xml.add_attribut(value))
-    //         that.$root_attributes.append(that.html_attribut(value));
-    // }
-
-    // this.html_attributes = function()
-    // {
-    //     var attributes_available = attributes_set[that.xml.tag];
-    //     if(attributes_available == null){
-    //         return null;
-    //     }
-    //
-    //     that.$root_attributes = $("<div>", {
-    //         'class': 'attributes_tag'
-    //     });
-    //
-    //     var $label_attribut = $("<span>", {
-    //         text: "Attributs :"
-    //     });
-    //
-    //     var $combo_box_attributes = $("<select>");
-    //     $combo_box_attributes.hide();
-    //
-    //     var $attribut_add_other = $("<input>", {
-    //         'type': "text",
-    //         'placeholder': ' Autre attribut'
-    //     });
-    //     $attribut_add_other.hide();
-    //
-    //     var $button_add = $("<button>", {
-    //         text: "+"
-    //     });
-    //
-    //     var $container_add_attribut = $("<span>", {
-    //         'class': 'attribut_add_container'
-    //     });
-    //     $container_add_attribut.append(
-    //         $combo_box_attributes,
-    //         $attribut_add_other,
-    //         $button_add
-    //     );
-    //
-    //     var $section_attributes = $("<section>", {
-    //         'class': 'section_attributes'
-    //     });
-    //     $section_attributes.append(
-    //         $label_attribut,
-    //         that.$root_attributes,
-    //         $container_add_attribut
-    //     );
-    //
-    //     // ajoute attributs du set au combo box
-    //     for(var i = 0; i < attributes_available.length; i++){
-    //         $combo_box_attributes.append(
-    //             $("<option>", {
-    //                 'value': attributes_available[i],
-    //                 text: attributes_available[i]
-    //             })
-    //         );
-    //     }
-    //
-    //     // ajoute 'autre' au combo box
-    //     $combo_box_attributes.append(
-    //         $("<option>", {
-    //             'value': option_other,
-    //             text: option_other
-    //         })
-    //     );
-    //
-    //     // si changement au combo box
-    //     $combo_box_attributes.change(function(){
-    //         var new_attribut = $combo_box_attributes.val();
-    //
-    //         if(new_attribut == option_other)
-    //             $attribut_add_other.show();
-    //         else
-    //             $attribut_add_other.hide();
-    //     });
-    //
-    //     // ajout des attributs déjà présent
-    //     for(var i = 0; i < that.xml.attributes.length; i++){
-    //         that.$root_attributes.append(that.html_attribut(that.xml.attributes[i]));
-    //     }
-    //
-    //     // si click sur button ajouter new attribut
-    //     $button_add.click(function(){
-    //         var new_attribut = $combo_box_attributes.val();
-    //
-    //         if($combo_box_attributes.is(":hidden")){
-    //             $combo_box_attributes.show();
-    //
-    //             if(new_attribut == option_other)
-    //                 $attribut_add_other.show();
-    //             else
-    //                 $attribut_add_other.hide();
-    //
-    //             return;
-    //         }
-    //
-    //         if(new_attribut == option_other)
-    //             new_attribut = $attribut_add_other.val();
-    //
-    //         that.add_attribut(
-    //             new_attribut,
-    //             $container_add_attribut);
-    //
-    //         $combo_box_attributes.hide();
-    //         $attribut_add_other.val("");
-    //         $attribut_add_other.hide();
-    //     });
-    //
-    //     return $section_attributes;
-    // }
 
     this.html_attribute = function(attribute)
     {
@@ -533,9 +406,10 @@ function taggable_tag_xml(xml)
 
     this.html = function()
     {
-        var $balise_ouvrante = $("<div class='xml-tag'>");
+        var is_inline = (that.xml.contents.length <= 1)? "inline-node" : "";
+        var $balise_ouvrante = $("<div class='xml-tag "+is_inline+"'>");
 
-        var $balise_fermante = $("<div class='xml-tag'>");
+        var $balise_fermante = $("<div class='xml-tag "+is_inline+"'>");
 
         $balise_ouvrante.append(
             $("<span class='xml-tag-arrow'><</span>"),
@@ -551,7 +425,7 @@ function taggable_tag_xml(xml)
         );
 
         var $children = $("<div>", {
-            class: 'children'
+            class: 'children '+is_inline
         });
 
         var children = that.html_children();

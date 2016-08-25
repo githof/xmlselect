@@ -20,6 +20,12 @@ footer,header,hgroup,menu,nav,section {
     font-weight: bold;
 }
 
+.inline-node {
+    display: inline-block;
+    border: none;
+    padding: 0px;
+}
+
 /* TAG ATTRIBUTES */
 .attributes {
     display: inline-block;

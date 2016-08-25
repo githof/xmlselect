@@ -88,5 +88,3 @@ var attributes_set = {
 	    "de", "la", "los"
 	]
 }
-
-var option_other = "Autre";
