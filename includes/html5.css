@@ -24,6 +24,17 @@ body{
     margin: 0px;
 }
 
+/* TAG ATTRIBUTES */
+.attributes {
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.attribute {
+    display: inline-block;
+    margin-right: 10px;
+}
+
 /* TEXT NODE */
 .text-node .xml-text {
     border: 1px solid white;

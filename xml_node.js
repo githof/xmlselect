@@ -359,7 +359,7 @@ function xml_tag_node(tag, children, attributes = [])
         return true;
     }
 
-    this.contains_attribut = function(attribut)
+    this.contains_attribut = function(key, value)
     {
         return that.attributes.includes(attribut);
     }

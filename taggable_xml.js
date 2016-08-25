@@ -430,6 +430,23 @@ function taggable_tag_xml(xml)
         return $section_attributes;
     }
 
+    this.html_attribute = function(attribute)
+    {
+        $attribute = $("<div class='attribute'>");
+        $attribute.text(attribute);
+        return $attribute;
+    }
+
+    this.html_attributes_b = function()
+    {
+        $attributes = $("<div class='attributes'>");
+
+        for(var i = 0; i < that.xml.attributes.length; i++)
+            $attributes.append(that.html_attribute(that.xml.attributes[i]));
+
+        return $attributes;
+    }
+
     this.html_child = function(xml)
     {
         return new_taggable_xml(xml);
@@ -449,15 +466,19 @@ function taggable_tag_xml(xml)
 
     this.html = function()
     {
-        var $balise_ouvrante = $("<div>", {
-            text: "<"+that.xml.tag+">",
-            class: "xml-tag"
-        });
+        var $balise_ouvrante = $("<div class='xml-tag'>");
 
         var $balise_fermante = $("<div>", {
             text: "</"+that.xml.tag+">",
             class: "xml-tag"
         });
+
+        var $attributes = that.html_attributes_b();
+        $balise_ouvrante.append(
+            $("<span>",  {text: "<"+that.xml.tag}),
+            $attributes,
+            $("<span>></span>")
+        );
 
         var $children = $("<div>", {
             class: 'children'

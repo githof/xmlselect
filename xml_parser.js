@@ -16,8 +16,7 @@ function xml_parser(xml)
             tag = node.nodeName;
 
             for(var i = 0; i < node.attributes.length; i++){
-                if(node.attributes[i].value === "true")
-                    attributes.push(node.attributes[i].name);
+                attributes.push(node.attributes[i].name+"="+node.attributes[i].value);
             }
 
             for(var i = 0; i < node.childNodes.length; i++){
