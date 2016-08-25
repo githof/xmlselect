@@ -449,36 +449,6 @@ function taggable_tag_xml(xml)
 
     this.html = function()
     {
-        var $div_tag = $("<div>", {
-            text: that.xml.tag,
-            class: 'tag_title'
-        });
-
-        var $dt = $("<dt>", {});
-        $dt.append(
-            $div_tag,
-            that.html_attributes()
-        );
-
-        var $dd = $("<dd>", {
-            'class': 'children'
-        });
-
-        var children = that.html_children();
-        for(var i = 0; i< children.length; i++)
-            children[i].append_to($dd);
-
-        that.$root_children = $dd;
-
-        that.$root = $("<div>", {
-            'class': 'tag_node'
-        });
-
-        that.$root.append([$dt, $dd]);
-    }
-
-    this.html_bis = function()
-    {
         var $balise_ouvrante = $("<div>", {
             text: "<"+that.xml.tag+">",
             class: "xml-tag"
@@ -543,7 +513,7 @@ function taggable_tag_xml(xml)
     }
 
     this.set_xml(xml);
-    this.html_bis();
+    this.html();
 }
 
 // Instanciation facile d'un xml node
