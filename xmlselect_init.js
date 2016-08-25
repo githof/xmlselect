@@ -1,7 +1,7 @@
 
 
 $(document).ready(function(){
-    var $html_edit = $(".xmlselect_edit");
+    var $html_edit = $(".xmlselect-edit");
 
     var acte_brut = $html_edit.text();
     $html_edit.text("");

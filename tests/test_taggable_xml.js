@@ -17,7 +17,7 @@ function test_acte(nom, acte){
         }),
         $button,
         $("<div>",{
-            class: "xmlselect_edit",
+            class: "xmlselect-edit",
             text: acte
         })
     );
