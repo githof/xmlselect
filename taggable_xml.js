@@ -290,145 +290,145 @@ function taggable_tag_xml(xml)
         that.$root.hide().remove();
     }
 
-    this.html_attribut = function(value)
-    {
-        var $div_attribut = $("<div>", {
-            text: value,
-            'class': 'attribut'
-        });
+    // this.html_attribut = function(value)
+    // {
+    //     var $div_attribut = $("<div>", {
+    //         text: value,
+    //         'class': 'attribut'
+    //     });
+    //
+    //     $div_attribut.click(function(){
+    //         if(that.xml.remove_attribut(value))
+    //             $div_attribut.hide().remove();
+    //     });
+    //
+    //     return $div_attribut;
+    // }
 
-        $div_attribut.click(function(){
-            if(that.xml.remove_attribut(value))
-                $div_attribut.hide().remove();
-        });
+    // this.add_attribut = function(value, $where_error)
+    // {
+    //     if(value.length == 0){
+    //         show_error_message("L'attribut est vide", $where_error);
+    //         return;
+    //     }
+    //
+    //     if(that.xml.contains_attribut(value)){
+    //         show_error_message("L'attribut existe déjà", $where_error);
+    //         return;
+    //     }
+    //
+    //     if(that.xml.add_attribut(value))
+    //         that.$root_attributes.append(that.html_attribut(value));
+    // }
 
-        return $div_attribut;
-    }
-
-    this.add_attribut = function(value, $where_error)
-    {
-        if(value.length == 0){
-            show_error_message("L'attribut est vide", $where_error);
-            return;
-        }
-
-        if(that.xml.contains_attribut(value)){
-            show_error_message("L'attribut existe déjà", $where_error);
-            return;
-        }
-
-        if(that.xml.add_attribut(value))
-            that.$root_attributes.append(that.html_attribut(value));
-    }
-
-    this.html_attributes = function()
-    {
-        var attributes_available = attributes_set[that.xml.tag];
-        if(attributes_available == null){
-            return null;
-        }
-
-        that.$root_attributes = $("<div>", {
-            'class': 'attributes_tag'
-        });
-
-        var $label_attribut = $("<span>", {
-            text: "Attributs :"
-        });
-
-        var $combo_box_attributes = $("<select>");
-        $combo_box_attributes.hide();
-
-        var $attribut_add_other = $("<input>", {
-            'type': "text",
-            'placeholder': ' Autre attribut'
-        });
-        $attribut_add_other.hide();
-
-        var $button_add = $("<button>", {
-            text: "+"
-        });
-
-        var $container_add_attribut = $("<span>", {
-            'class': 'attribut_add_container'
-        });
-        $container_add_attribut.append(
-            $combo_box_attributes,
-            $attribut_add_other,
-            $button_add
-        );
-
-        var $section_attributes = $("<section>", {
-            'class': 'section_attributes'
-        });
-        $section_attributes.append(
-            $label_attribut,
-            that.$root_attributes,
-            $container_add_attribut
-        );
-
-        // ajoute attributs du set au combo box
-        for(var i = 0; i < attributes_available.length; i++){
-            $combo_box_attributes.append(
-                $("<option>", {
-                    'value': attributes_available[i],
-                    text: attributes_available[i]
-                })
-            );
-        }
-
-        // ajoute 'autre' au combo box
-        $combo_box_attributes.append(
-            $("<option>", {
-                'value': option_other,
-                text: option_other
-            })
-        );
-
-        // si changement au combo box
-        $combo_box_attributes.change(function(){
-            var new_attribut = $combo_box_attributes.val();
-
-            if(new_attribut == option_other)
-                $attribut_add_other.show();
-            else
-                $attribut_add_other.hide();
-        });
-
-        // ajout des attributs déjà présent
-        for(var i = 0; i < that.xml.attributes.length; i++){
-            that.$root_attributes.append(that.html_attribut(that.xml.attributes[i]));
-        }
-
-        // si click sur button ajouter new attribut
-        $button_add.click(function(){
-            var new_attribut = $combo_box_attributes.val();
-
-            if($combo_box_attributes.is(":hidden")){
-                $combo_box_attributes.show();
-
-                if(new_attribut == option_other)
-                    $attribut_add_other.show();
-                else
-                    $attribut_add_other.hide();
-
-                return;
-            }
-
-            if(new_attribut == option_other)
-                new_attribut = $attribut_add_other.val();
-
-            that.add_attribut(
-                new_attribut,
-                $container_add_attribut);
-
-            $combo_box_attributes.hide();
-            $attribut_add_other.val("");
-            $attribut_add_other.hide();
-        });
-
-        return $section_attributes;
-    }
+    // this.html_attributes = function()
+    // {
+    //     var attributes_available = attributes_set[that.xml.tag];
+    //     if(attributes_available == null){
+    //         return null;
+    //     }
+    //
+    //     that.$root_attributes = $("<div>", {
+    //         'class': 'attributes_tag'
+    //     });
+    //
+    //     var $label_attribut = $("<span>", {
+    //         text: "Attributs :"
+    //     });
+    //
+    //     var $combo_box_attributes = $("<select>");
+    //     $combo_box_attributes.hide();
+    //
+    //     var $attribut_add_other = $("<input>", {
+    //         'type': "text",
+    //         'placeholder': ' Autre attribut'
+    //     });
+    //     $attribut_add_other.hide();
+    //
+    //     var $button_add = $("<button>", {
+    //         text: "+"
+    //     });
+    //
+    //     var $container_add_attribut = $("<span>", {
+    //         'class': 'attribut_add_container'
+    //     });
+    //     $container_add_attribut.append(
+    //         $combo_box_attributes,
+    //         $attribut_add_other,
+    //         $button_add
+    //     );
+    //
+    //     var $section_attributes = $("<section>", {
+    //         'class': 'section_attributes'
+    //     });
+    //     $section_attributes.append(
+    //         $label_attribut,
+    //         that.$root_attributes,
+    //         $container_add_attribut
+    //     );
+    //
+    //     // ajoute attributs du set au combo box
+    //     for(var i = 0; i < attributes_available.length; i++){
+    //         $combo_box_attributes.append(
+    //             $("<option>", {
+    //                 'value': attributes_available[i],
+    //                 text: attributes_available[i]
+    //             })
+    //         );
+    //     }
+    //
+    //     // ajoute 'autre' au combo box
+    //     $combo_box_attributes.append(
+    //         $("<option>", {
+    //             'value': option_other,
+    //             text: option_other
+    //         })
+    //     );
+    //
+    //     // si changement au combo box
+    //     $combo_box_attributes.change(function(){
+    //         var new_attribut = $combo_box_attributes.val();
+    //
+    //         if(new_attribut == option_other)
+    //             $attribut_add_other.show();
+    //         else
+    //             $attribut_add_other.hide();
+    //     });
+    //
+    //     // ajout des attributs déjà présent
+    //     for(var i = 0; i < that.xml.attributes.length; i++){
+    //         that.$root_attributes.append(that.html_attribut(that.xml.attributes[i]));
+    //     }
+    //
+    //     // si click sur button ajouter new attribut
+    //     $button_add.click(function(){
+    //         var new_attribut = $combo_box_attributes.val();
+    //
+    //         if($combo_box_attributes.is(":hidden")){
+    //             $combo_box_attributes.show();
+    //
+    //             if(new_attribut == option_other)
+    //                 $attribut_add_other.show();
+    //             else
+    //                 $attribut_add_other.hide();
+    //
+    //             return;
+    //         }
+    //
+    //         if(new_attribut == option_other)
+    //             new_attribut = $attribut_add_other.val();
+    //
+    //         that.add_attribut(
+    //             new_attribut,
+    //             $container_add_attribut);
+    //
+    //         $combo_box_attributes.hide();
+    //         $attribut_add_other.val("");
+    //         $attribut_add_other.hide();
+    //     });
+    //
+    //     return $section_attributes;
+    // }
 
     this.html_attribute = function(attribute)
     {
@@ -437,12 +437,18 @@ function taggable_tag_xml(xml)
         return $attribute;
     }
 
-    this.html_attributes_b = function()
+    this.html_attributes = function()
     {
         $attributes = $("<div class='attributes'>");
 
         for(var i = 0; i < that.xml.attributes.length; i++)
             $attributes.append(that.html_attribute(that.xml.attributes[i]));
+
+        if(that.xml.tag == "nom"){
+            var $button_add = $("<button title='Ajouter attribut attr' class='button-add-attribute btn btn-sm'>");
+            $button_add.html("<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>");
+            $attributes.append($button_add);
+        }
 
         return $attributes;
     }
@@ -473,7 +479,7 @@ function taggable_tag_xml(xml)
             class: "xml-tag"
         });
 
-        var $attributes = that.html_attributes_b();
+        var $attributes = that.html_attributes();
         $balise_ouvrante.append(
             $("<span>",  {text: "<"+that.xml.tag}),
             $attributes,

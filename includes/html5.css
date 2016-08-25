@@ -27,13 +27,21 @@ body{
 /* TAG ATTRIBUTES */
 .attributes {
     display: inline-block;
-    margin-left: 10px;
+    color: #2a00ff;
 }
 
 .attribute {
     display: inline-block;
-    margin-right: 10px;
+    margin-left: 10px;
 }
+
+.button-add-attribute {
+    color: black;
+    padding: 1px 3px;
+    font-size: 9px;
+    margin-left: 10px;
+}
+
 
 /* TEXT NODE */
 .text-node .xml-text {
