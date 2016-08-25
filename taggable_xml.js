@@ -437,6 +437,18 @@ function taggable_tag_xml(xml)
         return $attribute;
     }
 
+    this.add_attribute = function(key, val)
+    {
+        if(key.length == 0 || val.length == 0)
+            return;
+
+        var attr = key+"="+val;
+        if(that.xml.contains_attribut(attr))
+            return;
+
+        that.xml.add_attribut(attr);
+    }
+
     this.html_attributes = function()
     {
         $attributes = $("<div class='attributes'>");
@@ -444,11 +456,46 @@ function taggable_tag_xml(xml)
         for(var i = 0; i < that.xml.attributes.length; i++)
             $attributes.append(that.html_attribute(that.xml.attributes[i]));
 
-        if(that.xml.tag == "nom"){
-            var $button_add = $("<button title='Ajouter attribut attr' class='button-add-attribute btn btn-sm'>");
-            $button_add.html("<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>");
-            $attributes.append($button_add);
-        }
+        var $button_add = $("<button title='Ajouter attribut' class='button-add-attribute btn btn-sm'>");
+        $button_add.html("<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>");
+        that.$root_attributes = $attributes;
+
+        var $form_add = $("<div class='attribut-new'>");
+        var $form_key = $("<input type='text' placeholder='Attribut'>");
+        var $span_equal = $("<span>=</span>");
+        var $form_value = $("<input type='text' placeholder='Valeur'>");
+        var $button_submit = $("<button title='Ajouter' class='button-add-attribute btn btn-sm'>");
+        $button_submit.html("<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>");
+
+        $form_add.append(
+            $form_key,
+            $span_equal,
+            $form_value,
+            $button_submit
+        );
+        $form_add.hide();
+
+        $button_add.click(function(){
+            $button_add.hide();
+            $form_add.show();
+        });
+
+        $button_submit.click(function(){
+            var key = $form_key.val();
+            var val = $form_value.val();
+
+            that.add_attribute(key, val);
+            $button_add.show();
+            $form_add.hide();
+
+            $form_key.val("");
+            $form_value.val("");
+        });
+
+        $attributes.append(
+            $button_add,
+            $form_add
+        );
 
         return $attributes;
     }
@@ -474,16 +521,19 @@ function taggable_tag_xml(xml)
     {
         var $balise_ouvrante = $("<div class='xml-tag'>");
 
-        var $balise_fermante = $("<div>", {
-            text: "</"+that.xml.tag+">",
-            class: "xml-tag"
-        });
+        var $balise_fermante = $("<div class='xml-tag'>");
 
-        var $attributes = that.html_attributes();
         $balise_ouvrante.append(
-            $("<span>",  {text: "<"+that.xml.tag}),
-            $attributes,
-            $("<span>></span>")
+            $("<span class='xml-tag-arrow'><</span>"),
+            $("<span class='xml-tag-name'>"+that.xml.tag+"</span>"),
+            that.html_attributes(),
+            $("<span class='xml-tag-arrow'>></span>")
+        );
+
+        $balise_fermante.append(
+            $("<span>", {class:"xml-tag-arrow", text: "</"}),
+            $("<span class='xml-tag-name'>"+that.xml.tag+"</span>"),
+            $("<span class='xml-tag-arrow'>></span>")
         );
 
         var $children = $("<div>", {
@@ -531,6 +581,8 @@ function taggable_tag_xml(xml)
 
     this.update = function()
     {
+        that.$root_attributes.detach();
+        that.$root.children(".xml-tag").first().children(".xml-tag-name").after(that.html_attributes());
         that.update_children();
     }
 

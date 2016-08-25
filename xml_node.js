@@ -345,6 +345,9 @@ function xml_tag_node(tag, children, attributes = [])
         if(that.attributes.includes(new_attribut))
             return false;
         that.attributes.push(new_attribut);
+
+        if(that.view != null)
+            that.view.update();
         return true;
     }
 
@@ -356,12 +359,14 @@ function xml_tag_node(tag, children, attributes = [])
         var index = that.attributes.indexOf(attribut);
         that.attributes.splice(index, 1);
 
+        if(that.view != null)
+            that.view.update();
         return true;
     }
 
-    this.contains_attribut = function(key, value)
+    this.contains_attribut = function(attr)
     {
-        return that.attributes.includes(attribut);
+        return that.attributes.includes(attr);
     }
 
     this.init(tag, children, attributes);
