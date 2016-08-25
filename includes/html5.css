@@ -36,6 +36,14 @@ body{
     color: #2a00ff;
 }
 
+.attribute:hover {
+    cursor: pointer;
+    background-color: #ffdfdf;
+    color: red;
+    border-radius: 3px;
+    padding: 0px 2px;
+}
+
 .button-add-attribute {
     padding: 1px 3px;
     font-size: 9px;

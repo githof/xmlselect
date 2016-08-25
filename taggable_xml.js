@@ -432,8 +432,12 @@ function taggable_tag_xml(xml)
 
     this.html_attribute = function(attribute)
     {
-        $attribute = $("<div class='attribute'>");
+        $attribute = $("<div class='attribute' title='Supprimer'>");
         $attribute.text(attribute);
+
+        $attribute.click(function(){
+            that.xml.remove_attribut(attribute);
+        });
         return $attribute;
     }
 
