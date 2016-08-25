@@ -14,32 +14,47 @@ body{
 
 
 /* TAG NODE */
-.xml-tag {
-    color: green;
-}
-
 .children {
     border-left: 1px solid rgba(0, 128, 0, 0.18);
     padding-left: 50px;
     margin: 0px;
 }
 
+.xml-tag-name {
+    color: green;
+    font-weight: bold;
+}
+
 /* TAG ATTRIBUTES */
 .attributes {
     display: inline-block;
-    color: #2a00ff;
 }
 
 .attribute {
     display: inline-block;
     margin-left: 10px;
+    color: #2a00ff;
 }
 
 .button-add-attribute {
-    color: black;
     padding: 1px 3px;
     font-size: 9px;
     margin-left: 10px;
+}
+
+.attribute-new{
+    display: inline-block;
+    font-size: 12px;
+    line-height: 1;
+    margin-left: 10px;
+}
+
+.attribute-new input {
+    width: 70px;
+}
+
+.attribute-new span {
+    margin: 0px 5px;
 }
 
 

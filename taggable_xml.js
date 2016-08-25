@@ -460,18 +460,21 @@ function taggable_tag_xml(xml)
         $button_add.html("<span class='glyphicon glyphicon-plus' aria-hidden='true'></span>");
         that.$root_attributes = $attributes;
 
-        var $form_add = $("<div class='attribut-new'>");
+        var $form_add = $("<div class='attribute-new'>");
         var $form_key = $("<input type='text' placeholder='Attribut'>");
         var $span_equal = $("<span>=</span>");
         var $form_value = $("<input type='text' placeholder='Valeur'>");
         var $button_submit = $("<button title='Ajouter' class='button-add-attribute btn btn-sm'>");
         $button_submit.html("<span class='glyphicon glyphicon-ok' aria-hidden='true'></span>");
+        var $button_cancel = $("<button title='Annuler' class='button-add-attribute btn btn-sm'>");
+        $button_cancel.html("<span class='glyphicon glyphicon-remove' aria-hidden='true'></span>");
 
         $form_add.append(
             $form_key,
             $span_equal,
             $form_value,
-            $button_submit
+            $button_submit,
+            $button_cancel
         );
         $form_add.hide();
 
@@ -485,9 +488,16 @@ function taggable_tag_xml(xml)
             var val = $form_value.val();
 
             that.add_attribute(key, val);
+
             $button_add.show();
             $form_add.hide();
+            $form_key.val("");
+            $form_value.val("");
+        });
 
+        $button_cancel.click(function(){
+            $button_add.show();
+            $form_add.hide();
             $form_key.val("");
             $form_value.val("");
         });
