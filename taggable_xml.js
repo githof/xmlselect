@@ -17,7 +17,7 @@ function show_error_message(message, $where)
 }
 
 // taggable d'un xml text node
-function taggable_text_xml(xml)
+function taggable_text_xml(xml, is_editable = false)
 {
     var that = this;
 
@@ -26,6 +26,7 @@ function taggable_text_xml(xml)
     this.sel_show = null;
     this.id = null;
     this.duplicate_tags = {};
+    this.is_editable = is_editable;
 
     this.set_xml = function(xml)
     {
@@ -212,65 +213,68 @@ function taggable_text_xml(xml)
         $inline_disabled.addClass("inline-node");
     }
 
-    this.html = function()
+    this.html = function(is_editable)
     {
         var $text_node = $("<div>", {
             class: "text-node"
         });
+        that.$root = $text_node;
 
         var $source = $("<div>", {
             class: "xml-text source",
             text: that.xml.text
         });
 
-        var $close = $("<span>", {
-            class: "text-node-edit-close",
-            html: "&times;",
-            "aria-label": "close"
-        });
-        $close.hide();
+        if(that.is_editable){
+            var $close = $("<span>", {
+                class: "text-node-edit-close",
+                html: "&times;",
+                "aria-label": "close"
+            });
+            $close.hide();
 
-        var $side_buttons = $("<div>", {
-            class: "text-node-edit-side-buttons"
-        });
-        $side_buttons.append(
-            that.html_button_up(),
-            that.html_button_down()
-        );
-        $side_buttons.hide();
+            var $side_buttons = $("<div>", {
+                class: "text-node-edit-side-buttons"
+            });
+            $side_buttons.append(
+                that.html_button_up(),
+                that.html_button_down()
+            );
+            $side_buttons.hide();
 
-        var $container_edit = that.html_container_edit($source);
-        $container_edit.hide();
+            var $container_edit = that.html_container_edit($source);
+            $container_edit.hide();
 
-        $text_node.append(
-            $close,
-            $side_buttons,
-            $source,
-            $container_edit
-        );
-
-        that.$root = $text_node;
-        that.check_buttons();
-
-        $source.click(function(){
-            if(!$container_edit.is(":visible")){
-                that.close_others_edit();
-                that.show_edit();
-                var $parent = that.$root.parent();
-                if($parent.hasClass("inline-node")){
-                    $parent.removeClass("inline-node");
-                    $parent.addClass("inline-node-disabled");
+            $source.click(function(){
+                if(!$container_edit.is(":visible")){
+                    that.close_others_edit();
+                    that.show_edit();
+                    var $parent = that.$root.parent();
+                    if($parent.hasClass("inline-node")){
+                        $parent.removeClass("inline-node");
+                        $parent.addClass("inline-node-disabled");
+                    }
                 }
-            }
-        });
-        $close.click(function(){
-            that.hide_edit();
-            var $parent = that.$root.parent();
-            if($parent.hasClass("inline-node-disabled")){
-                $parent.removeClass("inline-node-disabled");
-                $parent.addClass("inline-node");
-            }
-        });
+            });
+            $close.click(function(){
+                that.hide_edit();
+                var $parent = that.$root.parent();
+                if($parent.hasClass("inline-node-disabled")){
+                    $parent.removeClass("inline-node-disabled");
+                    $parent.addClass("inline-node");
+                }
+            });
+
+            $text_node.append(
+                $close,
+                $side_buttons,
+                $source,
+                $container_edit
+            );
+            that.check_buttons();
+        }else{
+            $text_node.append($source);
+        }
     }
 
     this.append_to = function($where)
@@ -283,7 +287,7 @@ function taggable_text_xml(xml)
 }
 
 // taggable d'un xml tag node
-function taggable_tag_xml(xml)
+function taggable_tag_xml(xml, is_editable = false)
 {
     var that = this;
 
@@ -291,6 +295,7 @@ function taggable_tag_xml(xml)
     this.$root = null;
     this.$root_attributes = null;
     this.$root_children = null;
+    this.is_editable = is_editable
 
     this.set_xml = function(xml)
     {
@@ -389,7 +394,7 @@ function taggable_tag_xml(xml)
 
     this.html_child = function(xml)
     {
-        return new_taggable_xml(xml);
+        return new_taggable_xml(xml, that.is_editable);
     }
 
     this.html_children = function()
@@ -413,10 +418,11 @@ function taggable_tag_xml(xml)
 
         $balise_ouvrante.append(
             $("<span class='xml-tag-arrow'><</span>"),
-            $("<span class='xml-tag-name'>"+that.xml.tag+"</span>"),
-            that.html_attributes(),
-            $("<span class='xml-tag-arrow'>></span>")
+            $("<span class='xml-tag-name'>"+that.xml.tag+"</span>")
         );
+        if(that.is_editable)
+            $balise_ouvrante.append(that.html_attributes());
+        $balise_ouvrante.append($("<span class='xml-tag-arrow'>></span>"));
 
         $balise_fermante.append(
             $("<span>", {class:"xml-tag-arrow", text: "</"}),
@@ -484,11 +490,11 @@ function taggable_tag_xml(xml)
 }
 
 // Instanciation facile d'un xml node
-function new_taggable_xml(xml)
+function new_taggable_xml(xml, is_editable = false)
 {
     if(xml instanceof xml_text_node)
-        return new taggable_text_xml(xml);
+        return new taggable_text_xml(xml, is_editable);
     if(xml instanceof xml_tag_node)
-        return new taggable_tag_xml(xml);
+        return new taggable_tag_xml(xml, is_editable);
     return null;
 }
