@@ -11,5 +11,17 @@ $(document).ready(function(){
         $html_edit.parent().children("button").click(function(){
             console.log(acte.xml.toString());
         });
+        var clipboard = new Clipboard("#btn-copy-xml", {
+            text: function(){
+                return acte.xml.toString();
+            }
+        });
+        clipboard.on("success", function(e){
+            alert_add(
+                $("<div class='alert alert-info fade in'>\
+                <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>\
+                XML copié dans le presse-papier</div>")
+            );
+        })
     }
 });
