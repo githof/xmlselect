@@ -29,41 +29,8 @@ footer,header,hgroup,menu,nav,section {
 /* TAG ATTRIBUTES */
 .attributes {
     display: inline-block;
-}
-
-.attribute {
-    display: inline-block;
     margin-left: 10px;
     color: #2a00ff;
-}
-
-.attribute:hover {
-    cursor: pointer;
-    background-color: #ffdfdf;
-    color: red;
-    border-radius: 3px;
-    padding: 0px 2px;
-}
-
-.button-add-attribute {
-    padding: 1px 3px;
-    font-size: 9px;
-    margin-left: 10px;
-}
-
-.attribute-new{
-    display: inline-block;
-    font-size: 12px;
-    line-height: 1;
-    margin-left: 10px;
-}
-
-.attribute-new input {
-    width: 70px;
-}
-
-.attribute-new span {
-    margin: 0px 5px;
 }
 
 

@@ -176,17 +176,19 @@ function xml_text_node(text)
     }
 }
 
-function xml_tag_node(tag, children, attributes = [])
+function xml_tag_node(tag, children, id = null, don = false, attr = null)
 {
     var that = this;
 
     this.tag = null;
     this.parent = null;
     this.contents = [];
-    this.attributes = [];
     this.view = null;
+    this.don = false;
+    this.id = null;
+    this.attr = null;
 
-    this.init = function(tag, children, attributes)
+    this.init = function(tag, children, id, don, attr)
     {
         that.tag = tag;
 
@@ -196,9 +198,9 @@ function xml_tag_node(tag, children, attributes = [])
             for(var i = 0; i < children.length; i++)
                 that.add_child(children[i]);
         }
-
-        for(var i = 0; i < attributes.length; i++)
-            that.add_attribut(attributes[i]);
+        that.set_id(id);
+        that.set_don(don);
+        that.set_attr(attr);
     }
 
     this.set_view = function(view)
@@ -261,9 +263,14 @@ function xml_tag_node(tag, children, attributes = [])
 
         s += "<"+that.tag;
 
-        for(var i = 0; i < that.attributes.length; i++){
-            s += " " + that.attributes[i] + '="true"';
-        }
+        if(that.id != null)
+            s += " id='"+that.id+"'";
+
+        if(that.don)
+            s += " don='true'";
+
+        if(that.attr != null)
+            s += " attr='"+that.attr+"'";
 
         s += ">";
 
@@ -340,34 +347,20 @@ function xml_tag_node(tag, children, attributes = [])
             that.view.update_children();
     }
 
-    this.add_attribut = function(new_attribut)
+    this.set_id = function(id)
     {
-        if(that.attributes.includes(new_attribut))
-            return false;
-        that.attributes.push(new_attribut);
-
-        if(that.view != null)
-            that.view.update();
-        return true;
+        that.id = id;
     }
 
-    this.remove_attribut = function(attribut)
+    this.set_don = function(don)
     {
-        if(!that.attributes.includes(attribut))
-            return false;
-
-        var index = that.attributes.indexOf(attribut);
-        that.attributes.splice(index, 1);
-
-        if(that.view != null)
-            that.view.update();
-        return true;
+        that.don = don;
     }
 
-    this.contains_attribut = function(attr)
+    this.set_attr = function(attr)
     {
-        return that.attributes.includes(attr);
+        that.attr = attr;
     }
 
-    this.init(tag, children, attributes);
+    this.init(tag, children, id, don, attr);
 }

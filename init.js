@@ -12,52 +12,60 @@ function setup_xmlselect(){
         $html_edit.parent().children("button").click(function(){
             console.log(acte.xml.toString());
         });
+        return acte;
     }
+    return null;
 }
 
 $(document).ready(function(){
-        setup_xmlselect();
+    var acte;
+    acte = setup_xmlselect();
 
-        var clipboard = new Clipboard("#btn-copy-xml",{
-            text: function(trigger){
-                return $(".raw-xml").text();
-            }
-        });
-        clipboard.on("success", function(e){
-            alert_add(
-                $("<div class='alert alert-info fade in'>\
-                <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>\
-                XML copié dans le presse-papier</div>")
-            );
-        });
+    var clipboard = new Clipboard("#btn-copy-xml",{
+        text: function(trigger){
+            return $(".raw-xml").text();
+        }
+    });
+    clipboard.on("success", function(e){
+        alert_add(
+            $("<div class='alert alert-info fade in'>\
+            <a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a>\
+            XML copié dans le presse-papier</div>")
+        );
+    });
 
-        $("#btn-edit-xml").click(function(){
-            $(this).hide();
-            $("#btn-copy-xml").hide();
-            $("#btn-save-edit-xml").show();
-            $("#btn-cancel-edit-xml").show();
+    $("#btn-edit-xml").click(function(){
+        $(this).hide();
+        $("#btn-copy-xml").hide();
+        $("#btn-save-edit-xml").show();
+        $("#btn-cancel-edit-xml").show();
 
-            $(".xmlselect-edit").addClass("editable");
-            setup_xmlselect();
-        });
+        $(".xmlselect-edit").addClass("editable");
+        acte = setup_xmlselect();
+    });
 
-        $("#btn-cancel-edit-xml").click(function(){
-            $(this).hide();
-            $("#btn-save-edit-xml").hide();
-            $("#btn-copy-xml").show();
-            $("#btn-edit-xml").show();
+    $("#btn-cancel-edit-xml").click(function(){
+        $(this).hide();
+        $("#btn-save-edit-xml").hide();
+        $("#btn-copy-xml").show();
+        $("#btn-edit-xml").show();
 
-            $(".xmlselect-edit").removeClass("editable");
-            setup_xmlselect();
-        });
+        $(".xmlselect-edit").removeClass("editable");
+        acte = setup_xmlselect();
+    });
 
-        $("#btn-save-edit-xml").click(function(){
-            $(this).hide();
-            $("#btn-cancel-edit-xml").hide();
-            $("#btn-copy-xml").show();
-            $("#btn-edit-xml").show();
+    $("#btn-save-edit-xml").click(function(){
+        var id = $("#acte-id").text();
+        var source_id = $("#acte_source_id").val();
+        var raw = acte.xml.to_XML();
+        var form = $(
+            "<form method='post' action='acte/"+id+"'>\
+            <input type='hidden' name='edit_acte' value='1'>\
+            <input type='hidden' name='source_id' value='"+source_id+"'>\
+            <input type='hidden' name='raw_xml' value='"+raw+"'>\
+            </form>");
+        console.log(form);
 
-            $(".xmlselect-edit").removeClass("editable");
-            setup_xmlselect();
-        });
+        form.submit();
+    });
 });
