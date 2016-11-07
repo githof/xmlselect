@@ -30,7 +30,7 @@ footer,header,hgroup,menu,nav,section {
 .attributes {
     display: inline-block;
     margin-left: 10px;
-    color: #2a00ff;
+    color: #32b132;
 }
 
 
@@ -41,15 +41,15 @@ footer,header,hgroup,menu,nav,section {
     white-space: pre-wrap;
 }
 
-.text-node > .source {
+.editable .text-node > .source {
     cursor: pointer;
 }
 
-.source:hover {
+.editable .source:hover {
     text-decoration: underline;
 }
 
-.text-node:hover .xml-text, .text-node-edit .xml-text {
+.editable .text-node:hover .xml-text, .text-node-edit .xml-text {
     background-color: #fbfbfb;
     border: 1px solid #e7e7e7;
 }
