@@ -40,15 +40,9 @@ function xml_text_node(text)
 
         var before = select = after = "";
 
-        //before = that.text.substring(0, start).replace(/\s/g, '');
-        //if(before.length > 0)
-            before = that.text.substring(0, start);
-
+        before = that.text.substring(0, start);
         select = that.text.substring(start, end);
-
-        //after = that.text.substring(end).replace(/\s/g, '');
-        //if(after.length > 0)
-            after = that.text.substring(end);
+        after = that.text.substring(end);
 
         if(that.view != null)
             that.view.remove_from_DOM();
