@@ -51,6 +51,7 @@ function taggable_text_xml(xml, is_editable = false)
         }
 
         that.check_buttons();
+        that.test_visible();
     }
 
     this.html_button_ascend = function()
@@ -275,6 +276,16 @@ function taggable_text_xml(xml, is_editable = false)
         }else{
             $text_node.append($source);
         }
+        that.test_visible();
+    }
+
+    this.test_visible = function()
+    {
+        var test = that.xml.text.replace(/\s/g, '');
+        if(test.length == 0)
+            that.$root.hide();
+        else
+            that.$root.show();
     }
 
     this.append_to = function($where)
