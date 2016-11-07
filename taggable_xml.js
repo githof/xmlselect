@@ -282,7 +282,7 @@ function taggable_text_xml(xml, is_editable = false)
     this.test_visible = function()
     {
         var test = that.xml.text.replace(/\s/g, '');
-        if(test.length == 0)
+        if(test.length == 0 && !that.is_editable)
             that.$root.hide();
         else
             that.$root.show();
@@ -329,6 +329,8 @@ function taggable_tag_xml(xml, is_editable = false)
         if(that.xml.attr)
             attrs_str += " attr='"+that.xml.attr+"'";
 
+        if(attrs_str.length == 0)
+            return null;
         $attributes.append(attrs_str);
         return $attributes;
     }
