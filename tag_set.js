@@ -27,7 +27,7 @@ ajouter les tags qui manquent
 
 var wedding_tags = {
     'acte': [
-	"epoux", "epouse", "temoins", "parrains"
+	"epoux", "epouse", "temoins", "parrains", "date"
     ],
 	'epoux': [
 	    "prenom", "nom", "condition", "naissance-lieu", "age", "veuf", "pere", "mere"
