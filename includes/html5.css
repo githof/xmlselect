@@ -29,8 +29,15 @@ footer,header,hgroup,menu,nav,section {
 /* TAG ATTRIBUTES */
 .attributes {
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
     color: #32b132;
+}
+
+.btn-attribute-edit {
+    color: black;
+    font-size: 12px;
+    margin-left: 5px;
 }
 
 

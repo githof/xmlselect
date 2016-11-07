@@ -329,9 +329,14 @@ function taggable_tag_xml(xml, is_editable = false)
         if(that.xml.attr)
             attrs_str += " attr='"+that.xml.attr+"'";
 
-        if(attrs_str.length == 0)
+        if(!that.is_editable && attrs_str.length == 0)
             return null;
         $attributes.append(attrs_str);
+        if(this.is_editable)
+            $attributes.append(
+                $("<span class='glyphicon glyphicon-pencil btn-attribute-edit'\
+                 aria-hidden='true'></span>")
+            );
         return $attributes;
     }
 
