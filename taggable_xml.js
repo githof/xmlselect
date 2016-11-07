@@ -489,7 +489,6 @@ function taggable_tag_xml(xml, is_editable = false)
 
     this.update = function()
     {
-        that.$root_attributes.detach();
         that.$root.children(".xml-tag").first().children(".xml-tag-name").after(that.html_attributes());
         that.update_children();
     }
