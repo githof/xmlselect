@@ -293,7 +293,6 @@ function taggable_tag_xml(xml, is_editable = false)
 
     this.xml = null;
     this.$root = null;
-    this.$root_attributes = null;
     this.$root_children = null;
     this.is_editable = is_editable
 

@@ -10,6 +10,7 @@ function setup_xmlselect(){
         acte.append_to($html_edit);
         acte.$root.children("button").click(function(){
             $html_raw_xml.val(acte.xml.to_XML());
+            console.log(acte.xml.toString());
         });
         return acte;
     }

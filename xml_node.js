@@ -279,7 +279,6 @@ function xml_tag_node(tag, children, id = null, don = false, attr = null)
 
         for(var i = 0; i < that.contents.length; i++){
             s += that.contents[i].to_XML((indentation != null) ? indentation + "  " : null);
-            s += "\n";
         }
 
         if(indentation != null)
